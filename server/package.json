@@ -1,0 +1,26 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "./src/index.js",
+  "scripts": {
+    "start": "node --env-file=.env ./src/index.js",
+    "start:watch": "node --watch --env-file=.env ./src/index.js",
+    "drizzle": "drizzle-kit",
+    "test": "node --env-file=.env.test --test-reporter spec --test --test-concurrency=1",
+    "test:watch": "node --env-file=.env.test --test-reporter spec --test --test-concurrency=1 --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "^22.7.6",
+    "drizzle-kit": "^0.26.2"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.5.0",
+    "drizzle-orm": "^0.35.3"
+  }
+}
