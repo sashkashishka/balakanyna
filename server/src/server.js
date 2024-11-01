@@ -21,7 +21,7 @@ export function getRouter(config, deps, connect = connectMiddlewares) {
 /**
  * @argument {import('./core/server.js').IConfig} config
  */
-export async function createServer(config, deps) {
+export async function createServer(config, deps = {}) {
   const logger = deps.logger || new Logger({ prefix: '[BalakanynaServer]' });
   const db = deps.database || (await getDb(process.env.DATABASE_URL));
   const router = deps.router || getRouter(config, { logger, db });
