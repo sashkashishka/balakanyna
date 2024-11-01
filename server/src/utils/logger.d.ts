@@ -1,6 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface IOptions {
   prefix: string;
+  transport?: ITransport;
+}
+
+type TLevel = 'log' | 'error' | 'trace';
+
+interface ITransport {
+  handle(level: TLevel, message: string): void;
 }
 
 export class Logger {
