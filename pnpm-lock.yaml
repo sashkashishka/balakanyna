@@ -67,6 +67,9 @@ importers:
       better-sqlite3:
         specifier: ^11.5.0
         version: 11.5.0
+      cookie:
+        specifier: ^1.0.1
+        version: 1.0.1
       drizzle-orm:
         specifier: ^0.35.3
         version: 0.35.3(@libsql/client-wasm@0.14.0)(@types/better-sqlite3@7.6.11)(@types/react@18.3.11)(better-sqlite3@11.5.0)(mysql2@3.11.3)(react@18.3.1)
@@ -988,6 +991,10 @@ packages:
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
+
+  cookie@1.0.1:
+    resolution: {integrity: sha512-Xd8lFX4LM9QEEwxQpF9J9NTUh8pmdJO0cyRJhFiDoLTk2eH8FXlRv2IFGYVadZpqI3j8fhNrSdKCeYPxiAhLXw==}
+    engines: {node: '>=18'}
 
   cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
@@ -2563,6 +2570,8 @@ snapshots:
   concat-map@0.0.1: {}
 
   convert-source-map@2.0.0: {}
+
+  cookie@1.0.1: {}
 
   cross-spawn@7.0.3:
     dependencies:
