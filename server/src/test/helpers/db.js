@@ -31,3 +31,9 @@ export function runTestMigration(dbUrl) {
 export async function clearDb(dbUrl) {
   await fs.rm(dbUrl);
 }
+
+export const dbStub = {
+  $client: {
+    close() {},
+  },
+};

@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import { getDb } from '../../db/index.js';
 import { createServer, getRouter } from '../../server.js';
 import { Logger } from '../../utils/logger.js';
@@ -8,12 +10,14 @@ import { clearDb, getTmpDbUrl, runTestMigration } from './db.js';
  *   config: import('../../core/server.js').IConfig,
  *   t: import('node:test').TestContext,
  *   connectMiddleware: (router: typeof import('../../middleware/index.js').connectMiddleware)
+ *   deps?: { db: import('../../db/index.js').IDb }
  * }}
  */
 export async function getTestServer({
   t,
   config = testConfig,
   connectMiddleware,
+  deps = {},
 }) {
   const tmpDbUrl = getTmpDbUrl();
 
@@ -29,7 +33,7 @@ export async function getTestServer({
     prefix: '[TestServer]',
     transport: loggerTransport,
   });
-  const db = await getDb(tmpDbUrl);
+  const db = deps.db || (await getDb(tmpDbUrl));
 
   const router = getRouter(config, { logger, db }, connectMiddleware);
 
@@ -78,6 +82,12 @@ export async function getTestServer({
  */
 export const testConfig = {
   port: process.env.PORT,
+  static: [
+    {
+      prefix: '/media',
+      dir: path.resolve(import.meta.dirname, '../static'),
+    },
+  ],
   timeouts: {
     connection: 1000,
     request: 500,

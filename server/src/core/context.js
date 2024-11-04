@@ -1,6 +1,7 @@
 import cookie from 'cookie';
 
 import { ERR_FAILED_SERIALIZATION } from './errors.js';
+import { createError } from '../utils/createError.js';
 
 export class Context {
   constructor(req, res, db, logger, config) {
@@ -63,5 +64,9 @@ export class Context {
     } catch (e) {
       throw new ERR_FAILED_SERIALIZATION(e);
     }
+  }
+
+  throw(err) {
+    this.json(createError(err), err?.statusCode || 500)
   }
 }

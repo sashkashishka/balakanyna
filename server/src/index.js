@@ -1,3 +1,4 @@
+import path from 'node:path';
 import process from 'node:process';
 import { createServer } from './server.js';
 
@@ -9,6 +10,12 @@ process.title = 'balakanyna-server';
  */
 const config = {
   port: process.env.PORT,
+  static: [
+    {
+      prefix: '/media',
+      dir: path.resolve(import.meta.dirname, '../static'),
+    },
+  ],
   timeouts: {
     connection: 10000,
     request: 5000,

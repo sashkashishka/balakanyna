@@ -22,5 +22,11 @@ export const ERR_FAILED_SERIALIZATION = createError(
   'FAILED_SERIALIZATION',
   'Failed serialization \n %s',
   500,
-  TypeError
+  TypeError,
+);
+
+export const ERR_FILE_STREAM_ERROR = createError(
+  'FILE_STREAM_ERROR',
+  'File stream error',
+  500,
 );

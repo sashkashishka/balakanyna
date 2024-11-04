@@ -12,6 +12,7 @@ export interface IDependencies {
 
 export interface IConfig {
   port: number;
+  static: Array<{ prefix: string; dir: string }>;
   timeouts: {
     connection: number;
     request: number;

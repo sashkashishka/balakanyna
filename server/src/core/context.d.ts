@@ -27,4 +27,5 @@ export class Context {
   ): void;
 
   json<T>(val: T, code: number): void;
+  throw(err: Error): void;
 }

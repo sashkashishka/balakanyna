@@ -11,7 +11,7 @@ export function getRouter(config, deps, connect = connectMiddlewares) {
 
   router.handleError(handleError);
 
-  connect(router);
+  connect(router, config);
 
   router.use(notFound);
 
