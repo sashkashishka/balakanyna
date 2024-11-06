@@ -1,5 +1,6 @@
 import * as healthcheck from './api/healthcheck.js';
 import * as registration from './api/admin/registration.js';
+import * as login from './api/admin/login.js';
 
 import { receiveJsonBodyMiddleware } from './auxiliary/receiveJsonBody.js';
 import { createStaticMiddleware } from './auxiliary/static.js';
@@ -11,10 +12,15 @@ import { limitByIpMiddleware } from './auxiliary/limitByIp.js';
  */
 export function connectMiddlewares(router, config) {
   router.use(receiveJsonBodyMiddleware);
-  router.get(healthcheck.route, healthcheck.middleware);
+  router[healthcheck.method](healthcheck.route, healthcheck.middleware);
 
   // admin
-  router.post(registration.route, limitByIpMiddleware, registration.middleware);
+  router[registration.method](
+    registration.route,
+    limitByIpMiddleware,
+    registration.middleware,
+  );
+  router[login.method](login.route, login.middleware);
 
   if (Array.isArray(config.static)) {
     config.static.forEach((options) => {

@@ -7,7 +7,7 @@ import * as registration from '../../../../middleware/api/admin/registration.js'
 import { seedAdmins } from '../../../../db/seeders.js';
 import { admin } from './fixtures/admin.js';
 
-describe('[api] healthcheck', async () => {
+describe('[api] registration', async () => {
   test('should return 403 if request was made from the restricted ip', async (t) => {
     const { request } = await getTestServer({
       t,
@@ -15,7 +15,7 @@ describe('[api] healthcheck', async () => {
     });
 
     const resp = await request(registration.route, {
-      method: 'POST',
+      method: registration.method,
       body: admin,
     });
 
@@ -31,7 +31,7 @@ describe('[api] healthcheck', async () => {
     });
 
     const resp = await request(registration.route, {
-      method: 'POST',
+      method: registration.method,
       body: { name: 'Jack' },
     });
     const body = await resp.json();
@@ -55,7 +55,7 @@ describe('[api] healthcheck', async () => {
     });
 
     const resp = await request(registration.route, {
-      method: 'POST',
+      method: registration.method,
       body: admin,
     });
     const body = await resp.json();
@@ -76,7 +76,7 @@ describe('[api] healthcheck', async () => {
     });
 
     const resp = await request(registration.route, {
-      method: 'POST',
+      method: registration.method,
       body: admin,
     });
     const body = await resp.json();

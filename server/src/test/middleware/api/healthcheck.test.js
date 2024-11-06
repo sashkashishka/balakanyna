@@ -8,7 +8,9 @@ describe('[api] healthcheck', async () => {
   test('should return OK', async (t) => {
     const { request } = await getTestServer({ t });
 
-    const resp = await request(healthcheck.route);
+    const resp = await request(healthcheck.route, {
+      method: healthcheck.method,
+    });
 
     const body = await resp.json();
     assert.deepEqual(body, { health: 'OK' }, 'should return proper json');

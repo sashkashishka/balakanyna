@@ -67,6 +67,7 @@ async function registrationMiddleware(ctx) {
   });
 }
 
+export const method = 'post';
 export const route = '/api/admin/registration';
 
 export const middleware = Composer.compose([
