@@ -11,6 +11,9 @@ const ERR_WRONG_CREDENTIALS = createError(
   400,
 );
 
+/**
+ * @argument {import('../../../core/context.js').Context} ctx
+ */
 function validatePayloadMiddleware(ctx, next) {
   const body = ctx.body;
 
