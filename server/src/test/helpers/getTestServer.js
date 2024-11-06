@@ -10,7 +10,8 @@ import { mergeDeep } from '../../utils/merge.js';
  * @argument {{
  *   config: import('../../core/server.js').IConfig,
  *   t: import('node:test').TestContext,
- *   connectMiddleware: (router: typeof import('../../middleware/index.js').connectMiddleware)
+ *   connectMiddleware: (router: typeof import('../../middleware/index.js').connectMiddleware),
+ *   seed: (db: import('../../db/index.js').IDb, config: import('../../core/server.js').IConfig): Promise<void>,
  *   deps?: { db: import('../../db/index.js').IDb }
  * }}
  */
@@ -18,6 +19,7 @@ export async function getTestServer({
   t,
   config: externalConfig = {},
   connectMiddleware,
+  seed = () => void 0,
   deps = {},
 }) {
   const config = mergeDeep(getTestConfig(), externalConfig);
@@ -38,8 +40,6 @@ export async function getTestServer({
   const db = deps.db || (await getDb(tmpDbUrl));
 
   const router = getRouter(config, { logger, db }, connectMiddleware);
-
-  // TODO: add scenarios and seed db with predefined values
 
   const server = await createServer(config, {
     logger,
@@ -62,6 +62,9 @@ export async function getTestServer({
   }
 
   await server.init();
+
+  await seed(db, config);
+
   server.listen();
 
   async function stop() {
@@ -96,6 +99,9 @@ export function getTestConfig() {
       connection: 1000,
       request: 500,
       close: 100,
+    },
+    salt: {
+      password: process.env.PASSWORD_SALT,
     },
     jwt: {
       cookie: 'token',

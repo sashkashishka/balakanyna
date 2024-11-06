@@ -2,7 +2,7 @@ import cookie from 'cookie';
 import { SignJWT, jwtVerify, importJWK } from 'jose';
 
 import { ERR_FAILED_SERIALIZATION } from './errors.js';
-import { createError } from '../utils/createError.js';
+import { createErrorResponse } from '../utils/createErrorResponse.js';
 
 export class Cookie {
   /**
@@ -143,6 +143,6 @@ export class Context {
   }
 
   throw(err) {
-    this.json(createError(err), err?.statusCode || 500);
+    this.json(createErrorResponse(err), err?.statusCode || 500);
   }
 }

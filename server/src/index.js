@@ -21,6 +21,9 @@ const config = {
     request: 5000,
     close: 3000,
   },
+  salt: {
+    password: process.env.PASSWORD_SALT,
+  },
   jwt: {
     cookie: 'token',
     key: process.env.JWT_KEY,

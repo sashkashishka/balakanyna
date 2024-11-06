@@ -1,6 +1,6 @@
 import { format } from 'node:util';
 
-function createError(code, message, statusCode = 500, Base = Error) {
+export function createError(code, message, statusCode = 500, Base = Error) {
   class ServerError extends Base {
     constructor(...args) {
       super(...args);
@@ -38,3 +38,9 @@ export const ERR_UNAUTHORIZED = createError(
 );
 
 export const ERR_FORBIDDEN = createError('FORBIDDEN', 'Forbidden', 403);
+
+export const ERR_INVALID_PAYLOAD = createError(
+  'INVALID_PAYLOAD',
+  'Invalid payload',
+  400,
+);

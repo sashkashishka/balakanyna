@@ -1,4 +1,4 @@
-import { createError } from '../utils/createError.js';
+import { createErrorResponse } from '../utils/createErrorResponse.js';
 
 /**
  * @argument {Error} err
@@ -7,5 +7,5 @@ import { createError } from '../utils/createError.js';
 export function handleErrorMiddleware(err, ctx) {
   ctx.logger.error(err);
 
-  ctx.json(createError(err), err.statusCode || 500);
+  ctx.json(createErrorResponse(err), err.statusCode || 500);
 }

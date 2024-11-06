@@ -4,9 +4,9 @@ import fs from 'node:fs';
 import fsp from 'node:fs/promises';
 import path from 'node:path';
 
-import { getTestServer } from '../../helpers/getTestServer.js';
-import { dbStub } from '../../helpers/db.js';
-import { createStaticMiddleware } from '../../../middleware/auxiliary/static.js';
+import { getTestServer } from '../../../helpers/getTestServer.js';
+import { dbStub } from '../../../helpers/db.js';
+import { createStaticMiddleware } from '../../../../middleware/auxiliary/static.js';
 
 describe('[auxiliary] serve static files', async () => {
   test('should send content type header', async (t) => {

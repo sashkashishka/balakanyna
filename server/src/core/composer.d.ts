@@ -16,4 +16,6 @@ export class Composer<Ctx> {
   patch(route: string, ...fns: Middleware<Ctx>[]): this;
   delete(route: string, ...fns: Middleware<Ctx>[]): this;
   middleware: MiddlewareFn<Ctx>;
+
+  static compose(...fns: Middleware<Ctx>[]): MiddlewareFn<Ctx>;
 }

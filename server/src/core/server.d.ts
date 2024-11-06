@@ -18,6 +18,9 @@ export interface IConfig {
     request: number;
     close: number;
   };
+  salt: {
+    password: string;
+  };
   jwt: {
     cookie: string;
     key: string;
