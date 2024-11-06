@@ -23,6 +23,12 @@ export interface IConfig {
     key: string;
     expirationTime: string;
   };
+  restrictions: {
+    /*
+     * from what ip address requests will be allowed
+     */
+    ip: string;
+  };
 }
 
 export class Server {

@@ -26,6 +26,9 @@ const config = {
     key: process.env.JWT_KEY,
     expirationTime: process.env.JWT_EXPIRATION_TIME,
   },
+  restrictions: {
+    ip: process.env.ALLOWED_IP,
+  },
 };
 
 const balakanynaServer = await createServer(config);

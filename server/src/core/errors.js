@@ -36,3 +36,5 @@ export const ERR_UNAUTHORIZED = createError(
   'Unauthorized',
   401,
 );
+
+export const ERR_FORBIDDEN = createError('FORBIDDEN', 'Forbidden', 403);

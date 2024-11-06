@@ -49,7 +49,7 @@ export class Server {
   }
 
   listen() {
-    this.#server.listen({ port: this.#config.port }, () =>
+    this.#server.listen({ port: this.#config.port, host: '0.0.0.0' }, () =>
       this.#logger.log('Server started'),
     );
   }

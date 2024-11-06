@@ -4,6 +4,7 @@ import { getDb } from '../../db/index.js';
 import { createServer, getRouter } from '../../server.js';
 import { Logger } from '../../utils/logger.js';
 import { clearDb, getTmpDbUrl, runTestMigration } from './db.js';
+import { mergeDeep } from '../../utils/merge.js';
 
 /**
  * @argument {{
@@ -15,10 +16,11 @@ import { clearDb, getTmpDbUrl, runTestMigration } from './db.js';
  */
 export async function getTestServer({
   t,
-  config = testConfig,
+  config: externalConfig = {},
   connectMiddleware,
   deps = {},
 }) {
+  const config = mergeDeep(getTestConfig(), externalConfig);
   const tmpDbUrl = getTmpDbUrl();
 
   await runTestMigration(tmpDbUrl);
@@ -80,17 +82,27 @@ export async function getTestServer({
  * @TODO: make a configuration validator
  * @type {import('./core/server.js').IConfig}
  */
-export const testConfig = {
-  port: process.env.PORT,
-  static: [
-    {
-      prefix: '/media',
-      dir: path.resolve(import.meta.dirname, '../static'),
+export function getTestConfig() {
+  return {
+    port: process.env.PORT,
+    static: [
+      {
+        prefix: '/media',
+        dir: path.resolve(import.meta.dirname, '../static'),
+      },
+    ],
+    timeouts: {
+      connection: 1000,
+      request: 500,
+      close: 100,
     },
-  ],
-  timeouts: {
-    connection: 1000,
-    request: 500,
-    close: 100,
-  },
-};
+    jwt: {
+      cookie: 'token',
+      key: process.env.JWT_KEY,
+      expirationTime: process.env.JWT_EXPIRATION_TIME,
+    },
+    restrictions: {
+      ip: process.env.ALLOWED_IP,
+    },
+  };
+}
