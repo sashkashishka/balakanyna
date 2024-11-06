@@ -30,3 +30,9 @@ export const ERR_FILE_STREAM_ERROR = createError(
   'File stream error',
   500,
 );
+
+export const ERR_UNAUTHORIZED = createError(
+  'UNAUTHORIZED',
+  'Unauthorized',
+  401,
+);

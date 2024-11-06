@@ -18,6 +18,11 @@ export interface IConfig {
     request: number;
     close: number;
   };
+  jwt: {
+    cookie: string;
+    key: string;
+    expirationTime: string;
+  };
 }
 
 export class Server {

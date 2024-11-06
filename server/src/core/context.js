@@ -1,7 +1,93 @@
 import cookie from 'cookie';
+import { SignJWT, jwtVerify, importJWK } from 'jose';
 
 import { ERR_FAILED_SERIALIZATION } from './errors.js';
 import { createError } from '../utils/createError.js';
+
+export class Cookie {
+  /**
+   * @type {import('node:http').IncomingMessage}
+   */
+  #req = undefined;
+  /**
+   * @type {import('node:http').ServerResponse}
+   */
+  #res = undefined;
+
+  constructor(req, res) {
+    this.#req = req;
+    this.#res = res;
+  }
+
+  getCookies() {
+    return cookie.parse(this.#req.headers.cookie || '');
+  }
+
+  getCookie(name) {
+    return this.getCookies()[name];
+  }
+
+  setCookie(name, value, options) {
+    let cookies = [];
+
+    const resCookies = this.#res.getHeader('set-cookies');
+
+    if (resCookies === undefined) {
+      cookies = [];
+    } else if (typeof resCookies === 'string') {
+      cookies = [resCookies];
+    } else {
+      cookies = resCookies;
+    }
+
+    cookies.push(cookie.serialize(name, value, options));
+
+    this.#res.removeHeader('set-cookies');
+    this.#res.setHeader('set-cookies', cookies);
+  }
+}
+
+export class Jwt {
+  /**
+   * @type {{ key: string; expirationTime: string; }}
+   */
+  #options = {};
+
+  constructor(options) {
+    this.#options = options;
+  }
+
+  async #getKey() {
+    return importJWK({
+      alg: 'HS256',
+      kty: 'oct',
+      k: this.#options.key,
+    });
+  }
+
+  async sign(payload) {
+    const key = await this.#getKey();
+
+    const signer = new SignJWT(payload);
+
+    return signer
+      .setProtectedHeader({ alg: 'HS256' })
+      .setIssuedAt()
+      .setExpirationTime(this.#options.expirationTime)
+      .sign(key);
+  }
+
+  async verify(token) {
+    const key = await this.#getKey();
+
+    try {
+      return jwtVerify(token, key);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (e) {
+      return false;
+    }
+  }
+}
 
 export class Context {
   constructor(req, res, db, logger, config) {
@@ -25,31 +111,19 @@ export class Context {
      * @type {import('./server.js').IConfig}
      */
     this.config = config;
-  }
+    /**
+     * @type {Cookie}
+     */
+    this.cookie = new Cookie(req, res);
+    /**
+     * @type {Jwt}
+     */
+    this.jwt = new Jwt({
+      key: config.jwt.key,
+      expirationTime: config.jwt.expirationTime,
+    });
 
-  get cookie() {
-    return cookie.parse(this.req.headers.cookie || '');
-  }
-
-  setCookie(name, value, options) {
-    let cookies = [];
-
-    const resCookies = this.res.getHeader('set-cookies');
-
-    if (resCookies === undefined) {
-      cookies = [];
-    } else if (typeof resCookies === 'string') {
-      cookies = [resCookies];
-    } else {
-      cookies = resCookies;
-    }
-
-    cookies.push(cookie.serialize(name, value, options));
-
-    console.log(cookies)
-
-    this.res.removeHeader('set-cookies');
-    this.res.setHeader('set-cookies', cookies);
+    this.body = undefined;
   }
 
   json(val, code = 200) {
@@ -67,6 +141,6 @@ export class Context {
   }
 
   throw(err) {
-    this.json(createError(err), err?.statusCode || 500)
+    this.json(createError(err), err?.statusCode || 500);
   }
 }

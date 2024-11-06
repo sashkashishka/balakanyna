@@ -21,6 +21,11 @@ const config = {
     request: 5000,
     close: 3000,
   },
+  jwt: {
+    cookie: 'token',
+    key: process.env.JWT_KEY,
+    expirationTime: process.env.JWT_EXPIRATION_TIME,
+  },
 };
 
 const balakanynaServer = await createServer(config);
