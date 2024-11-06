@@ -78,10 +78,12 @@ export class Jwt {
   }
 
   async verify(token) {
-    const key = await this.#getKey();
-
     try {
-      return jwtVerify(token, key);
+      const key = await this.#getKey();
+
+      const result = await jwtVerify(token, key);
+
+      return result;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       return false;

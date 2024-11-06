@@ -75,6 +75,7 @@ export async function getTestServer({
     server,
     request,
     loggerTransport,
+    config,
   };
 }
 
