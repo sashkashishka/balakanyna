@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 
 import { getTestServer } from '../../helpers/getTestServer.js';
 import { dbStub } from '../../helpers/db.js';
-import { limitByIp } from '../../../middleware/auxiliary/limitByIp.js';
+import { limitByIpMiddleware } from '../../../middleware/auxiliary/limitByIp.js';
 
 describe('[auxiliary] limit by ip', async () => {
   test('should throw 403 error if restrictions.ip is undefined', async (t) => {
@@ -16,7 +16,7 @@ describe('[auxiliary] limit by ip', async () => {
         },
       },
       connectMiddleware: (router) => {
-        router.use(limitByIp);
+        router.use(limitByIpMiddleware);
       },
     });
 
@@ -37,7 +37,7 @@ describe('[auxiliary] limit by ip', async () => {
         },
       },
       connectMiddleware: (router) => {
-        router.use(limitByIp);
+        router.use(limitByIpMiddleware);
       },
     });
 
@@ -59,7 +59,7 @@ describe('[auxiliary] limit by ip', async () => {
         },
       },
       connectMiddleware: (router) => {
-        router.use(limitByIp);
+        router.use(limitByIpMiddleware);
         router.use((ctx) => {
           ctx.json(answer);
         });
