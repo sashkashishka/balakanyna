@@ -15,7 +15,9 @@ describe('[api] logout', async () => {
 
     const resp = await request(logout.route, {
       method: logout.method,
-      cookie: 'token=12345',
+      headers: {
+        cookie: 'token=12345',
+      },
     });
     const body = await resp.json();
 

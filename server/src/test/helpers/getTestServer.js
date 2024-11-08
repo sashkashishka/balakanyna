@@ -48,13 +48,12 @@ export async function getTestServer({
   });
 
   function request(endpoint, options = {}) {
-    const { headers, body, cookie } = options;
+    const { headers, body } = options;
 
     return fetch(`http://127.0.0.1:${config.port}${endpoint}`, {
       ...options,
       headers: {
         'content-type': 'application/json',
-        cookie: cookie ? cookie : '',
         ...headers,
       },
       body: body ? JSON.stringify(body) : undefined,

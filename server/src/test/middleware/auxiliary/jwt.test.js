@@ -42,7 +42,11 @@ describe('[auxiliary] verify token middleware', async () => {
       },
     });
 
-    const resp = await request('/', { cookie: 'token=123' });
+    const resp = await request('/', {
+      headers: {
+        cookie: 'token=123',
+      },
+    });
     const body = await resp.json();
 
     assert.equal(resp.status, 401);
@@ -68,7 +72,11 @@ describe('[auxiliary] verify token middleware', async () => {
     const jwt = new Jwt(config.jwt);
     const token = await jwt.sign({});
 
-    const resp = await request('/', { cookie: `token=${token}` });
+    const resp = await request('/', {
+      headers: {
+        cookie: `token=${token}`,
+      },
+    });
     const body = await resp.json();
 
     assert.equal(resp.status, 200);
