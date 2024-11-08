@@ -48,15 +48,29 @@ export async function getTestServer({
   });
 
   function request(endpoint, options = {}) {
-    const { headers, body } = options;
+    const { isJson = true } = options;
+
+    let body = undefined;
+    let headers = {};
+
+    if (options.body) {
+      body = options.body;
+    }
+
+    if (isJson) {
+      body = JSON.stringify(body);
+      headers = {
+        'content-type': 'application/json',
+      };
+    }
 
     return fetch(`http://127.0.0.1:${config.port}${endpoint}`, {
       ...options,
       headers: {
-        'content-type': 'application/json',
         ...headers,
+        ...options.headers,
       },
-      body: body ? JSON.stringify(body) : undefined,
+      body,
     });
   }
 
@@ -83,7 +97,7 @@ export async function getTestServer({
 
 /**
  * @TODO: make a configuration validator
- * @type {import('./core/server.js').IConfig}
+ * @type {import('../../core/server.js').IConfig}
  */
 export function getTestConfig() {
   return {
@@ -98,6 +112,14 @@ export function getTestConfig() {
       connection: 1000,
       request: 500,
       close: 100,
+    },
+    media: {
+      saveDir: path.resolve(import.meta.dirname, '../static/media'),
+      files: 1,
+      fileSize: 1024 * 1024 * 10,
+      parts: 1,
+      allowedExtenstion: ['jpeg', 'jpg', 'png'],
+      fieldname: 'image',
     },
     salt: {
       password: process.env.PASSWORD_SALT,

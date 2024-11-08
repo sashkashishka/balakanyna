@@ -44,3 +44,9 @@ export const ERR_INVALID_PAYLOAD = createError(
   'Invalid payload',
   400,
 );
+
+export const ERR_UNSUPPORTED_MEDIA_TYPE = createError(
+  'UNSUPPORTED_MEDIA_TYPE',
+  'Unsupported Media Type',
+  415,
+);

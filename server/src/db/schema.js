@@ -29,6 +29,13 @@ export const labelTable = sqliteTable('label', {
   name: text().notNull(),
 });
 
+export const imageTable = sqliteTable('image', {
+  id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
+  filename: text().notNull(),
+  path: text().notNull(),
+  hashsum: text().notNull(),
+});
+
 export const programTaskTable = sqliteTable('program_task', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   programId: integer('program_id').references(() => programTable.id),
@@ -38,5 +45,11 @@ export const programTaskTable = sqliteTable('program_task', {
 export const taskLabelTable = sqliteTable('task_label', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   labelId: integer('label_id').references(() => labelTable.id),
+  taskId: integer('task_id').references(() => taskTable.id),
+});
+
+export const taskImageTable = sqliteTable('task_image', {
+  id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
+  imageId: integer('image_id').references(() => imageTable.id),
   taskId: integer('task_id').references(() => taskTable.id),
 });

@@ -21,6 +21,29 @@ export interface IConfig {
   salt: {
     password: string;
   };
+  media: {
+    saveDir: string;
+    /**
+     * For multipart forms, the max file size (in bytes)
+     */
+    fileSize: number;
+    /**
+     * For multipart forms, the max number of file fields
+     */
+    files: number;
+    /**
+     * For multipart forms, the max number of parts (fields + files)
+     */
+    parts: number;
+    /**
+     * List of extensions that are allowed to upload
+     */
+    allowedExtenstion: string[];
+    /**
+     * Fieldname of an image in multipart/form-data payload
+     */
+    fieldname: string;
+  };
   jwt: {
     cookie: string;
     key: string;

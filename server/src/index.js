@@ -21,6 +21,14 @@ const config = {
     request: 5000,
     close: 3000,
   },
+  media: {
+    saveDir: path.resolve(import.meta.dirname, '../static/media'),
+    files: 1,
+    fileSize: 1024 * 1024 * 10,
+    parts: 1,
+    allowedExtenstion: ['jpeg', 'jpg', 'png'],
+    fieldname: 'image',
+  },
   salt: {
     password: process.env.PASSWORD_SALT,
   },

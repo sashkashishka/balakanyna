@@ -20,6 +20,7 @@
     "drizzle-kit": "^0.26.2"
   },
   "dependencies": {
+    "@fastify/busboy": "^3.0.0",
     "better-sqlite3": "^11.5.0",
     "cookie": "^1.0.1",
     "drizzle-orm": "^0.35.3",
