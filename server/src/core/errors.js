@@ -41,7 +41,7 @@ export const ERR_FORBIDDEN = createError('FORBIDDEN', 'Forbidden', 403);
 
 export const ERR_INVALID_PAYLOAD = createError(
   'INVALID_PAYLOAD',
-  'Invalid payload',
+  'Invalid payload: %s',
   400,
 );
 

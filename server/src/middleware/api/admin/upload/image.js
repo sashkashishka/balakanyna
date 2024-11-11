@@ -1,5 +1,6 @@
 import path from 'node:path';
 import fs from 'node:fs';
+import fsp from 'node:fs/promises';
 import { Busboy } from '@fastify/busboy';
 import { eq } from 'drizzle-orm';
 import * as mimeTypes from 'mime-types';
@@ -7,21 +8,9 @@ import * as mimeTypes from 'mime-types';
 import { Composer } from '../../../../core/composer.js';
 import {
   createError,
-  ERR_INVALID_PAYLOAD,
   ERR_UNSUPPORTED_MEDIA_TYPE,
 } from '../../../../core/errors.js';
 import { imageTable } from '../../../../db/schema.js';
-
-// TODO:
-// [x] check if x-checksum header present. if not - throw error - invalid request or similar
-// [x] check if x-checksum header value is present in image table.
-// if yes - throw error - duplicate image and return the image's data from db
-// [x] check if multipart formdata not url encoded
-// [ ] check file size (to be no more than 10mb)
-// [ ] check for other fields (non file fields should be abcent )
-// [ ] number of files to upload - 1
-// [ ] field should be named as file
-// [ ] accept only specific files - jpeg, jpg or png
 
 const ERR_MISSING_IMAGE_HASHSUM = createError(
   'MISSING_IMAGE_HASHSUM',
@@ -41,11 +30,13 @@ const ERR_WRONG_FILE_FIELD = createError(
   422,
 );
 
-const ERR_FILE_QTY_LIMIT = createError(
-  'FILE_QTY_LIMIT',
-  'File quantity limit',
+const ERR_HIT_FILE_SIZE_LIMIT = createError(
+  'HIT_FILE_SIZE_LIMIT',
+  'Hit file size limit %s',
   422,
 );
+
+export const HASHSUM_HEADER = 'x-image-hashsum';
 
 /**
  * @argument {import('../../../../core/context.js').Context} ctx
@@ -64,7 +55,7 @@ function verifyIsMultipartFormDataContentTypeMiddleware(ctx, next) {
  * @argument {import('../../../../core/context.js').Context} ctx
  */
 function checkIfHaveHashsumMiddleware(ctx, next) {
-  const hashsum = ctx.req.headers['x-image-hashsum'];
+  const hashsum = ctx.req.headers[HASHSUM_HEADER];
 
   if (typeof hashsum !== 'string' || hashsum?.length === 0) {
     throw new ERR_MISSING_IMAGE_HASHSUM();
@@ -77,7 +68,7 @@ function checkIfHaveHashsumMiddleware(ctx, next) {
  * @argument {import('../../../../core/context.js').Context} ctx
  */
 async function checkIfDuplicateMiddleware(ctx, next) {
-  const hashsum = ctx.req.headers['x-image-hashsum'];
+  const hashsum = ctx.req.headers[HASHSUM_HEADER];
 
   const [record] = await ctx.db
     .select()
@@ -85,12 +76,14 @@ async function checkIfDuplicateMiddleware(ctx, next) {
     .where(eq(imageTable.hashsum, hashsum));
 
   if (record) {
-    ctx.json({
-      id: record.id,
-      filename: record.filename,
-      hashsum: record.hashsum,
-      path: record.path,
-    });
+    ctx.json([
+      {
+        id: record.id,
+        filename: record.filename,
+        hashsum: record.hashsum,
+        path: record.path,
+      },
+    ]);
 
     return;
   }
@@ -113,15 +106,26 @@ async function uploadImageMiddelware(ctx) {
     },
   });
 
-  // send 400 errors if there
-  // busboy.on('field')
+  /**
+   * @type {import('node:fs').WriteStream}
+   */
+  let fileWriteStream = undefined;
+  /**
+   * imageDb resut
+   */
+  let result = [];
+
+  function destroyFileWriteStream() {
+    fileWriteStream?.removeAllListeners?.();
+
+    if (!fileWriteStream?.closed) {
+      fileWriteStream?.destroy?.();
+    }
+  }
 
   busboy.on(
     'file',
     function onFile(fieldname, file, filename, encoding, mimetype) {
-      console.log('@@@@@@@@@@@@@@@@@@@@@@@');
-      console.log({ fieldname, filename, encoding, mimetype });
-      console.log('@@@@@@@@@@@@@@@@@@@@@@@');
       if (fieldname !== ctx.config.media.fieldname) {
         return reject(
           new ERR_WRONG_FILE_FIELD(fieldname, ctx.config.media.fieldname),
@@ -134,63 +138,69 @@ async function uploadImageMiddelware(ctx) {
         return reject(new ERR_UNSUPPORTED_IMAGE_TYPE(extension));
       }
 
-      var saveTo = path.join(
-        ctx.config.media.saveDir,
-        path.basename(fieldname),
-      );
+      filename = path.basename(filename);
+      var saveTo = path.join(ctx.config.media.saveDir, filename);
 
-      file.pipe(fs.createWriteStream(saveTo, { encoding, mimetype }));
-
-      file.once('error', function onFileError(err) {
-        ctx.logger.error(err);
-        reject(err);
+      fileWriteStream = fs.createWriteStream(saveTo, {
+        mimetype,
       });
 
-      file.once('end', function onFileEnd() {
-        ctx.logger.log('File writing finished');
+      // TODO check for memory leak
+      file.pipe(fileWriteStream);
+
+      fileWriteStream.once('close', async function writeToDb() {
+        result = await ctx.db
+          .insert(imageTable)
+          .values({
+            filename,
+            hashsum: ctx.req.headers[HASHSUM_HEADER],
+            path: filename,
+          })
+          .returning();
+
+        if (!ctx.res.closed) {
+          ctx.json(result);
+        }
+
+        resolve();
+      });
+
+      file.on('limit', function onFileSizeLimit() {
+        file.destroy();
+
+        fsp
+          .rm(saveTo)
+          .catch((err) => {
+            ctx.logger.error('[remove limit file]', err);
+          })
+          .then(() => {
+            reject(new ERR_HIT_FILE_SIZE_LIMIT(ctx.config.media.fileSize));
+          });
+      });
+
+      file.once('error', function onFileError(err) {
+        destroyFileWriteStream();
+        ctx.logger.error(err);
+        reject(err);
       });
     },
   );
 
-  busboy.on('field', function onField(...args) {
-    console.log('@@@@@@@@@@@@@@@@@@@');
-    console.log('field', args);
-    console.log('@@@@@@@@@@@@@@@@@@@');
-    // TODO: refactor
-    reject(new Error('should not be any field'));
-  });
-
   busboy.on('error', function onError(err) {
-    console.log('@@@@@@@@@@@@@@@@@@@');
-    console.log(err);
-    console.log('@@@@@@@@@@@@@@@@@@@');
+    destroyFileWriteStream();
     reject(err);
   });
 
-  busboy.once('filesLimit', function onFilesLimit() {
-    console.log('@@@@@@@@@@@@@@@@@@@');
-    console.log('filesLimit');
-    console.log('@@@@@@@@@@@@@@@@@@@');
-    // TODO: make it processable within promise
-    reject(new ERR_INVALID_PAYLOAD('files limit'));
-  });
-
-  busboy.once('partsLimit', function onPartsLimit() {
-    console.log('@@@@@@@@@@@@@@@@@@@');
-    console.log('partsLimit');
-    console.log('@@@@@@@@@@@@@@@@@@@');
-    // reject(new ERR_INVALID_PAYLOAD('parts limit'));
-  });
-
   busboy.once('finish', function onFinish() {
-    console.log('@@@@@@@@@@@@@@@@@@@');
-    console.log('finish');
-    console.log('@@@@@@@@@@@@@@@@@@@');
-    resolve();
+    if (fileWriteStream) return;
+
+    destroyFileWriteStream();
 
     if (!ctx.res.closed) {
-      ctx.json({ finish: 1 });
+      ctx.json(result);
     }
+
+    resolve();
   });
 
   ctx.req.pipe(busboy);

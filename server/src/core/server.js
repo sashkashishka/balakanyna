@@ -65,7 +65,7 @@ export class Server {
     await this.#closeServer();
     this.#db.$client.close();
 
-    // clear all timeouts
+    process.removeAllListeners();
   }
 
   #initServer() {
@@ -79,9 +79,9 @@ export class Server {
     // timeout for connection in general
     this.#server.setTimeout(this.#config.timeouts.connection);
 
-    process.on('SIGINT', destroy);
-    process.on('SIGTERM', destroy);
-    process.on('TERMINATE', destroy);
+    process.once('SIGINT', destroy);
+    process.once('SIGTERM', destroy);
+    process.once('TERMINATE', destroy);
   }
 
   #closeServer() {
