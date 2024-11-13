@@ -5,6 +5,7 @@ import * as logout from './api/admin/logout.js';
 import * as uploadImage from './api/admin/upload/image.js';
 import * as userCreate from './api/admin/user/create.js';
 import * as userGet from './api/admin/user/get.js';
+import * as userUpdate from './api/admin/user/update.js';
 
 import { receiveJsonBodyMiddleware } from './auxiliary/receiveJsonBody.js';
 import { createStaticMiddleware } from './auxiliary/static.js';
@@ -45,6 +46,11 @@ export function connectMiddlewares(router, config) {
     userGet.route,
     verifyTokenMiddleware,
     userGet.middleware,
+  );
+  router[userUpdate.method](
+    userUpdate.route,
+    verifyTokenMiddleware,
+    userUpdate.middleware,
   );
 
   if (Array.isArray(config.static)) {
