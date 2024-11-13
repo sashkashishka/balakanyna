@@ -77,8 +77,8 @@ describe('[api] upload image', async () => {
 
     const resp = await request(uploadImage.route, {
       method: uploadImage.method,
-      cookie: 'token=123',
       headers: {
+        cookie: 'token=123',
         [uploadImage.HASHSUM_HEADER]: '123',
       },
     });

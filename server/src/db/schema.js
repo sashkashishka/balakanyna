@@ -36,6 +36,12 @@ export const imageTable = sqliteTable('image', {
   hashsum: text().notNull(),
 });
 
+export const userProgramTable = sqliteTable('user_program', {
+  id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
+  userId: integer('user_id').references(() => userTable.id),
+  programId: integer('program_id').references(() => programTable.id),
+});
+
 export const programTaskTable = sqliteTable('program_task', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   programId: integer('program_id').references(() => programTable.id),

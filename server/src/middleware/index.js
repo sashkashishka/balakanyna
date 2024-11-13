@@ -3,6 +3,7 @@ import * as registration from './api/admin/registration.js';
 import * as login from './api/admin/login.js';
 import * as logout from './api/admin/logout.js';
 import * as uploadImage from './api/admin/upload/image.js';
+import * as userCreate from './api/admin/user/create.js';
 
 import { receiveJsonBodyMiddleware } from './auxiliary/receiveJsonBody.js';
 import { createStaticMiddleware } from './auxiliary/static.js';
@@ -25,10 +26,19 @@ export function connectMiddlewares(router, config) {
   );
   router[login.method](login.route, login.middleware);
   router[logout.method](logout.route, logout.middleware);
+
+  // image upload
   router[uploadImage.method](
     uploadImage.route,
     verifyTokenMiddleware,
     uploadImage.middelware,
+  );
+
+  // user
+  router[userCreate.method](
+    userCreate.route,
+    verifyTokenMiddleware,
+    userCreate.middleware,
   );
 
   if (Array.isArray(config.static)) {

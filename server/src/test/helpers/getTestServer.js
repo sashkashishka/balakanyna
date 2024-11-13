@@ -58,7 +58,7 @@ export async function getTestServer({
     }
 
     if (isJson) {
-      body = JSON.stringify(body);
+      body = body ? JSON.stringify(body) : body;
       headers = {
         'content-type': 'application/json',
       };
