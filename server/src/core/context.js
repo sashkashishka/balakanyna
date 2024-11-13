@@ -3,6 +3,7 @@ import { SignJWT, jwtVerify, importJWK } from 'jose';
 
 import { ERR_FAILED_SERIALIZATION } from './errors.js';
 import { createErrorResponse } from '../utils/createErrorResponse.js';
+import { getUrl } from '../utils/network.js';
 
 export class Cookie {
   /**
@@ -126,6 +127,8 @@ export class Context {
     });
 
     this.body = undefined;
+
+    this.url = getUrl(req.url)
   }
 
   json(val, code = 200) {

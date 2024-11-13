@@ -64,7 +64,13 @@ export async function getTestServer({
       };
     }
 
-    return fetch(`http://127.0.0.1:${config.port}${endpoint}`, {
+    let url = `http://127.0.0.1:${config.port}${endpoint}`;
+
+    if (endpoint instanceof URL) {
+      url = endpoint;
+    }
+
+    return fetch(url, {
       ...options,
       headers: {
         ...headers,
@@ -92,6 +98,7 @@ export async function getTestServer({
     request,
     loggerTransport,
     config,
+    baseUrl: `http://localhost:${config.port}`,
   };
 }
 

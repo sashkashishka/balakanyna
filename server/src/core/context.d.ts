@@ -38,6 +38,7 @@ export class Context {
   logger: Logger;
   config: IConfig;
   body: any;
+  url: URL;
 
   cookie: Cookie;
   jwt: Jwt;

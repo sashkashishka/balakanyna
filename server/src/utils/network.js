@@ -21,3 +21,7 @@ export function jsonParse(buffer) {
     return null;
   }
 }
+
+export function getUrl(urlString, base = 'http://localhost') {
+  return new URL(urlString, base);
+}

@@ -1,3 +1,5 @@
+import { getUrl } from '../utils/network.js';
+
 export class Composer {
   #handler = Composer.passThrough();
 
@@ -72,7 +74,9 @@ export class Composer {
     function filter(ctx) {
       const { req } = ctx;
 
-      return route === req.url;
+      const url = getUrl(req.url);
+
+      return route === url.pathname;
     }
 
     return Composer.optional(filter, middleware);
