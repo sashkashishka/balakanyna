@@ -8,8 +8,8 @@
     "start": "node --env-file=.env ./src/index.js",
     "start:watch": "node --watch --env-file=.env ./src/index.js",
     "drizzle": "drizzle-kit",
-    "test": "node --env-file=.env.test --test-reporter spec --test --test-concurrency=1",
-    "test:watch": "node --env-file=.env.test --test-reporter spec --test --test-concurrency=1 --watch"
+    "test": "node --env-file=.env.test --import=./src/test/helpers/setup.js --test-reporter spec --test-concurrency=1 --test './src/test/**/*.test.js'",
+    "test:watch": "node --env-file=.env.test --import=./src/test/helpers/setup.js --test-reporter spec --test-concurrency=1 --test './src/test/**/*.test.js' --watch"
   },
   "keywords": [],
   "author": "",

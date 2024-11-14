@@ -3,7 +3,7 @@ import path from 'node:path';
 import { getDb } from '../../db/index.js';
 import { createServer, getRouter } from '../../server.js';
 import { Logger } from '../../utils/logger.js';
-import { clearDb, getTmpDbUrl, runTestMigration } from './db.js';
+import { clearDb, getTmpDbUrl, runTestMigration, setupDb } from './db.js';
 import { mergeDeep } from '../../utils/merge.js';
 
 /**
@@ -23,9 +23,6 @@ export async function getTestServer({
   deps = {},
 }) {
   const config = mergeDeep(getTestConfig(), externalConfig);
-  const tmpDbUrl = getTmpDbUrl();
-
-  await runTestMigration(tmpDbUrl);
 
   const loggerTransport = {
     log: t.mock.fn(),
@@ -37,7 +34,14 @@ export async function getTestServer({
     prefix: '[TestServer]',
     transport: loggerTransport,
   });
-  const db = deps.db || (await getDb(tmpDbUrl));
+
+  let db = deps.db;
+  let dbDir = '';
+
+  if (!db) {
+    dbDir = await setupDb(globalThis.tmpDbDir);
+    db = await getDb(dbDir);
+  }
 
   const router = getRouter(config, { logger, db }, connectMiddleware);
 
@@ -88,7 +92,10 @@ export async function getTestServer({
 
   async function stop() {
     await server.destroy();
-    await clearDb(tmpDbUrl);
+
+    if (dbDir) {
+      await clearDb(dbDir);
+    }
   }
 
   t.after(stop);
