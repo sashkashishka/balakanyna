@@ -27,7 +27,7 @@ const schema = {
 describe('[middleware] validate middleware', () => {
   test('should throw provided error if validation failed', async (t) => {
     const mockGetter = t.mock.fn((ctx) => ctx.body);
-    const mockMiddleware = t.mock.fn();
+    const mockMiddleware = t.mock.fn(ctx => ctx.json({ ok: 1 }));
 
     const { request } = await getTestServer({
       t,
@@ -42,7 +42,7 @@ describe('[middleware] validate middleware', () => {
       method: 'post',
       body: {
         foo: 1,
-        bar: '2',
+        bar: 'boo',
       },
     });
     const body = await resp.json();
