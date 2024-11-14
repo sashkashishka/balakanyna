@@ -1,16 +1,16 @@
-import * as healthcheck from './api/healthcheck.js';
-import * as registration from './api/admin/registration.js';
-import * as login from './api/admin/login.js';
-import * as logout from './api/admin/logout.js';
-import * as uploadImage from './api/admin/upload/image.js';
-import * as userCreate from './api/admin/user/create.js';
-import * as userGet from './api/admin/user/get.js';
-import * as userUpdate from './api/admin/user/update.js';
+import * as healthcheck from './api/healthcheck/middleware.js';
+import * as registration from './api/admin/registration/middleware.js';
+import * as login from './api/admin/login/middleware.js';
+import * as logout from './api/admin/logout/middleware.js';
+import * as uploadImage from './api/admin/upload/image/middleware.js';
+import * as userCreate from './api/admin/user/create/middleware.js';
+import * as userGet from './api/admin/user/get/middleware.js';
+import * as userUpdate from './api/admin/user/update/middleware.js';
 
-import { receiveJsonBodyMiddleware } from './auxiliary/receiveJsonBody.js';
-import { createStaticMiddleware } from './auxiliary/static.js';
-import { limitByIpMiddleware } from './auxiliary/limitByIp.js';
-import { verifyTokenMiddleware } from './auxiliary/jwt.js';
+import { receiveJsonBodyMiddleware } from './auxiliary/receiveJsonBody/middleware.js';
+import { createStaticMiddleware } from './auxiliary/static/middleware.js';
+import { limitByIpMiddleware } from './auxiliary/limitByIp/middleware.js';
+import { verifyTokenMiddleware } from './auxiliary/jwt/middleware.js';
 
 /**
  * @argument {import('../core/router.js').Router<import('../core/context.js').Context>} router

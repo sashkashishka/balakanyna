@@ -6,7 +6,7 @@ import path from 'node:path';
 
 import { getTestServer } from '../../../helpers/getTestServer.js';
 import { dbStub } from '../../../helpers/db.js';
-import { createStaticMiddleware } from '../../../../middleware/auxiliary/static.js';
+import { createStaticMiddleware } from '../../../../middleware/auxiliary/static/middleware.js';
 
 describe('[auxiliary] serve static files', async () => {
   test('should send content type header', async (t) => {
