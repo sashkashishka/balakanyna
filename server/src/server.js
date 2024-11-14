@@ -3,8 +3,8 @@ import { Router } from './core/router.js';
 import { Logger } from './utils/logger.js';
 import { getDb } from './db/index.js';
 import { connectMiddlewares } from './middleware/index.js';
-import { handleErrorMiddleware } from './middleware/handleError.js';
-import { notFoundMiddleware } from './middleware/notFound.js';
+import { handleErrorMiddleware } from './middleware/auxiliary/handleError.js';
+import { notFoundMiddleware } from './middleware/auxiliary/notFound.js';
 
 export function getRouter(config, deps, connect = connectMiddlewares) {
   const router = new Router(config, deps);
