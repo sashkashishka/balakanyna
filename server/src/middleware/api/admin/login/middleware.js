@@ -4,31 +4,15 @@ import { Composer } from '../../../../core/composer.js';
 import { createError } from '../../../../core/errors.js';
 import { adminTable } from '../../../../db/schema.js';
 import { encryptPassword } from '../../../../utils/encryptPassword.js';
+import { createValidateBodyMiddleware } from '../../../auxiliary/validate/middleware.js';
+
+import schema from './schema.json' with { type: 'json' };
 
 const ERR_WRONG_CREDENTIALS = createError(
   'WRONG_CREDENTIALS',
   'Wrong credentials',
   400,
 );
-
-/**
- * @argument {import('../../../../core/context.js').Context} ctx
- */
-function validatePayloadMiddleware(ctx, next) {
-  const body = ctx.body;
-
-  if (
-    body &&
-    body?.name &&
-    typeof body?.name === 'string' &&
-    body?.password &&
-    typeof body?.password === 'string'
-  ) {
-    return next();
-  }
-
-  throw new ERR_WRONG_CREDENTIALS();
-}
 
 /**
  * @argument {import('../../../../core/context.js').Context} ctx
@@ -86,7 +70,7 @@ export const route = '/api/admin/login';
  * @argument {import('../../../../core/context.js').Context} ctx
  */
 export const middleware = Composer.compose([
-  validatePayloadMiddleware,
+  createValidateBodyMiddleware(schema, ERR_WRONG_CREDENTIALS),
   checkIfUserExistsMiddleware,
   loginMiddleware,
 ]);

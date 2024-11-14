@@ -1,29 +1,16 @@
 import { and, count, eq } from 'drizzle-orm';
 
 import { Composer } from '../../../../../core/composer.js';
-import { createError, ERR_INVALID_PAYLOAD } from '../../../../../core/errors.js';
+import {
+  createError,
+  ERR_INVALID_PAYLOAD,
+} from '../../../../../core/errors.js';
+import { createValidateBodyMiddleware } from '../../../../auxiliary/validate/middleware.js';
 import { userTable } from '../../../../../db/schema.js';
 
+import schema from './schema.json' with { type: 'json' };
+
 const ERR_DUPLICATE_USER = createError('DUPLICATE_USER', 'Duplicate user', 400);
-
-/**
- * @argument {import('../../../../../core/context.js').Context} ctx
- */
-function validateUserCreateBodyMiddleware(ctx, next) {
-  const body = ctx.body;
-
-  if (
-    body &&
-    body?.name &&
-    typeof body?.name === 'string' &&
-    body?.surname &&
-    typeof body?.surname === 'string'
-  ) {
-    return next();
-  }
-
-  throw new ERR_INVALID_PAYLOAD();
-}
 
 /**
  * @argument {import('../../../../../core/context.js').Context} ctx
@@ -70,7 +57,7 @@ export const method = 'post';
 export const route = '/api/admin/user/create';
 
 export const middleware = Composer.compose([
-  validateUserCreateBodyMiddleware,
+  createValidateBodyMiddleware(schema, ERR_INVALID_PAYLOAD),
   checkIfDuplicateMiddleware,
   createUserMiddleware,
 ]);

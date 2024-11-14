@@ -4,31 +4,15 @@ import { adminTable } from '../../../../db/schema.js';
 import { ERR_INVALID_PAYLOAD, createError } from '../../../../core/errors.js';
 import { Composer } from '../../../../core/composer.js';
 import { encryptPassword } from '../../../../utils/encryptPassword.js';
+import { createValidateBodyMiddleware } from '../../../auxiliary/validate/middleware.js';
+
+import schema from './schema.json' with { type: 'json' };
 
 const ERR_DUPLICATE_USER = createError(
   'DUPLICATE_USER',
   'Cannot create user that is already exist',
   400,
 );
-
-/**
- * @argument {import('../../../../core/context.js').Context} ctx
- */
-function validatePayloadMiddleware(ctx, next) {
-  const body = ctx.body;
-
-  if (
-    body &&
-    body?.name &&
-    typeof body?.name === 'string' &&
-    body?.password &&
-    typeof body?.password === 'string'
-  ) {
-    return next();
-  }
-
-  throw new ERR_INVALID_PAYLOAD();
-}
 
 /**
  * @argument {import('../../../../core/context.js').Context} ctx
@@ -71,7 +55,7 @@ export const method = 'post';
 export const route = '/api/admin/registration';
 
 export const middleware = Composer.compose([
-  validatePayloadMiddleware,
+  createValidateBodyMiddleware(schema, ERR_INVALID_PAYLOAD),
   checkIfDuplicateAdminMiddleware,
   registrationMiddleware,
 ]);
