@@ -25,3 +25,9 @@ export function jsonParse(buffer) {
 export function getUrl(urlString, base = 'http://localhost') {
   return new URL(urlString, base);
 }
+
+export function getSearchParams(url) {
+  const { searchParams } = url;
+
+  return Object.fromEntries(searchParams.entries());
+}

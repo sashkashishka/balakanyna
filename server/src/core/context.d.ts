@@ -43,6 +43,7 @@ export class Context {
   config: IConfig;
   body: any;
   url: URL;
+  searchParams: Record<string, unknown>;
 
   cookie: Cookie;
   jwt: Jwt;
