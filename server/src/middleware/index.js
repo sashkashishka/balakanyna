@@ -1,12 +1,17 @@
 import * as healthcheck from './api/healthcheck/middleware.js';
+
 import * as registration from './api/admin/registration/middleware.js';
 import * as login from './api/admin/login/middleware.js';
 import * as logout from './api/admin/logout/middleware.js';
+
 import * as uploadImage from './api/admin/upload/image/middleware.js';
+
 import * as userCreate from './api/admin/user/create/middleware.js';
 import * as userGet from './api/admin/user/get/middleware.js';
 import * as userUpdate from './api/admin/user/update/middleware.js';
 import * as userList from './api/admin/user/list/middleware.js';
+
+import * as labelCreate from './api/admin/label/create/middleware.js';
 
 import { receiveJsonBodyMiddleware } from './auxiliary/receiveJsonBody/middleware.js';
 import { createStaticMiddleware } from './auxiliary/static/middleware.js';
@@ -57,6 +62,13 @@ export function connectMiddlewares(router, config) {
     userList.route,
     verifyTokenMiddleware,
     userList.middleware,
+  );
+
+  // label
+  router[labelCreate.method](
+    labelCreate.route,
+    verifyTokenMiddleware,
+    labelCreate.middleware,
   );
 
   if (Array.isArray(config.static)) {

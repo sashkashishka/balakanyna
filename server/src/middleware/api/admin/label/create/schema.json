@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "color": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "image",
+        "task"
+      ]
+    }
+  },
+  "required": [
+    "name",
+    "color",
+    "type"
+  ],
+  "additionalProperties": false
+}

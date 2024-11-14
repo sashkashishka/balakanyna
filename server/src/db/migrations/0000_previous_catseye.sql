@@ -23,7 +23,9 @@ CREATE TABLE `label_image` (
 --> statement-breakpoint
 CREATE TABLE `label` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`type` text NOT NULL,
 	`name` text NOT NULL,
+	`color` text,
 	`createdAt` text DEFAULT (datetime('now')),
 	`updatedAt` text DEFAULT (datetime('now'))
 );

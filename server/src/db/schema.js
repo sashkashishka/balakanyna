@@ -38,7 +38,9 @@ export const taskTable = sqliteTable('task', {
 
 export const labelTable = sqliteTable('label', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
+  type: text({ enum: ['image', 'task'] }).notNull(),
   name: text().notNull(),
+  color: text(),
   createdAt: text().default(sql`(datetime('now'))`),
   updatedAt: text().default(sql`(datetime('now'))`),
 });
