@@ -13,6 +13,7 @@ import * as userList from './api/admin/user/list/middleware.js';
 
 import * as labelCreate from './api/admin/label/create/middleware.js';
 import * as labelUpdate from './api/admin/label/update/middleware.js';
+import * as labelList from './api/admin/label/list/middleware.js';
 
 import { receiveJsonBodyMiddleware } from './auxiliary/receiveJsonBody/middleware.js';
 import { createStaticMiddleware } from './auxiliary/static/middleware.js';
@@ -75,6 +76,11 @@ export function connectMiddlewares(router, config) {
     labelUpdate.route,
     verifyTokenMiddleware,
     labelUpdate.middleware,
+  );
+  router[labelList.method](
+    labelList.route,
+    verifyTokenMiddleware,
+    labelList.middleware,
   );
 
   if (Array.isArray(config.static)) {

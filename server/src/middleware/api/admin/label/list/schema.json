@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "properties": {
+    "order_by": {
+      "type": "string",
+      "enum": [
+        "createdAt",
+        "name"
+      ]
+    },
+    "dir": {
+      "type": "string",
+      "enum": [
+        "asc",
+        "desc"
+      ]
+    },
+    "color": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "order_by",
+    "dir"
+  ]
+}

@@ -6,7 +6,7 @@ import {
   ERR_INVALID_PAYLOAD,
 } from '../../../../../core/errors.js';
 import { createValidateBodyMiddleware } from '../../../../auxiliary/validate/middleware.js';
-import { labelTable, userTable } from '../../../../../db/schema.js';
+import { labelTable } from '../../../../../db/schema.js';
 
 import schema from './schema.json' with { type: 'json' };
 
