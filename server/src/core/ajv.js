@@ -1,5 +1,10 @@
 import { Ajv } from 'ajv';
+import addFormats from 'ajv-formats';
 
 export function getAjv() {
-  return new Ajv();
+  const ajv = new Ajv({ coerceTypes: true });
+
+  addFormats(ajv);
+
+  return ajv;
 }
