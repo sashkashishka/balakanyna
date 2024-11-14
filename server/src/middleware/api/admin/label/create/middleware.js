@@ -51,9 +51,9 @@ async function createLabelMiddleware(ctx) {
 
   ctx.json({
     id: result.id,
-    name: body.name,
-    type: body.type,
-    color: body.color,
+    name: result.name,
+    type: result.type,
+    color: result.color,
     createdAt: result.createdAt,
     updatedAt: result.updatedAt,
   });
