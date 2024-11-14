@@ -110,6 +110,13 @@ describe('[api] user get', async () => {
 
   test('should return 200 and existing user', async (t) => {
     let dbUsers = [];
+    const customUser = {
+      ...user,
+      notes: 'foo',
+      phoneNumber: '+23498234',
+      email: 'foo@bar.baz',
+      messangers: 'tg',
+    };
 
     const { request, baseUrl } = await getTestServer({
       t,
@@ -118,7 +125,7 @@ describe('[api] user get', async () => {
       },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbUsers = await seedUsers(db, [user]);
+        dbUsers = await seedUsers(db, [customUser]);
       },
     });
 
@@ -135,10 +142,16 @@ describe('[api] user get', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(typeof body.id, 'number');
-    assert.equal(body.name, user.name);
-    assert.equal(body.surname, user.surname);
+    assert.equal(body.name, customUser.name);
+    assert.equal(body.surname, customUser.surname);
+    assert.equal(body.grade, customUser.grade);
+    assert.equal(body.birthdate, customUser.birthdate);
+    assert.equal(body.notes, customUser.notes);
+    assert.equal(body.phoneNumber, customUser.phoneNumber);
+    assert.equal(body.email, customUser.email);
+    assert.equal(body.messangers, customUser.messangers);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 5);
+    assert.equal(Object.keys(body).length, 11);
   });
 });

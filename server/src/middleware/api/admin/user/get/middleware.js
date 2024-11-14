@@ -29,8 +29,14 @@ async function getUserMiddleware(ctx) {
     id: result.id,
     name: result.name,
     surname: result.surname,
-    updatedAt: result.updatedAt,
+    grade: result.grade,
+    birthdate: result.birthdate,
+    notes: result.notes,
+    phoneNumber: result.phoneNumber,
+    email: result.email,
+    messangers: result.messangers,
     createdAt: result.createdAt,
+    updatedAt: result.updatedAt,
   });
 }
 

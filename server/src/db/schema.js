@@ -11,6 +11,12 @@ export const userTable = sqliteTable('user', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text().notNull(),
   surname: text().notNull(),
+  grade: integer({ mode: 'number' }).notNull(),
+  birthdate: text().notNull(),
+  notes: text(),
+  phoneNumber: text(),
+  email: text(),
+  messangers: text(),
   createdAt: text().default(sql`(datetime('now'))`),
   updatedAt: text().default(sql`(datetime('now'))`),
 });
@@ -18,12 +24,8 @@ export const userTable = sqliteTable('user', {
 export const programTable = sqliteTable('program', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text().notNull(),
-  createdAt: text()
-    .notNull()
-    .default(sql`(datetime('now'))`),
-  updatedAt: text()
-    .notNull()
-    .default(sql`(datetime('now'))`),
+  createdAt: text().default(sql`(datetime('now'))`),
+  updatedAt: text().default(sql`(datetime('now'))`),
 });
 
 export const taskTable = sqliteTable('task', {

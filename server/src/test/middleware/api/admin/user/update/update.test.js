@@ -133,34 +133,118 @@ describe('[api] user update', async () => {
       },
     });
 
-    const name = 'Bob';
-    const surname = 'Mortimer';
+    const payload = {
+      id: dbUsers[0].id,
+      name: 'Bob',
+      surname: 'Mortimer',
+      grade: 2,
+      birthdate: new Date().toISOString(),
+      notes: 'foo',
+      phoneNumber: '+23498234',
+      email: 'foo@bar.baz',
+      messangers: 'tg',
+    };
 
     const resp = await request(userUpdate.route, {
       method: userUpdate.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
-      body: {
-        id: dbUsers[0].id,
-        name,
-        surname,
-      },
+      body: payload,
     });
     const body = await resp.json();
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbUsers[0].id);
-    assert.equal(body.name, name);
-    assert.equal(body.surname, surname);
+    assert.equal(body.name, payload.name);
+    assert.equal(body.surname, payload.surname);
+    assert.equal(body.grade, payload.grade);
+    assert.equal(body.birthdate, payload.birthdate);
+    assert.equal(body.notes, payload.notes);
+    assert.equal(body.phoneNumber, payload.phoneNumber);
+    assert.equal(body.email, payload.email);
+    assert.equal(body.messangers, payload.messangers);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 5);
+    assert.equal(Object.keys(body).length, 11);
 
     assert.notEqual(
       new Date(body.updatedAt).getTime(),
       new Date(dbUsers[0].updatedAt).getTime(),
-      'should update updatetAt field'
+      'should update updatetAt field',
+    );
+    assert.equal(
+      new Date(body.createdAt).getTime(),
+      new Date(dbUsers[0].createdAt).getTime(),
+    );
+  });
+
+  test('should not clear non required fields if they was not sent', async (t) => {
+    let dbUsers = [];
+    const customUser = {
+      ...user,
+      notes: 'boo',
+      email: 'lolo@gmail.com',
+    };
+
+    const { request } = await getTestServer({
+      t,
+      config: {
+        salt: { password: '123' },
+      },
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbUsers = await seedUsers(db, [customUser]);
+      },
+    });
+
+    const payload = {
+      id: dbUsers[0].id,
+      name: 'Bob',
+      surname: 'Mortimer',
+      grade: 2,
+      notes: undefined,
+      email: null,
+      birthdate: new Date().toISOString(),
+      phoneNumber: '+23498234',
+      messangers: 'tg',
+    };
+
+    const resp = await request(userUpdate.route, {
+      method: userUpdate.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+      body: payload,
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(body.id, dbUsers[0].id);
+    assert.equal(body.name, payload.name);
+    assert.equal(body.surname, payload.surname);
+    assert.equal(body.grade, payload.grade);
+    assert.equal(body.birthdate, payload.birthdate);
+    assert.equal(body.phoneNumber, payload.phoneNumber);
+    assert.equal(body.messangers, payload.messangers);
+    assert.equal(
+      body.notes,
+      dbUsers[0].notes,
+      'should remain the same as before',
+    );
+    assert.equal(
+      body.email,
+      dbUsers[0].email,
+      'should remain the same as before',
+    );
+    assert.equal(isNaN(new Date(body.createdAt)), false);
+    assert.equal(isNaN(new Date(body.updatedAt)), false);
+    assert.equal(Object.keys(body).length, 11);
+
+    assert.notEqual(
+      new Date(body.updatedAt).getTime(),
+      new Date(dbUsers[0].updatedAt).getTime(),
+      'should update updatetAt field',
     );
     assert.equal(
       new Date(body.createdAt).getTime(),

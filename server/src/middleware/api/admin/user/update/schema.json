@@ -9,11 +9,34 @@
     },
     "surname": {
       "type": "string"
+    },
+    "grade": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "birthdate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "messangers": {
+      "type": "string"
     }
   },
   "required": [
     "id",
     "name",
-    "surname"
-  ]
+    "surname",
+    "grade",
+    "birthdate"
+  ],
+  "additionalProperties": false
 }

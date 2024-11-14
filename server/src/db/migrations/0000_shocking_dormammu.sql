@@ -31,8 +31,8 @@ CREATE TABLE `label` (
 CREATE TABLE `program` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
-	`createdAt` text DEFAULT (datetime('now')) NOT NULL,
-	`updatedAt` text DEFAULT (datetime('now')) NOT NULL
+	`createdAt` text DEFAULT (datetime('now')),
+	`updatedAt` text DEFAULT (datetime('now'))
 );
 --> statement-breakpoint
 CREATE TABLE `program_task` (
@@ -71,6 +71,12 @@ CREATE TABLE `user` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`surname` text NOT NULL,
+	`grade` integer NOT NULL,
+	`birthdate` text NOT NULL,
+	`notes` text,
+	`phoneNumber` text,
+	`email` text,
+	`messangers` text,
 	`createdAt` text DEFAULT (datetime('now')),
 	`updatedAt` text DEFAULT (datetime('now'))
 );

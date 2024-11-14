@@ -100,30 +100,44 @@ describe('[api] user create', async () => {
       },
     });
 
+    const payload = {
+      ...user,
+      notes: 'foo',
+      phoneNumber: '+23498234',
+      email: 'foo@bar.baz',
+      messangers: 'tg',
+    };
+
     const resp = await request(userCreate.route, {
       method: userCreate.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
-      body: user,
+      body: payload,
     });
     const body = await resp.json();
 
     assert.equal(resp.status, 200);
     assert.equal(typeof body.id, 'number');
-    assert.equal(body.name, user.name);
-    assert.equal(body.surname, user.surname);
+    assert.equal(body.name, payload.name);
+    assert.equal(body.surname, payload.surname);
+    assert.equal(body.grade, payload.grade);
+    assert.equal(body.birthdate, payload.birthdate);
+    assert.equal(body.notes, payload.notes);
+    assert.equal(body.phoneNumber, payload.phoneNumber);
+    assert.equal(body.email, payload.email);
+    assert.equal(body.messangers, payload.messangers);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 5);
+    assert.equal(Object.keys(body).length, 11);
 
-
+    // try to create the same user again
     const resp2 = await request(userCreate.route, {
       method: userCreate.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
-      body: user,
+      body: payload,
     });
     const body2 = await resp2.json();
 
@@ -132,34 +146,5 @@ describe('[api] user create', async () => {
       error: 'DUPLICATE_USER',
       message: 'Duplicate user',
     });
-  });
-
-  test('should return 200 when user successfuly created', async (t) => {
-    const { request } = await getTestServer({
-      t,
-      config: {
-        salt: { password: '123' },
-      },
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-      },
-    });
-
-    const resp = await request(userCreate.route, {
-      method: userCreate.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
-      body: user,
-    });
-    const body = await resp.json();
-
-    assert.equal(resp.status, 200);
-    assert.equal(typeof body.id, 'number');
-    assert.equal(body.name, user.name);
-    assert.equal(body.surname, user.surname);
-    assert.equal(isNaN(new Date(body.createdAt)), false);
-    assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 5);
   });
 });

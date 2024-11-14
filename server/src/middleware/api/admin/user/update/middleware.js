@@ -40,13 +40,34 @@ async function checkIfUserExistsMiddleware(ctx, next) {
 async function updateUserMiddleware(ctx) {
   const body = ctx.body;
 
+  const value = {
+    id: body.id,
+    name: body.name,
+    surname: body.surname,
+    grade: body.grade,
+    birthdate: body.birthdate,
+    updatedAt: new Date().toISOString(),
+  };
+
+  if (body.notes) {
+    value.notes = body.notes;
+  }
+
+  if (body.email) {
+    value.email = body.email;
+  }
+
+  if (body.phoneNumber) {
+    value.phoneNumber = body.phoneNumber;
+  }
+
+  if (body.messangers) {
+    value.messangers = body.messangers;
+  }
+
   const [result] = await ctx.db
     .update(userTable)
-    .set({
-      name: body.name,
-      surname: body.surname,
-      updatedAt: new Date().toISOString(),
-    })
+    .set(value)
     .where(eq(userTable.id, body.id))
     .returning();
 
@@ -54,6 +75,12 @@ async function updateUserMiddleware(ctx) {
     id: result.id,
     name: result.name,
     surname: result.surname,
+    grade: result.grade,
+    birthdate: result.birthdate,
+    notes: result.notes,
+    phoneNumber: result.phoneNumber,
+    email: result.email,
+    messangers: result.messangers,
     createdAt: result.createdAt,
     updatedAt: result.updatedAt,
   });

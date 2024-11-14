@@ -43,6 +43,12 @@ async function createUserMiddleware(ctx) {
     .values({
       name: body.name,
       surname: body.surname,
+      grade: body.grade,
+      birthdate: body.birthdate,
+      notes: body.notes,
+      phoneNumber: body.phoneNumber,
+      email: body.email,
+      messangers: body.messangers,
     })
     .returning();
 
@@ -50,6 +56,12 @@ async function createUserMiddleware(ctx) {
     id: result.id,
     name: result.name,
     surname: result.surname,
+    grade: result.grade,
+    birthdate: result.birthdate,
+    notes: result.notes,
+    phoneNumber: result.phoneNumber,
+    email: result.email,
+    messangers: result.messangers,
     createdAt: result.createdAt,
     updatedAt: result.updatedAt,
   });
