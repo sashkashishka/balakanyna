@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import { integer, text, sqliteTable } from 'drizzle-orm/sqlite-core';
 
 export const adminTable = sqliteTable('admin', {
@@ -10,23 +11,34 @@ export const userTable = sqliteTable('user', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text().notNull(),
   surname: text().notNull(),
+  createdAt: text().default(sql`(datetime('now'))`),
+  updatedAt: text().default(sql`(datetime('now'))`),
 });
 
 export const programTable = sqliteTable('program', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text().notNull(),
-  userId: integer('user_id').references(() => userTable.id),
+  createdAt: text()
+    .notNull()
+    .default(sql`(datetime('now'))`),
+  updatedAt: text()
+    .notNull()
+    .default(sql`(datetime('now'))`),
 });
 
 export const taskTable = sqliteTable('task', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   type: text({ enum: ['slider'] }).notNull(),
   config: text({ mode: 'json' }),
+  createdAt: text().default(sql`(datetime('now'))`),
+  updatedAt: text().default(sql`(datetime('now'))`),
 });
 
 export const labelTable = sqliteTable('label', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text().notNull(),
+  createdAt: text().default(sql`(datetime('now'))`),
+  updatedAt: text().default(sql`(datetime('now'))`),
 });
 
 export const imageTable = sqliteTable('image', {
@@ -34,6 +46,8 @@ export const imageTable = sqliteTable('image', {
   filename: text().notNull(),
   path: text().notNull(),
   hashsum: text().notNull(),
+  createdAt: text().default(sql`(datetime('now'))`),
+  updatedAt: text().default(sql`(datetime('now'))`),
 });
 
 export const userProgramTable = sqliteTable('user_program', {
@@ -54,8 +68,8 @@ export const taskLabelTable = sqliteTable('task_label', {
   taskId: integer('task_id').references(() => taskTable.id),
 });
 
-export const taskImageTable = sqliteTable('task_image', {
+export const labelImageTable = sqliteTable('label_image', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   imageId: integer('image_id').references(() => imageTable.id),
-  taskId: integer('task_id').references(() => taskTable.id),
+  labelId: integer('label_id').references(() => labelTable.id),
 });

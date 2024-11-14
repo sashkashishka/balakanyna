@@ -45,6 +45,7 @@ async function updateUserMiddleware(ctx) {
     .set({
       name: body.name,
       surname: body.surname,
+      updatedAt: new Date().toISOString(),
     })
     .where(eq(userTable.id, body.id))
     .returning();
@@ -53,6 +54,8 @@ async function updateUserMiddleware(ctx) {
     id: result.id,
     name: result.name,
     surname: result.surname,
+    createdAt: result.createdAt,
+    updatedAt: result.updatedAt,
   });
 }
 

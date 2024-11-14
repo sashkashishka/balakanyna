@@ -113,7 +113,10 @@ describe('[api] user create', async () => {
     assert.equal(typeof body.id, 'number');
     assert.equal(body.name, user.name);
     assert.equal(body.surname, user.surname);
-    assert.equal(Object.keys(body).length, 3);
+    assert.equal(isNaN(new Date(body.createdAt)), false);
+    assert.equal(isNaN(new Date(body.updatedAt)), false);
+    assert.equal(Object.keys(body).length, 5);
+
 
     const resp2 = await request(userCreate.route, {
       method: userCreate.method,
@@ -155,6 +158,8 @@ describe('[api] user create', async () => {
     assert.equal(typeof body.id, 'number');
     assert.equal(body.name, user.name);
     assert.equal(body.surname, user.surname);
-    assert.equal(Object.keys(body).length, 3);
+    assert.equal(isNaN(new Date(body.createdAt)), false);
+    assert.equal(isNaN(new Date(body.updatedAt)), false);
+    assert.equal(Object.keys(body).length, 5);
   });
 });

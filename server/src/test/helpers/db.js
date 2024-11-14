@@ -10,7 +10,7 @@ import path from 'node:path';
  * migrate script for each run
  */
 export function getTmpDbUrl() {
-  return path.join(os.tmpdir(), 'balakanyna-test.db');
+  return path.join(os.tmpdir(), `balakanyna-test-${Date.now()}.db`);
 }
 
 export function runTestMigration(dbUrl) {
@@ -35,18 +35,18 @@ export function runTestMigration(dbUrl) {
 }
 
 /**
- * @description 
+ * @description
  * Copies existing db file with all migrations applied
  */
 export async function setupDb(dbUrl) {
-  const dbCopyUrl = path.resolve(os.tmpdir(), 'b.db')
+  const dbCopyUrl = path.resolve(os.tmpdir(), 'b.db');
   await fs.copyFile(dbUrl, dbCopyUrl);
 
   return dbCopyUrl;
 }
 
 /**
- * @description 
+ * @description
  * Deletes copied db after test run
  */
 export async function clearDb(dbUrl) {

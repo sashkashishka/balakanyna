@@ -153,6 +153,18 @@ describe('[api] user update', async () => {
     assert.equal(body.id, dbUsers[0].id);
     assert.equal(body.name, name);
     assert.equal(body.surname, surname);
-    assert.equal(Object.keys(body).length, 3);
+    assert.equal(isNaN(new Date(body.createdAt)), false);
+    assert.equal(isNaN(new Date(body.updatedAt)), false);
+    assert.equal(Object.keys(body).length, 5);
+
+    assert.notEqual(
+      new Date(body.updatedAt).getTime(),
+      new Date(dbUsers[0].updatedAt).getTime(),
+      'should update updatetAt field'
+    );
+    assert.equal(
+      new Date(body.createdAt).getTime(),
+      new Date(dbUsers[0].createdAt).getTime(),
+    );
   });
 });

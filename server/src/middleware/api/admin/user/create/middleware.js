@@ -50,6 +50,8 @@ async function createUserMiddleware(ctx) {
     id: result.id,
     name: result.name,
     surname: result.surname,
+    createdAt: result.createdAt,
+    updatedAt: result.updatedAt,
   });
 }
 
