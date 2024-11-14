@@ -1,4 +1,6 @@
 import type { Servers as HttpServer } from 'node:http';
+import type { Ajv } from 'ajv';
+
 import type { Router } from './core/router.js';
 import type { Logger } from './utils/logger.js';
 import type { IDb } from './db/index.js';
@@ -8,6 +10,7 @@ export interface IDependencies {
   router: Router;
   db: IDb;
   logger: Logger;
+  ajv: Ajv;
 }
 
 export interface IConfig {
@@ -71,4 +74,6 @@ export class Server {
   get server(): HttpServer;
 
   get router(): Router<Context>;
+
+  get ajv(): Ajv;
 }

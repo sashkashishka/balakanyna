@@ -5,13 +5,15 @@ export class Router extends Composer {
   static noop() {}
 
   #db = undefined;
+  #ajv = undefined;
   #logger = undefined;
   #config = undefined;
   #handleError = async () => void 0;
 
-  constructor(config, { db, logger }) {
+  constructor(config, { db, logger, ajv }) {
     super();
     this.#db = db;
+    this.#ajv = ajv;
     this.#logger = logger;
     this.#config = config;
 
@@ -19,7 +21,14 @@ export class Router extends Composer {
   }
 
   async handle(req, res) {
-    const ctx = new Context(req, res, this.#db, this.#logger, this.#config);
+    const ctx = new Context(
+      req,
+      res,
+      this.#db,
+      this.#ajv,
+      this.#logger,
+      this.#config,
+    );
 
     try {
       await this.#handleRequest(ctx);

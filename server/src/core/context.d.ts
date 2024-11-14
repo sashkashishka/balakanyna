@@ -1,5 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
+import type { Ajv } from 'ajv';
 import * as cookie from 'cookie';
+
 import type { Logger } from '../utils/logger.js';
 import type { IDb } from '../db/index.js';
 import type { IConfig } from './server.js';
@@ -28,11 +30,13 @@ export class Context {
     req: IncomingMessage,
     res: ServerResponse,
     db: IDb,
+    ajv: Ajv,
     logger: Logger,
     config: IConfig,
   ): void;
 
   db: IDb;
+  ajv: Ajv;
   req: IncomingMessage;
   res: ServerResponse;
   logger: Logger;

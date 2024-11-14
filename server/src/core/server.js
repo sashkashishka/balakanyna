@@ -16,6 +16,10 @@ export class Server {
    */
   #router = undefined;
   /**
+   * @type {import('ajv').Ajv}
+   */
+  #ajv = undefined;
+  /**
    * @type {import('node:http').Server}
    */
   #server = undefined;
@@ -30,6 +34,7 @@ export class Server {
     this.#db = deps.db;
     this.#router = deps.router;
     this.#logger = deps.logger;
+    this.#ajv = deps.ajv;
   }
 
   get db() {
@@ -42,6 +47,10 @@ export class Server {
 
   get router() {
     return this.#router;
+  }
+
+  get ajv() {
+    return this.#ajv;
   }
 
   async init() {

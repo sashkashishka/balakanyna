@@ -1,9 +1,10 @@
 import path from 'node:path';
 
+import { getAjv } from '../../core/ajv.js';
 import { getDb } from '../../db/index.js';
 import { createServer, getRouter } from '../../server.js';
 import { Logger } from '../../utils/logger.js';
-import { clearDb, getTmpDbUrl, runTestMigration, setupDb } from './db.js';
+import { clearDb, setupDb } from './db.js';
 import { mergeDeep } from '../../utils/merge.js';
 
 /**
@@ -35,6 +36,8 @@ export async function getTestServer({
     transport: loggerTransport,
   });
 
+  const ajv = deps.ajv || getAjv();
+
   let db = deps.db;
   let dbDir = '';
 
@@ -43,9 +46,10 @@ export async function getTestServer({
     db = await getDb(dbDir);
   }
 
-  const router = getRouter(config, { logger, db }, connectMiddleware);
+  const router = getRouter(config, { logger, ajv, db }, connectMiddleware);
 
   const server = await createServer(config, {
+    ajv,
     logger,
     router,
     db,

@@ -93,7 +93,7 @@ export class Jwt {
 }
 
 export class Context {
-  constructor(req, res, db, logger, config) {
+  constructor(req, res, db, ajv, logger, config) {
     /**
      * @type {import('node:http').IncomingMessage}
      */
@@ -106,6 +106,10 @@ export class Context {
      * @type {import('../db/index.js').IDb}
      */
     this.db = db;
+    /**
+     * @type {import('ajv').Ajv}
+     */
+    this.ajv = ajv;
     /**
      * @type {import('../utils/logger.js').Logger}
      */
