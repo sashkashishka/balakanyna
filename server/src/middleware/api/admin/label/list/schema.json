@@ -1,4 +1,5 @@
 {
+  "title": "LabelListSearchParams",
   "type": "object",
   "properties": {
     "order_by": {

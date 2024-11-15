@@ -1,4 +1,5 @@
 {
+  "title": "UserListSearchParams",
   "type": "object",
   "properties": {
     "order_by": {

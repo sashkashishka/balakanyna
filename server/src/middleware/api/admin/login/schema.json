@@ -1,4 +1,5 @@
 {
+  "title": "LoginBody",
   "type": "object",
   "properties": {
     "name": {

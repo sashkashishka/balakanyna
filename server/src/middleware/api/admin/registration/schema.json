@@ -1,4 +1,5 @@
 {
+  "title": "RegistrationBody",
   "type": "object",
   "properties": {
     "name": {

@@ -1,4 +1,5 @@
 {
+  "title": "PaginationSearchParams",
   "type": "object",
   "properties": {
     "offset": {

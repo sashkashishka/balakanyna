@@ -1,4 +1,5 @@
 {
+  "title": "TaskCreateBody",
   "type": "object",
   "properties": {
     "name": {
