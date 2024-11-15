@@ -7,13 +7,26 @@
     "name": {
       "type": "string"
     },
-    "color": {
-      "type": "string"
+    "config": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "type": "string"
+        },
+        "bordered": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "color",
+        "bordered"
+      ],
+      "additionalProperties": false
     }
   },
   "required": [
     "id",
     "name",
-    "color"
+    "config"
   ]
 }

@@ -4,8 +4,21 @@
     "name": {
       "type": "string"
     },
-    "color": {
-      "type": "string"
+    "config": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "type": "string"
+        },
+        "bordered": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "color",
+        "bordered"
+      ],
+      "additionalProperties": false
     },
     "type": {
       "type": "string",
@@ -17,7 +30,7 @@
   },
   "required": [
     "name",
-    "color",
+    "config",
     "type"
   ],
   "additionalProperties": false

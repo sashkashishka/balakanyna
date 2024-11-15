@@ -148,7 +148,7 @@ describe('[api] label create', async () => {
     assert.equal(typeof body.id, 'number');
     assert.equal(body.name, payload.name);
     assert.equal(body.type, payload.type);
-    assert.equal(body.color, payload.color);
+    assert.deepEqual(body.config, payload.config);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
     assert.equal(Object.keys(body).length, 6);
@@ -178,7 +178,7 @@ describe('[api] label create', async () => {
     assert.equal(typeof body.id, 'number');
     assert.equal(body.name, label.name);
     assert.equal(body.type, label.type);
-    assert.equal(body.color, label.color);
+    assert.deepEqual(body.config, label.config);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
     assert.equal(Object.keys(body).length, 6);

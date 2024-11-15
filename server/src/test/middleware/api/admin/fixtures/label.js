@@ -1,44 +1,71 @@
 export const label = {
   name: 'Foo',
   type: 'task',
-  color: 'green',
+  config: {
+    color: 'green',
+    bordered: false,
+  },
 };
 
 export const labels = [
   {
     name: 'Foo',
     type: 'task',
-    color: 'green',
+    config: {
+      color: 'green',
+      bordered: false,
+    },
     createdAt: '2024-11-14T00:00:00',
+    updatedAt: '2024-11-14T00:00:00',
   },
   {
     name: 'Bar',
     type: 'task',
-    color: 'red',
+    config: {
+      color: 'red',
+      bordered: false,
+    },
     createdAt: '2024-11-13T00:00:00',
+    updatedAt: '2024-11-13T00:00:00',
   },
   {
     name: 'Bar',
     type: 'image',
-    color: 'yellow',
+    config: {
+      color: 'yellow',
+      bordered: false,
+    },
     createdAt: '2024-11-12T00:00:00',
+    updatedAt: '2024-11-12T00:00:00',
   },
   {
     name: 'Baz',
     type: 'image',
-    color: 'purple',
+    config: {
+      color: 'purple',
+      bordered: false,
+    },
     createdAt: '2024-11-11T00:00:00',
+    updatedAt: '2024-11-11T00:00:00',
   },
   {
     name: 'Boo',
     type: 'image',
-    color: 'brown',
+    config: {
+      color: 'brown',
+      bordered: false,
+    },
     createdAt: '2024-11-10T00:00:00',
+    updatedAt: '2024-11-10T00:00:00',
   },
   {
     name: 'Koo',
     type: 'image',
-    color: 'blue',
+    config: {
+      color: 'blue',
+      bordered: false,
+    },
     createdAt: '2024-11-09T00:00:00',
+    updatedAt: '2024-11-09T00:00:00',
   },
 ];

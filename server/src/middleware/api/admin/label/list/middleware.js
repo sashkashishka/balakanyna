@@ -17,13 +17,9 @@ const direction = {
  * @argument {import('../../../../../core/context.js').Context} ctx
  */
 async function labelListMiddleware(ctx) {
-  const { limit, offset, order_by, dir, color, name } = ctx.searchParams;
+  const { limit, offset, order_by, dir, name } = ctx.searchParams;
 
   const andClauses = [];
-
-  if (color) {
-    andClauses.push(like(labelTable.color, `%${color}%`));
-  }
 
   if (name) {
     andClauses.push(like(labelTable.name, `%${name}%`));

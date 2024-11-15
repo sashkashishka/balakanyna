@@ -45,7 +45,7 @@ async function createLabelMiddleware(ctx) {
     .values({
       name: body.name,
       type: body.type,
-      color: body.color,
+      config: body.config,
     })
     .returning();
 
@@ -53,7 +53,7 @@ async function createLabelMiddleware(ctx) {
     id: result.id,
     name: result.name,
     type: result.type,
-    color: result.color,
+    config: result.config,
     createdAt: result.createdAt,
     updatedAt: result.updatedAt,
   });

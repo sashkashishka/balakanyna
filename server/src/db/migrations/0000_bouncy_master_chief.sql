@@ -25,7 +25,7 @@ CREATE TABLE `label` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`type` text NOT NULL,
 	`name` text NOT NULL,
-	`color` text,
+	`config` text NOT NULL,
 	`createdAt` text DEFAULT (datetime('now')),
 	`updatedAt` text DEFAULT (datetime('now'))
 );
@@ -59,14 +59,6 @@ CREATE TABLE `task` (
 	`config` text,
 	`createdAt` text DEFAULT (datetime('now')),
 	`updatedAt` text DEFAULT (datetime('now'))
-);
---> statement-breakpoint
-CREATE TABLE `user_program` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`user_id` integer,
-	`program_id` integer,
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`program_id`) REFERENCES `program`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `user` (

@@ -5,6 +5,7 @@
       "type": "string",
       "enum": [
         "createdAt",
+        "updatedAt",
         "name"
       ]
     },
@@ -14,9 +15,6 @@
         "asc",
         "desc"
       ]
-    },
-    "color": {
-      "type": "string"
     },
     "name": {
       "type": "string"

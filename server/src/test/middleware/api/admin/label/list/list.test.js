@@ -13,7 +13,7 @@ import { seedLabels } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
 import { labels } from '../../fixtures/label.js';
 
-function getEndpoint(baseUrl, { limit, offset, order_by, dir, color, name }) {
+function getEndpoint(baseUrl, { limit, offset, order_by, dir, name }) {
   const url = getUrl(labelList.route, baseUrl);
 
   url.searchParams.set('limit', limit);
@@ -21,9 +21,6 @@ function getEndpoint(baseUrl, { limit, offset, order_by, dir, color, name }) {
   url.searchParams.set('order_by', order_by);
   url.searchParams.set('dir', dir);
 
-  if (color) {
-    url.searchParams.set('color', color);
-  }
   if (name) {
     url.searchParams.set('name', name);
   }
@@ -145,7 +142,7 @@ describe('[api] label list', async () => {
 
     assert.ok(
       new Date(body[body.length - 1].createdAt) < new Date(body2[0].createdAt),
-      'shoult be in chronological order',
+      'should be in chronological order',
     );
   });
 
@@ -207,7 +204,131 @@ describe('[api] label list', async () => {
 
     assert.ok(
       new Date(body[body.length - 1].createdAt) > new Date(body2[0].createdAt),
-      'shoult be in chronological order',
+      'should be in chronological order',
+    );
+  });
+
+  test('should return 200 and paginated result with order_by updatedAt and dir asc', async (t) => {
+    const offset = 0;
+    const limit = labels.length / 2;
+
+    const { request, baseUrl } = await getTestServer({
+      t,
+      config: {
+        salt: { password: '123' },
+      },
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        await seedLabels(db, labels);
+      },
+    });
+
+    const url = getEndpoint(baseUrl, {
+      offset,
+      limit,
+      order_by: 'updatedAt',
+      dir: 'asc',
+    });
+
+    const resp = await request(url, {
+      method: labelList.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(body.length, limit);
+
+    for (let i = 1; i < body.length; i++) {
+      assert.ok(new Date(body[i - 1].updatedAt) <= new Date(body[i].updatedAt));
+    }
+
+    // next page
+    const url2 = getEndpoint(baseUrl, {
+      offset: offset + limit,
+      limit,
+      order_by: 'updatedAt',
+      dir: 'asc',
+    });
+
+    const resp2 = await request(url2, {
+      method: labelList.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+    });
+    const body2 = await resp2.json();
+
+    assert.equal(resp2.status, 200);
+    assert.deepEqual(body2.length, limit);
+
+    assert.ok(
+      new Date(body[body.length - 1].updatedAt) < new Date(body2[0].updatedAt),
+      'should be in chronological order',
+    );
+  });
+
+  test('should return 200 and paginated result with order_by updatedAt and dir desc', async (t) => {
+    const offset = 0;
+    const limit = labels.length / 2;
+
+    const { request, baseUrl } = await getTestServer({
+      t,
+      config: {
+        salt: { password: '123' },
+      },
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        await seedLabels(db, labels);
+      },
+    });
+
+    const url = getEndpoint(baseUrl, {
+      offset,
+      limit,
+      order_by: 'updatedAt',
+      dir: 'desc',
+    });
+
+    const resp = await request(url, {
+      method: labelList.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(body.length, limit);
+
+    for (let i = 1; i < body.length; i++) {
+      assert.ok(new Date(body[i - 1].updatedAt) >= new Date(body[i].updatedAt));
+    }
+
+    // next page
+    const url2 = getEndpoint(baseUrl, {
+      offset: offset + limit,
+      limit,
+      order_by: 'updatedAt',
+      dir: 'desc',
+    });
+
+    const resp2 = await request(url2, {
+      method: labelList.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+    });
+    const body2 = await resp2.json();
+
+    assert.equal(resp2.status, 200);
+    assert.deepEqual(body2.length, limit);
+
+    assert.ok(
+      new Date(body[body.length - 1].updatedAt) > new Date(body2[0].updatedAt),
+      'should be in chronological order',
     );
   });
 
@@ -331,46 +452,6 @@ describe('[api] label list', async () => {
 
     for (let i = 0; i < body.length; i++) {
       assert.match(body[i].name, new RegExp(name, 'i'));
-    }
-  });
-
-  test('should return 200 filter color', async (t) => {
-    const offset = 0;
-    const limit = labels.length;
-    const color = 'green';
-
-    const { request, baseUrl } = await getTestServer({
-      t,
-      config: {
-        salt: { password: '123' },
-      },
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        await seedLabels(db, labels);
-      },
-    });
-
-    const url = getEndpoint(baseUrl, {
-      offset,
-      limit,
-      order_by: 'createdAt',
-      dir: 'desc',
-      color,
-    });
-
-    const resp = await request(url, {
-      method: labelList.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
-    });
-    const body = await resp.json();
-
-    assert.equal(resp.status, 200);
-    assert.equal(body.length, 1);
-
-    for (let i = 0; i < body.length; i++) {
-      assert.match(body[i].color, new RegExp(color, 'i'));
     }
   });
 });
