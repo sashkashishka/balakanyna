@@ -31,7 +31,7 @@ export const programTable = sqliteTable('program', {
 export const taskTable = sqliteTable('task', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text().notNull(),
-  type: text({ enum: ['imageSlider'] }).notNull(),
+  type: text({ enum: ['imageSlider', 'semaphoreText'] }).notNull(),
   config: text({ mode: 'json' }),
   createdAt: text().default(sql`(datetime('now'))`),
   updatedAt: text().default(sql`(datetime('now'))`),

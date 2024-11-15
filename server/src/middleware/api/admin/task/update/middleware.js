@@ -17,6 +17,12 @@ const ERR_TASK_DOES_NOT_EXIST = createError(
   400,
 );
 
+const ERR_DIFFERENT_TASK_TYPE = createError(
+  'DIFFERENT_TASK_TYPE',
+  'Different task type',
+  400,
+);
+
 /**
  * @argument {import('../../../../../core/context.js').Context} ctx
  */
@@ -30,6 +36,24 @@ async function checkIfTaskExistsMiddleware(ctx, next) {
 
   if (result?.count === 0) {
     throw new ERR_TASK_DOES_NOT_EXIST();
+  }
+
+  return next();
+}
+
+/**
+ * @argument {import('../../../../../core/context.js').Context} ctx
+ */
+async function checkIfTaskTypeTheSameMiddleware(ctx, next) {
+  const body = ctx.body;
+
+  const [result] = await ctx.db
+    .select({ count: count(taskTable.id) })
+    .from(taskTable)
+    .where(eq(taskTable.type, body.type));
+
+  if (result?.count === 0) {
+    throw new ERR_DIFFERENT_TASK_TYPE();
   }
 
   return next();
@@ -91,6 +115,7 @@ export const route = '/api/admin/task/update';
 export const middleware = Composer.compose([
   createValidateBodyMiddleware(schema, ERR_INVALID_PAYLOAD),
   checkIfTaskExistsMiddleware,
+  checkIfTaskTypeTheSameMiddleware,
   verifyTaskConfigSchemaMiddleware,
   updateTaskMiddleware,
 ]);

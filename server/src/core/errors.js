@@ -50,3 +50,9 @@ export const ERR_UNSUPPORTED_MEDIA_TYPE = createError(
   'Unsupported Media Type',
   415,
 );
+
+export const ERR_DELETE_RELATION = createError(
+  'DELETE_RELATION',
+  'Cannot delete because of relation',
+  400,
+);

@@ -49,6 +49,98 @@ describe('[api] task update slider', () => {
     });
   });
 
+  test('should return 400 if pass wrong type', async (t) => {
+    let dbTasks = [];
+
+    const { request } = await getTestServer({
+      t,
+      config: {
+        salt: { password: '123' },
+      },
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbTasks = await seedTasks(db, [imageSliderTask]);
+      },
+    });
+
+    const payload = {
+      ...imageSliderTask,
+      id: dbTasks[0].id,
+      type: 'semaphoreText',
+      name: 'BrandNewName',
+      config: {
+        title: 'BrandNewTitle',
+        slides: [
+          {
+            image: {
+              id: 2,
+              hashsum: 'bbb',
+              filename: 'baz.png',
+              path: 'bbb.png',
+            },
+          },
+        ],
+      },
+    };
+
+    const resp = await request(taskUpdate.route, {
+      method: taskUpdate.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+      body: payload,
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 400);
+    assert.deepEqual(body, {
+      error: 'DIFFERENT_TASK_TYPE',
+      message: 'Different task type',
+    });
+  });
+
+  test('should return 400 if pass wrong type but proper config for those type', async (t) => {
+    let dbTasks = [];
+
+    const { request } = await getTestServer({
+      t,
+      config: {
+        salt: { password: '123' },
+      },
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbTasks = await seedTasks(db, [imageSliderTask]);
+      },
+    });
+
+    const payload = {
+      ...imageSliderTask,
+      id: dbTasks[0].id,
+      type: 'semaphoreText',
+      name: 'BrandNewName',
+      config: {
+        colors: ['123'],
+        text: ['a'],
+        delayRange: [1, 2],
+      },
+    };
+
+    const resp = await request(taskUpdate.route, {
+      method: taskUpdate.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+      body: payload,
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 400);
+    assert.deepEqual(body, {
+      error: 'DIFFERENT_TASK_TYPE',
+      message: 'Different task type',
+    });
+  });
+
   test('should return 200 and update task', async (t) => {
     let dbTasks = [];
 
