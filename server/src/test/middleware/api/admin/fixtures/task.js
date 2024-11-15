@@ -1,4 +1,4 @@
-export const sliderTask = {
+export const imageSliderTask = {
   name: 'slider task',
   type: 'imageSlider',
   config: {
