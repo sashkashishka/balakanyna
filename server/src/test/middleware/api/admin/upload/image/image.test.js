@@ -13,7 +13,7 @@ import { seedAdmins } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
 
 async function getSupportedFile() {
-  const name = 'foo.jpg';
+  const name = 'foo.jpeg';
   const type = 'image/jpeg';
   const filepath = path.resolve(
     import.meta.dirname,
@@ -27,6 +27,7 @@ async function getSupportedFile() {
     type,
     filepath,
     file,
+    extension: path.extname(name),
   };
 }
 
@@ -50,7 +51,6 @@ async function getUnSupportedFile() {
 
 let saveDir = undefined;
 const fieldname = 'file';
-const hashsum = '123';
 
 beforeEach(async () => {
   saveDir = await fsp.mkdtemp(path.resolve(import.meta.dirname, 'tmp', 'test'));
@@ -79,7 +79,6 @@ describe('[api] upload image', async () => {
       method: uploadImage.method,
       headers: {
         cookie: 'token=123',
-        [uploadImage.HASHSUM_HEADER]: '123',
       },
     });
     const body = await resp.json();
@@ -118,36 +117,6 @@ describe('[api] upload image', async () => {
     });
   });
 
-  test('should return 422 if try to upload image without custom hash header', async (t) => {
-    const { request } = await getTestServer({
-      t,
-      config: {
-        salt: { password: '123' },
-        media: {
-          saveDir,
-        },
-      },
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-      },
-    });
-
-    const resp = await request(uploadImage.route, {
-      method: uploadImage.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-        'content-type': 'multipart/form-data',
-      },
-    });
-    const body = await resp.json();
-
-    assert.equal(resp.status, 422);
-    assert.deepEqual(body, {
-      error: 'MISSING_IMAGE_HASHSUM',
-      message: 'Missing image hashum',
-    });
-  });
-
   test('should return 422 if try to upload file with a wrong field name', async (t) => {
     const wrongFieldname = 'file1';
 
@@ -175,7 +144,6 @@ describe('[api] upload image', async () => {
       method: uploadImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
-        [uploadImage.HASHSUM_HEADER]: hashsum,
       },
       body: formData,
       isJson: false,
@@ -215,7 +183,6 @@ describe('[api] upload image', async () => {
       method: uploadImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
-        [uploadImage.HASHSUM_HEADER]: hashsum,
       },
       body: formData,
       isJson: false,
@@ -255,7 +222,6 @@ describe('[api] upload image', async () => {
       method: uploadImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
-        [uploadImage.HASHSUM_HEADER]: hashsum,
       },
       body: formData,
       isJson: false,
@@ -296,7 +262,6 @@ describe('[api] upload image', async () => {
       method: uploadImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
-        [uploadImage.HASHSUM_HEADER]: hashsum,
       },
       body: formData,
       isJson: false,
@@ -331,7 +296,7 @@ describe('[api] upload image', async () => {
 
     const formData = new FormData();
 
-    const { file, name } = await getSupportedFile();
+    const { file, name, extension } = await getSupportedFile();
 
     formData.append(fieldname, file, name);
     formData.append('test', 1);
@@ -340,7 +305,6 @@ describe('[api] upload image', async () => {
       method: uploadImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
-        [uploadImage.HASHSUM_HEADER]: hashsum,
       },
       body: formData,
       isJson: false,
@@ -352,15 +316,20 @@ describe('[api] upload image', async () => {
     assert.ok(Array.isArray(body));
 
     const [image] = body;
+    const hashedFilename = `${image.hashsum}${extension}`;
 
     assert.ok(image);
     assert.equal(typeof image.id, 'number');
     assert.equal(image.filename, name);
-    assert.equal(image.hashsum, hashsum);
-    assert.equal(image.path, name);
+    assert.equal(typeof image.hashsum, 'string');
+    assert.equal(image.path, hashedFilename);
+    assert.equal(isNaN(new Date(image.createdAt)), false);
+    assert.equal(isNaN(new Date(image.updatedAt)), false);
+    assert.equal(Object.keys(image).length, 6);
 
     const files = await fsp.readdir(saveDir);
-    assert.equal(files.length, 1, 'should not save any file');
+    assert.equal(files.length, 1, 'should save any file');
+    assert.equal(files[0], hashedFilename);
   });
 
   test('should return 200 with first file as response if try to upload more than 1 file at once', async (t) => {
@@ -381,7 +350,7 @@ describe('[api] upload image', async () => {
 
     const formData = new FormData();
 
-    const { file, name } = await getSupportedFile();
+    const { file, name, extension } = await getSupportedFile();
 
     formData.append(fieldname, file, name);
     formData.append(fieldname, file, name);
@@ -390,7 +359,6 @@ describe('[api] upload image', async () => {
       method: uploadImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
-        [uploadImage.HASHSUM_HEADER]: hashsum,
       },
       body: formData,
       isJson: false,
@@ -402,15 +370,20 @@ describe('[api] upload image', async () => {
     assert.ok(Array.isArray(body));
 
     const [image] = body;
+    const hashedFilename = `${image.hashsum}${extension}`;
 
     assert.ok(image);
     assert.equal(typeof image.id, 'number');
     assert.equal(image.filename, name);
-    assert.equal(image.hashsum, hashsum);
-    assert.equal(image.path, name);
+    assert.equal(typeof image.hashsum, 'string');
+    assert.equal(image.path, hashedFilename);
+    assert.equal(isNaN(new Date(image.createdAt)), false);
+    assert.equal(isNaN(new Date(image.updatedAt)), false);
+    assert.equal(Object.keys(image).length, 6);
 
     const files = await fsp.readdir(saveDir);
-    assert.equal(files.length, 1, 'should save file');
+    assert.equal(files.length, 1, 'should save any file');
+    assert.equal(files[0], hashedFilename);
   });
 
   test('should return 200 and empty response if there is no file has been uploaded', async (t) => {
@@ -435,7 +408,6 @@ describe('[api] upload image', async () => {
       method: uploadImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
-        [uploadImage.HASHSUM_HEADER]: hashsum,
       },
       body: formData,
       isJson: false,
@@ -478,7 +450,6 @@ describe('[api] upload image', async () => {
       method: uploadImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
-        [uploadImage.HASHSUM_HEADER]: hashsum,
       },
       body: formData,
       isJson: false,
@@ -513,7 +484,7 @@ describe('[api] upload image', async () => {
 
     const formData = new FormData();
 
-    const { file, name } = await getSupportedFile();
+    const { file, name, extension } = await getSupportedFile();
 
     formData.append(fieldname, file, name);
 
@@ -521,7 +492,6 @@ describe('[api] upload image', async () => {
       method: uploadImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
-        [uploadImage.HASHSUM_HEADER]: hashsum,
       },
       body: formData,
       isJson: false,
@@ -533,19 +503,26 @@ describe('[api] upload image', async () => {
     assert.ok(Array.isArray(body));
 
     const [image] = body;
+    const hashedFilename = `${image.hashsum}${extension}`;
 
     assert.ok(image);
     assert.equal(typeof image.id, 'number');
     assert.equal(image.filename, name);
-    assert.equal(image.hashsum, hashsum);
-    assert.equal(image.path, name);
+    assert.equal(typeof image.hashsum, 'string');
+    assert.equal(image.path, hashedFilename);
+    assert.equal(isNaN(new Date(image.createdAt)), false);
+    assert.equal(isNaN(new Date(image.updatedAt)), false);
+    assert.equal(Object.keys(image).length, 6);
+
+    const files = await fsp.readdir(saveDir);
+    assert.equal(files.length, 1, 'should save any file');
+    assert.equal(files[0], hashedFilename);
 
     // try to upload the same file second time
     const resp2 = await request(uploadImage.route, {
       method: uploadImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
-        [uploadImage.HASHSUM_HEADER]: hashsum,
       },
       body: formData,
       isJson: false,
@@ -562,8 +539,14 @@ describe('[api] upload image', async () => {
     assert.equal(image2.filename, image.filename);
     assert.equal(image2.hashsum, image.hashsum);
     assert.equal(image2.path, image.path);
+    assert.equal(image2.createdAt, image.createdAt);
+    assert.equal(image2.updatedAt, image.updatedAt);
+    assert.equal(isNaN(new Date(image2.createdAt)), false);
+    assert.equal(isNaN(new Date(image2.updatedAt)), false);
+    assert.equal(Object.keys(image2).length, 6);
 
-    const files = await fsp.readdir(saveDir);
-    assert.equal(files.length, 1, 'should save only 1 file');
+    const files2 = await fsp.readdir(saveDir);
+    assert.equal(files2.length, 1, 'should save only 1 file');
+    assert.match(files2[0], new RegExp(image.hashsum));
   });
 });

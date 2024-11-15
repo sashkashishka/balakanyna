@@ -1,6 +1,8 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import fsp from 'node:fs/promises';
+import crypto from 'node:crypto';
+
 import { Busboy } from '@fastify/busboy';
 import { eq } from 'drizzle-orm';
 import * as mimeTypes from 'mime-types';
@@ -11,12 +13,7 @@ import {
   ERR_UNSUPPORTED_MEDIA_TYPE,
 } from '../../../../../core/errors.js';
 import { imageTable } from '../../../../../db/schema.js';
-
-const ERR_MISSING_IMAGE_HASHSUM = createError(
-  'MISSING_IMAGE_HASHSUM',
-  'Missing image hashum',
-  422,
-);
+import { safeFileRm } from './utils.js';
 
 const ERR_UNSUPPORTED_IMAGE_TYPE = createError(
   'UNSUPPORTED_IMAGE_TYPE',
@@ -36,8 +33,6 @@ const ERR_HIT_FILE_SIZE_LIMIT = createError(
   422,
 );
 
-export const HASHSUM_HEADER = 'x-image-hashsum';
-
 /**
  * @argument {import('../../../../../core/context.js').Context} ctx
  */
@@ -46,46 +41,6 @@ function verifyIsMultipartFormDataContentTypeMiddleware(ctx, next) {
 
   if (!contentType || !contentType.startsWith('multipart/form-data')) {
     throw new ERR_UNSUPPORTED_MEDIA_TYPE();
-  }
-
-  return next();
-}
-
-/**
- * @argument {import('../../../../../core/context.js').Context} ctx
- */
-function checkIfHaveHashsumMiddleware(ctx, next) {
-  const hashsum = ctx.req.headers[HASHSUM_HEADER];
-
-  if (typeof hashsum !== 'string' || hashsum?.length === 0) {
-    throw new ERR_MISSING_IMAGE_HASHSUM();
-  }
-
-  return next();
-}
-
-/**
- * @argument {import('../../../../../core/context.js').Context} ctx
- */
-async function checkIfDuplicateMiddleware(ctx, next) {
-  const hashsum = ctx.req.headers[HASHSUM_HEADER];
-
-  const [record] = await ctx.db
-    .select()
-    .from(imageTable)
-    .where(eq(imageTable.hashsum, hashsum));
-
-  if (record) {
-    ctx.json([
-      {
-        id: record.id,
-        filename: record.filename,
-        hashsum: record.hashsum,
-        path: record.path,
-      },
-    ]);
-
-    return;
   }
 
   return next();
@@ -110,6 +65,9 @@ async function uploadImageMiddelware(ctx) {
    * @type {import('node:fs').WriteStream}
    */
   let fileWriteStream = undefined;
+  let hashWriteStream = crypto.createHash('sha1');
+  hashWriteStream.setEncoding('hex');
+
   /**
    * imageDb resut
    */
@@ -139,22 +97,52 @@ async function uploadImageMiddelware(ctx) {
       }
 
       filename = path.basename(filename);
-      var saveTo = path.join(ctx.config.media.saveDir, filename);
 
-      fileWriteStream = fs.createWriteStream(saveTo, {
+      const tmpSaveTo = path.join(ctx.config.media.saveDir, filename);
+
+      fileWriteStream = fs.createWriteStream(tmpSaveTo, {
         mimetype,
       });
 
       // TODO check for memory leak
       file.pipe(fileWriteStream);
 
+      file.pipe(hashWriteStream);
+
       fileWriteStream.once('close', async function writeToDb() {
+        const hashsum = hashWriteStream.read();
+
+        const [record] = await ctx.db
+          .select()
+          .from(imageTable)
+          .where(eq(imageTable.hashsum, hashsum));
+
+        // check if has duplicate image
+        if (record) {
+          await safeFileRm(tmpSaveTo, ctx.logger.error);
+
+          if (!ctx.res.closed) {
+            ctx.json([record]);
+          }
+
+          resolve();
+          return;
+        }
+
+        const saveTo = path.join(
+          ctx.config.media.saveDir,
+          `${hashsum}.${extension}`,
+        );
+
+        await fsp.copyFile(tmpSaveTo, saveTo);
+        await safeFileRm(tmpSaveTo, ctx.logger.error);
+
         result = await ctx.db
           .insert(imageTable)
           .values({
             filename,
-            hashsum: ctx.req.headers[HASHSUM_HEADER],
-            path: filename,
+            hashsum: hashsum,
+            path: path.basename(saveTo),
           })
           .returning();
 
@@ -165,17 +153,12 @@ async function uploadImageMiddelware(ctx) {
         resolve();
       });
 
-      file.on('limit', function onFileSizeLimit() {
+      file.on('limit', async function onFileSizeLimit() {
         file.destroy();
 
-        fsp
-          .rm(saveTo)
-          .catch((err) => {
-            ctx.logger.error('[remove limit file]', err);
-          })
-          .then(() => {
-            reject(new ERR_HIT_FILE_SIZE_LIMIT(ctx.config.media.fileSize));
-          });
+        await safeFileRm(tmpSaveTo, ctx.logger.error);
+
+        reject(new ERR_HIT_FILE_SIZE_LIMIT(ctx.config.media.fileSize));
       });
 
       file.once('error', function onFileError(err) {
@@ -213,7 +196,5 @@ export const route = '/api/admin/upload/image';
 
 export const middelware = Composer.compose([
   verifyIsMultipartFormDataContentTypeMiddleware,
-  checkIfHaveHashsumMiddleware,
-  checkIfDuplicateMiddleware,
   uploadImageMiddelware,
 ]);
