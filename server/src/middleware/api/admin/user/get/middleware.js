@@ -1,14 +1,8 @@
 import { eq } from 'drizzle-orm';
 
 import { Composer } from '../../../../../core/composer.js';
-import { createError } from '../../../../../core/errors.js';
+import { ERR_NOT_FOUND } from '../../../../../core/errors.js';
 import { userTable } from '../../../../../db/schema.js';
-
-const ERR_USER_DOES_NOT_EXIST = createError(
-  'USER_DOES_NOT_EXIST',
-  'User does not exist',
-  400,
-);
 
 /**
  * @argument {import('../../../../../core/context.js').Context} ctx
@@ -22,7 +16,7 @@ async function getUserMiddleware(ctx) {
     .where(eq(userTable.id, searchParams.get('id') || 0));
 
   if (!result) {
-    throw new ERR_USER_DOES_NOT_EXIST();
+    throw new ERR_NOT_FOUND();
   }
 
   ctx.json({

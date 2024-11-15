@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { getTestServer } from '../../../helpers/getTestServer.js';
 
 import { receiveJsonBodyMiddleware } from '../../../../middleware/auxiliary/receiveJsonBody/middleware.js';
-import { createValidateMiddleware } from '../../../../middleware/auxiliary/validate/middleware.js';
+import { createValidateReqMiddleware } from '../../../../middleware/auxiliary/validate/middleware.js';
 import { createError } from '../../../../core/errors.js';
 
 const errCode = 'CUSTOM_ERROR';
@@ -33,7 +33,7 @@ describe('[middleware] validate middleware', () => {
       t,
       connectMiddleware(router) {
         router.use(receiveJsonBodyMiddleware);
-        router.use(createValidateMiddleware(mockGetter, schema, ERR_CUSTOM));
+        router.use(createValidateReqMiddleware(mockGetter, schema, ERR_CUSTOM));
         router.use(mockMiddleware);
       },
     });
@@ -62,7 +62,7 @@ describe('[middleware] validate middleware', () => {
       t,
       connectMiddleware(router) {
         router.use(receiveJsonBodyMiddleware);
-        router.use(createValidateMiddleware(mockGetter, schema, ERR_CUSTOM));
+        router.use(createValidateReqMiddleware(mockGetter, schema, ERR_CUSTOM));
         router.use(mockMiddleware);
       },
     });

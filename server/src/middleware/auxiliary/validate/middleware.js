@@ -13,18 +13,18 @@ export function searchParamsGetter(ctx) {
 }
 
 export function createValidateBodyMiddleware(schema, error) {
-  return createValidateMiddleware(bodyGetter, schema, error);
+  return createValidateReqMiddleware(bodyGetter, schema, error);
 }
 
 export function createValidateSearchParamsMiddleware(schema, error) {
-  return createValidateMiddleware(searchParamsGetter, schema, error);
+  return createValidateReqMiddleware(searchParamsGetter, schema, error);
 }
 
-export function createValidateMiddleware(getter, schema, error) {
+export function createValidateReqMiddleware(getter, schema, error) {
   /**
    * @argument {import('../../../core/context.js').Context} ctx
    */
-  return async function validateMiddleware(ctx, next) {
+  return async function validateReqMiddleware(ctx, next) {
     const data = await getter(ctx);
 
     const validate = ctx.ajv.compile(schema);

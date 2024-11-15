@@ -68,17 +68,14 @@ describe('[api] user get', async () => {
     });
     const body = await resp.json();
 
-    assert.equal(resp.status, 400);
+    assert.equal(resp.status, 404);
     assert.deepEqual(body, {
-      error: 'USER_DOES_NOT_EXIST',
-      message: 'User does not exist',
+      error: 'NOT_FOUND',
+      message: 'Not Found',
     });
   });
 
-  test("should return 400 if user doesn't exist", async (t) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    let dbUsers = [];
-
+  test("should return 404 if user doesn't exist", async (t) => {
     const { request, baseUrl } = await getTestServer({
       t,
       config: {
@@ -86,7 +83,6 @@ describe('[api] user get', async () => {
       },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbUsers = await seedUsers(db, [user]);
       },
     });
 
@@ -101,10 +97,10 @@ describe('[api] user get', async () => {
     });
     const body = await resp.json();
 
-    assert.equal(resp.status, 400);
+    assert.equal(resp.status, 404);
     assert.deepEqual(body, {
-      error: 'USER_DOES_NOT_EXIST',
-      message: 'User does not exist',
+      error: 'NOT_FOUND',
+      message: 'Not Found',
     });
   });
 

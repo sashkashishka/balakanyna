@@ -65,31 +65,6 @@ async function checkIfTaskTypeTheSameMiddleware(ctx, next) {
 async function updateTaskMiddleware(ctx) {
   const body = ctx.body;
 
-  const value = {
-    id: body.id,
-    name: body.name,
-    surname: body.surname,
-    grade: body.grade,
-    birthdate: body.birthdate,
-    updatedAt: new Date().toISOString(),
-  };
-
-  if (body.notes) {
-    value.notes = body.notes;
-  }
-
-  if (body.email) {
-    value.email = body.email;
-  }
-
-  if (body.phoneNumber) {
-    value.phoneNumber = body.phoneNumber;
-  }
-
-  if (body.messangers) {
-    value.messangers = body.messangers;
-  }
-
   const [result] = await ctx.db
     .update(taskTable)
     .set({
@@ -119,4 +94,3 @@ export const middleware = Composer.compose([
   verifyTaskConfigSchemaMiddleware,
   updateTaskMiddleware,
 ]);
-
