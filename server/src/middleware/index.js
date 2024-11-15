@@ -18,6 +18,7 @@ import * as labelList from './api/admin/label/list/middleware.js';
 import * as taskCreate from './api/admin/task/create/middleware.js';
 import * as taskUpdate from './api/admin/task/update/middleware.js';
 import * as taskDelete from './api/admin/task/delete/middleware.js';
+import * as taskGet from './api/admin/task/get/middleware.js';
 
 import { receiveJsonBodyMiddleware } from './auxiliary/receiveJsonBody/middleware.js';
 import { createStaticMiddleware } from './auxiliary/static/middleware.js';
@@ -102,6 +103,11 @@ export function connectMiddlewares(router, config) {
     taskDelete.route,
     verifyTokenMiddleware,
     taskDelete.middleware,
+  );
+  router[taskGet.method](
+    taskGet.route,
+    verifyTokenMiddleware,
+    taskGet.middleware,
   );
 
   if (Array.isArray(config.static)) {
