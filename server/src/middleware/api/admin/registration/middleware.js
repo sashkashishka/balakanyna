@@ -8,9 +8,9 @@ import { createValidateBodyMiddleware } from '../../../auxiliary/validate/middle
 
 import schema from './schema.json' with { type: 'json' };
 
-const ERR_DUPLICATE_USER = createError(
-  'DUPLICATE_USER',
-  'Cannot create user that is already exist',
+const ERR_DUPLICATE_ADMIN = createError(
+  'DUPLICATE_ADMIN',
+  'Cannot create admin that is already exist',
   400,
 );
 
@@ -26,7 +26,7 @@ async function checkIfDuplicateAdminMiddleware(ctx, next) {
     .where(eq(adminTable.name, body.name));
 
   if (result.count > 0) {
-    throw new ERR_DUPLICATE_USER();
+    throw new ERR_DUPLICATE_ADMIN();
   }
 
   return next();
@@ -48,6 +48,8 @@ async function registrationMiddleware(ctx) {
   ctx.json({
     id: result.id,
     name: result.name,
+    updatedAt: result.updatedAt,
+    createdAt: result.createdAt,
   });
 }
 

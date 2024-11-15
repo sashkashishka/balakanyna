@@ -66,9 +66,7 @@ async function loginMiddleware(ctx) {
 
 export const method = 'post';
 export const route = '/api/admin/login';
-/**
- * @argument {import('../../../../core/context.js').Context} ctx
- */
+
 export const middleware = Composer.compose([
   createValidateBodyMiddleware(schema, ERR_WRONG_CREDENTIALS),
   checkIfUserExistsMiddleware,

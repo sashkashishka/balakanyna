@@ -5,6 +5,8 @@ export const adminTable = sqliteTable('admin', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text().notNull(),
   password: text().notNull(),
+  createdAt: text().default(sql`(datetime('now'))`),
+  updatedAt: text().default(sql`(datetime('now'))`),
 });
 
 export const userTable = sqliteTable('user', {
@@ -24,6 +26,9 @@ export const userTable = sqliteTable('user', {
 export const programTable = sqliteTable('program', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text().notNull(),
+  userId: integer('user_id').references(() => userTable.id),
+  startDatetime: text().default(sql`(datetime('now'))`),
+  expirationDatetime: text().default(sql`(datetime('now'))`),
   createdAt: text().default(sql`(datetime('now'))`),
   updatedAt: text().default(sql`(datetime('now'))`),
 });
@@ -53,12 +58,6 @@ export const imageTable = sqliteTable('image', {
   hashsum: text().notNull(),
   createdAt: text().default(sql`(datetime('now'))`),
   updatedAt: text().default(sql`(datetime('now'))`),
-});
-
-export const userProgramTable = sqliteTable('user_program', {
-  id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
-  userId: integer('user_id').references(() => userTable.id),
-  programId: integer('program_id').references(() => programTable.id),
 });
 
 export const programTaskTable = sqliteTable('program_task', {

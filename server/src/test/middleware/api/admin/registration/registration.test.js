@@ -62,8 +62,8 @@ describe('[api] registration', async () => {
 
     assert.equal(resp.status, 400);
     assert.deepEqual(body, {
-      error: 'DUPLICATE_USER',
-      message: 'Cannot create user that is already exist',
+      error: 'DUPLICATE_ADMIN',
+      message: 'Cannot create admin that is already exist',
     });
   });
 
@@ -84,6 +84,8 @@ describe('[api] registration', async () => {
     assert.equal(resp.status, 200);
     assert.ok(body.id, 'id exists');
     assert.equal(body.name, admin.name);
-    assert.equal(Object.keys(body).length, 2);
+    assert.equal(isNaN(new Date(body.createdAt)), false);
+    assert.equal(isNaN(new Date(body.updatedAt)), false);
+    assert.equal(Object.keys(body).length, 4);
   });
 });

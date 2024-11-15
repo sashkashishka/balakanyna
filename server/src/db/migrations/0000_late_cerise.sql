@@ -1,7 +1,9 @@
 CREATE TABLE `admin` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
-	`password` text NOT NULL
+	`password` text NOT NULL,
+	`createdAt` text DEFAULT (datetime('now')),
+	`updatedAt` text DEFAULT (datetime('now'))
 );
 --> statement-breakpoint
 CREATE TABLE `image` (
@@ -33,8 +35,12 @@ CREATE TABLE `label` (
 CREATE TABLE `program` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
+	`user_id` integer,
+	`startDatetime` text DEFAULT (datetime('now')),
+	`expirationDatetime` text DEFAULT (datetime('now')),
 	`createdAt` text DEFAULT (datetime('now')),
-	`updatedAt` text DEFAULT (datetime('now'))
+	`updatedAt` text DEFAULT (datetime('now')),
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `program_task` (
