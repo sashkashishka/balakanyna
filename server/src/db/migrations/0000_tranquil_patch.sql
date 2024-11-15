@@ -55,6 +55,7 @@ CREATE TABLE `task_label` (
 --> statement-breakpoint
 CREATE TABLE `task` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`name` text NOT NULL,
 	`type` text NOT NULL,
 	`config` text,
 	`createdAt` text DEFAULT (datetime('now')),
