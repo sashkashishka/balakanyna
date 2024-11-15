@@ -29,5 +29,22 @@ export function getUrl(urlString, base = 'http://localhost') {
 export function getSearchParams(url) {
   const { searchParams } = url;
 
-  return Object.fromEntries(searchParams.entries());
+  const obj = {};
+
+  for (let [key, val] of searchParams.entries()) {
+    if (key.endsWith('[]')) {
+      const k = key.replace('[]', '');
+
+      if (!Array.isArray(obj[k])) {
+        obj[k] = [];
+      }
+
+      obj[k].push(val);
+      continue;
+    }
+
+    obj[key] = val;
+  }
+
+  return obj;
 }
