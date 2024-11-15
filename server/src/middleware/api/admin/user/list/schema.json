@@ -5,6 +5,7 @@
       "type": "string",
       "enum": [
         "createdAt",
+        "updatedAt",
         "name",
         "birthdate",
         "grade"

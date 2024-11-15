@@ -241,6 +241,82 @@ describe('[api] user list', async () => {
     );
   });
 
+  test('should return 200 and with order_by updatedAt and dir asc', async (t) => {
+    const offset = 0;
+    const limit = users.length / 2;
+
+    const { request, baseUrl } = await getTestServer({
+      t,
+      config: {
+        salt: { password: '123' },
+      },
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        await seedUsers(db, users);
+      },
+    });
+
+    const url = getEndpoint(baseUrl, {
+      offset,
+      limit,
+      order_by: 'updatedAt',
+      dir: 'asc',
+    });
+
+    const resp = await request(url, {
+      method: userList.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(body.length, limit);
+
+    for (let i = 1; i < body.length; i++) {
+      assert.ok(new Date(body[i - 1].updatedAt) <= new Date(body[i].updatedAt));
+    }
+  });
+
+  test('should return 200 and with order_by updatedAt and dir desc', async (t) => {
+    const offset = 0;
+    const limit = users.length / 2;
+
+    const { request, baseUrl } = await getTestServer({
+      t,
+      config: {
+        salt: { password: '123' },
+      },
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        await seedUsers(db, users);
+      },
+    });
+
+    const url = getEndpoint(baseUrl, {
+      offset,
+      limit,
+      order_by: 'updatedAt',
+      dir: 'desc',
+    });
+
+    const resp = await request(url, {
+      method: userList.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(body.length, limit);
+
+    for (let i = 1; i < body.length; i++) {
+      assert.ok(new Date(body[i - 1].updatedAt) >= new Date(body[i].updatedAt));
+    }
+  });
+
   test('should return 200 and with order_by name and dir asc', async (t) => {
     const offset = 0;
     const limit = users.length / 2;
@@ -431,7 +507,7 @@ describe('[api] user list', async () => {
     }
   });
 
-  test('should return 200 and with order_by grade and dir desc', async (t) => {
+  test('should return 200 and with order_by birthdate and dir desc', async (t) => {
     const offset = 0;
     const limit = users.length / 2;
 
