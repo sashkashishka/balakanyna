@@ -20,7 +20,7 @@ function getEndpoint(baseUrl, { id }) {
   return url;
 }
 
-describe('[api] user get', async () => {
+describe('[api] task get', async () => {
   test('should return 401 if unauthorized', async (t) => {
     const { request } = await getTestServer({
       t,

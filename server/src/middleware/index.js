@@ -22,6 +22,7 @@ import * as taskGet from './api/admin/task/get/middleware.js';
 
 import * as programCreate from './api/admin/program/create/middleware.js';
 import * as programUpdate from './api/admin/program/update/middleware.js';
+import * as programGet from './api/admin/program/get/middleware.js';
 
 import { receiveJsonBodyMiddleware } from './auxiliary/receiveJsonBody/middleware.js';
 import { createStaticMiddleware } from './auxiliary/static/middleware.js';
@@ -123,6 +124,11 @@ export function connectMiddlewares(router, config) {
     programUpdate.route,
     verifyTokenMiddleware,
     programUpdate.middleware,
+  );
+  router[programGet.method](
+    programGet.route,
+    verifyTokenMiddleware,
+    programGet.middleware,
   );
 
   if (Array.isArray(config.static)) {
