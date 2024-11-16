@@ -26,7 +26,8 @@ async function checkIfProgramExistsMiddleware(ctx, next) {
   const [result] = await ctx.db
     .select({ count: count(programTable.id) })
     .from(programTable)
-    .where(eq(programTable.id, body.id));
+    .where(eq(programTable.id, body.id))
+    .limit(1);
 
   if (result?.count === 0) {
     throw new ERR_NOT_FOUND();

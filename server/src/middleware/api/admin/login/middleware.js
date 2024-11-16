@@ -23,7 +23,8 @@ async function checkIfUserExistsMiddleware(ctx, next) {
   const [result] = await ctx.db
     .select({ count: count(adminTable.id) })
     .from(adminTable)
-    .where(eq(adminTable.name, body.name));
+    .where(eq(adminTable.name, body.name))
+    .limit(1);
 
   if (result.count === 0) {
     throw new ERR_WRONG_CREDENTIALS();

@@ -1,4 +1,4 @@
-import { count, eq } from 'drizzle-orm';
+import { and, count, eq } from 'drizzle-orm';
 
 import { Composer } from '../../../../../core/composer.js';
 import {
@@ -27,7 +27,8 @@ async function checkIfTaskExistsMiddleware(ctx, next) {
   const [result] = await ctx.db
     .select({ count: count(taskTable.id) })
     .from(taskTable)
-    .where(eq(taskTable.id, body.id));
+    .where(eq(taskTable.id, body.id))
+    .limit(1);
 
   if (result?.count === 0) {
     throw new ERR_NOT_FOUND();
@@ -45,7 +46,8 @@ async function checkIfTaskTypeTheSameMiddleware(ctx, next) {
   const [result] = await ctx.db
     .select({ count: count(taskTable.id) })
     .from(taskTable)
-    .where(eq(taskTable.type, body.type));
+    .where(and(eq(taskTable.id, body.id), eq(taskTable.type, body.type)))
+    .limit(1);
 
   if (result?.count === 0) {
     throw new ERR_DIFFERENT_TASK_TYPE();

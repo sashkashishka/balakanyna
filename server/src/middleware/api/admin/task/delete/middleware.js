@@ -21,7 +21,8 @@ async function checkIfTaskExistsMiddleware(ctx, next) {
   const [result] = await ctx.db
     .select({ count: count(taskTable.id) })
     .from(taskTable)
-    .where(eq(taskTable.id, searchParams.id));
+    .where(eq(taskTable.id, searchParams.id))
+    .limit(1);
 
   if (result?.count === 0) {
     throw new ERR_NOT_FOUND();

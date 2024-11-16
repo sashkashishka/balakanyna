@@ -31,7 +31,8 @@ async function checkIfLabelExistsMiddleware(ctx, next) {
   const [result] = await ctx.db
     .select({ count: count(labelTable.id) })
     .from(labelTable)
-    .where(eq(labelTable.id, body.id));
+    .where(eq(labelTable.id, body.id))
+    .limit(1);
 
   if (result?.count === 0) {
     throw new ERR_LABEL_DOES_NOT_EXIST();

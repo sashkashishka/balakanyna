@@ -23,7 +23,8 @@ async function checkIfDuplicateMiddleware(ctx, next) {
     .from(userTable)
     .where(
       and(eq(userTable.name, body.name), eq(userTable.surname, body.surname)),
-    );
+    )
+    .limit(1);
 
   if (result?.count) {
     throw new ERR_DUPLICATE_USER();

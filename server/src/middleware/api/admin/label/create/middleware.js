@@ -25,7 +25,8 @@ async function checkIfDuplicateMiddleware(ctx, next) {
   const [result] = await ctx.db
     .select({ count: count(labelTable.id) })
     .from(labelTable)
-    .where(and(eq(labelTable.name, body.name), eq(labelTable.type, body.type)));
+    .where(and(eq(labelTable.name, body.name), eq(labelTable.type, body.type)))
+    .limit(1);
 
   if (result?.count) {
     throw new ERR_DUPLICATE_LABEL();

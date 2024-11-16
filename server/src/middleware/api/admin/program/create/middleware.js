@@ -25,7 +25,8 @@ async function checkIfUserExistsMiddleware(ctx, next) {
   const [result] = await ctx.db
     .select({ count: count(userTable.id) })
     .from(userTable)
-    .where(eq(userTable.id, body.userId));
+    .where(eq(userTable.id, body.userId))
+    .limit(1);
 
   if (result?.count === 0) {
     throw new ERR_USER_DOES_NOT_EXIST();
