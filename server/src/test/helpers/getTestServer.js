@@ -4,7 +4,7 @@ import { getAjv } from '../../core/ajv.js';
 import { getDb } from '../../db/index.js';
 import { createServer, getRouter } from '../../server.js';
 import { Logger } from '../../utils/logger.js';
-import { clearDb, setupDb } from './db.js';
+import { clearDb, getTmpDbUrl, setupDb } from './db.js';
 import { mergeDeep } from '../../utils/merge.js';
 
 /**
@@ -42,7 +42,7 @@ export async function getTestServer({
   let dbDir = '';
 
   if (!db) {
-    dbDir = await setupDb(globalThis.tmpDbDir);
+    dbDir = await setupDb(getTmpDbUrl());
     db = await getDb(dbDir);
   }
 

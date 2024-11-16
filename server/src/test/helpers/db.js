@@ -10,7 +10,7 @@ import path from 'node:path';
  * migrate script for each run
  */
 export function getTmpDbUrl() {
-  return path.join(os.tmpdir(), `balakanyna-test-${Date.now()}.db`);
+  return path.join(os.tmpdir(), `balakanyna-test.db`);
 }
 
 export function runTestMigration(dbUrl) {

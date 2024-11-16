@@ -1,7 +1,7 @@
-import { getTmpDbUrl, runTestMigration } from "./db.js";
+import { clearDb, getTmpDbUrl, runTestMigration } from './db.js';
 
-const tmpDbDir = getTmpDbUrl()
+const tmpDbDir = getTmpDbUrl();
+
+await clearDb(tmpDbDir);
 
 await runTestMigration(tmpDbDir);
-
-globalThis.tmpDbDir = tmpDbDir;
