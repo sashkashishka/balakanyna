@@ -87,7 +87,7 @@ describe('[api] task update', async () => {
     });
   });
 
-  test('should return 400 if user does not exists', async (t) => {
+  test('should return 404 if user does not exists', async (t) => {
     const { request } = await getTestServer({
       t,
       config: {
@@ -110,10 +110,10 @@ describe('[api] task update', async () => {
     });
     const body = await resp.json();
 
-    assert.equal(resp.status, 400);
+    assert.equal(resp.status, 404);
     assert.deepEqual(body, {
-      error: 'TASK_DOES_NOT_EXIST',
-      message: 'Task does not exist',
+      error: 'NOT_FOUND',
+      message: 'Not Found',
     });
   });
 });

@@ -4,18 +4,13 @@ import { Composer } from '../../../../../core/composer.js';
 import {
   createError,
   ERR_INVALID_PAYLOAD,
+  ERR_NOT_FOUND,
 } from '../../../../../core/errors.js';
 import { createValidateBodyMiddleware } from '../../../../auxiliary/validate/middleware.js';
 import { taskTable } from '../../../../../db/schema.js';
 
 import schema from './schema.json' with { type: 'json' };
 import { verifyTaskConfigSchemaMiddleware } from '../schema/index.js';
-
-const ERR_TASK_DOES_NOT_EXIST = createError(
-  'TASK_DOES_NOT_EXIST',
-  'Task does not exist',
-  400,
-);
 
 const ERR_DIFFERENT_TASK_TYPE = createError(
   'DIFFERENT_TASK_TYPE',
@@ -35,7 +30,7 @@ async function checkIfTaskExistsMiddleware(ctx, next) {
     .where(eq(taskTable.id, body.id));
 
   if (result?.count === 0) {
-    throw new ERR_TASK_DOES_NOT_EXIST();
+    throw new ERR_NOT_FOUND();
   }
 
   return next();

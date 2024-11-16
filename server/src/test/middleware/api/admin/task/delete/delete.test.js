@@ -103,7 +103,7 @@ describe('[api] task delete', async () => {
     });
   });
 
-  test('should return 400 if task does not exists', async (t) => {
+  test('should return 404 if task does not exists', async (t) => {
     const { request, baseUrl } = await getTestServer({
       t,
       config: {
@@ -124,10 +124,10 @@ describe('[api] task delete', async () => {
     });
     const body = await resp.json();
 
-    assert.equal(resp.status, 400);
+    assert.equal(resp.status, 404);
     assert.deepEqual(body, {
-      error: 'TASK_DOES_NOT_EXIST',
-      message: 'Task does not exist',
+      error: 'NOT_FOUND',
+      message: 'Not Found',
     });
   });
 

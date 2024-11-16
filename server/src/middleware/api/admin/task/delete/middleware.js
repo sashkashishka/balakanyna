@@ -4,18 +4,12 @@ import { Composer } from '../../../../../core/composer.js';
 import {
   ERR_INVALID_PAYLOAD,
   ERR_DELETE_RELATION,
-  createError,
+  ERR_NOT_FOUND,
 } from '../../../../../core/errors.js';
 import { createValidateSearchParamsMiddleware } from '../../../../auxiliary/validate/middleware.js';
 import { programTaskTable, taskTable } from '../../../../../db/schema.js';
 
 import schema from './schema.json' with { type: 'json' };
-
-const ERR_TASK_DOES_NOT_EXIST = createError(
-  'TASK_DOES_NOT_EXIST',
-  'Task does not exist',
-  400,
-);
 
 /**
  * @TODO: candidate to moving in a common space to share with the update
@@ -30,7 +24,7 @@ async function checkIfTaskExistsMiddleware(ctx, next) {
     .where(eq(taskTable.id, searchParams.id));
 
   if (result?.count === 0) {
-    throw new ERR_TASK_DOES_NOT_EXIST();
+    throw new ERR_NOT_FOUND();
   }
 
   return next();
