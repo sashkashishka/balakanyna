@@ -15,7 +15,11 @@ import {
 
 import schema from './schema.json' with { type: 'json' };
 
-const ERR_MISSING_ENTITY = createError('MISSING_ENTITY', 'Missing entity: %s', 400);
+const ERR_MISSING_ENTITY = createError(
+  'MISSING_ENTITY',
+  'Missing entity: %s',
+  400,
+);
 
 /**
  * @argument {import('../../../../../core/context.js').Context} ctx
@@ -82,7 +86,7 @@ async function checkDuplicateRowMiddleware(ctx, next) {
 /**
  * @argument {import('../../../../../core/context.js').Context} ctx
  */
-async function labelTaskMiddleware(ctx) {
+async function linkLabelTaskMiddleware(ctx) {
   const { labelId, taskId } = ctx.body;
 
   const [result] = await ctx.db
@@ -100,12 +104,12 @@ async function labelTaskMiddleware(ctx) {
 }
 
 export const method = 'post';
-export const route = '/api/admin/label/task';
+export const route = '/api/admin/link/label/task';
 
 export const middleware = Composer.compose([
   createValidateBodyMiddleware(schema, ERR_INVALID_PAYLOAD),
   checkIfLabelExistsMiddleware,
   checkIfTaskExistsMiddleware,
   checkDuplicateRowMiddleware,
-  labelTaskMiddleware,
+  linkLabelTaskMiddleware,
 ]);

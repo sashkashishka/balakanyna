@@ -86,7 +86,7 @@ async function checkDuplicateRowMiddleware(ctx, next) {
 /**
  * @argument {import('../../../../../core/context.js').Context} ctx
  */
-async function labelImageMiddleware(ctx) {
+async function linkLabelImageMiddleware(ctx) {
   const { labelId, imageId } = ctx.body;
 
   const [result] = await ctx.db
@@ -104,12 +104,12 @@ async function labelImageMiddleware(ctx) {
 }
 
 export const method = 'post';
-export const route = '/api/admin/label/image';
+export const route = '/api/admin/link/label/image';
 
 export const middleware = Composer.compose([
   createValidateBodyMiddleware(schema, ERR_INVALID_PAYLOAD),
   checkIfLabelExistsMiddleware,
   checkIfImageExistsMiddleware,
   checkDuplicateRowMiddleware,
-  labelImageMiddleware,
+  linkLabelImageMiddleware,
 ]);

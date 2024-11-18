@@ -1,18 +1,19 @@
 {
-  "title": "LabelImageBody",
+  "title": "LinkLabelTaskBody",
   "type": "object",
   "properties": {
     "labelId": {
       "type": "integer",
       "minimum": 0
     },
-    "imageId": {
+    "taskId": {
       "type": "integer",
       "minimum": 0
     }
   },
   "required": [
     "labelId",
-    "imageId"
-  ]
+    "taskId"
+  ],
+  "additionalProperties": false
 }

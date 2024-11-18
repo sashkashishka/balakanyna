@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { getTestServer } from '../../../../../helpers/getTestServer.js';
 import { getAuthCookie } from '../../../../../helpers/utils.js';
 
-import * as labelImage from '../../../../../../middleware/api/admin/label/image/middleware.js';
+import * as linkLabelImage from '../../../../../../middleware/api/admin/link/labelImage/middleware.js';
 
 import {
   seedAdmins,
@@ -16,7 +16,7 @@ import { admin } from '../../fixtures/admin.js';
 import { label } from '../../fixtures/label.js';
 import { image } from '../../fixtures/image.js';
 
-describe('[api] label image', async () => {
+describe('[api] link label image', async () => {
   test('should return 401 if unauthorized', async (t) => {
     const { request } = await getTestServer({
       t,
@@ -28,8 +28,8 @@ describe('[api] label image', async () => {
       },
     });
 
-    const resp = await request(labelImage.route, {
-      method: labelImage.method,
+    const resp = await request(linkLabelImage.route, {
+      method: linkLabelImage.method,
       headers: {
         cookie: 'token=123',
       },
@@ -51,8 +51,8 @@ describe('[api] label image', async () => {
       },
     });
 
-    const resp = await request(labelImage.route, {
-      method: labelImage.method,
+    const resp = await request(linkLabelImage.route, {
+      method: linkLabelImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -77,8 +77,8 @@ describe('[api] label image', async () => {
       },
     });
 
-    const resp = await request(labelImage.route, {
-      method: labelImage.method,
+    const resp = await request(linkLabelImage.route, {
+      method: linkLabelImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -111,8 +111,8 @@ describe('[api] label image', async () => {
       imageId: 2,
     };
 
-    const resp = await request(labelImage.route, {
-      method: labelImage.method,
+    const resp = await request(linkLabelImage.route, {
+      method: linkLabelImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -146,8 +146,8 @@ describe('[api] label image', async () => {
       imageId: 2,
     };
 
-    const resp = await request(labelImage.route, {
-      method: labelImage.method,
+    const resp = await request(linkLabelImage.route, {
+      method: linkLabelImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -186,8 +186,8 @@ describe('[api] label image', async () => {
       imageId: dbImages[0].id,
     };
 
-    const resp = await request(labelImage.route, {
-      method: labelImage.method,
+    const resp = await request(linkLabelImage.route, {
+      method: linkLabelImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -223,8 +223,8 @@ describe('[api] label image', async () => {
       imageId: dbImages[0].id,
     };
 
-    const resp = await request(labelImage.route, {
-      method: labelImage.method,
+    const resp = await request(linkLabelImage.route, {
+      method: linkLabelImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },

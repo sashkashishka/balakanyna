@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { getTestServer } from '../../../../../helpers/getTestServer.js';
 import { getAuthCookie } from '../../../../../helpers/utils.js';
 
-import * as labelTask from '../../../../../../middleware/api/admin/label/task/middleware.js';
+import * as linkLabelTask from '../../../../../../middleware/api/admin/link/labelTask/middleware.js';
 
 import {
   seedAdmins,
@@ -16,7 +16,7 @@ import { admin } from '../../fixtures/admin.js';
 import { label } from '../../fixtures/label.js';
 import { imageSliderTask } from '../../fixtures/task.js';
 
-describe('[api] label task', async () => {
+describe('[api] link label task', async () => {
   test('should return 401 if unauthorized', async (t) => {
     const { request } = await getTestServer({
       t,
@@ -28,8 +28,8 @@ describe('[api] label task', async () => {
       },
     });
 
-    const resp = await request(labelTask.route, {
-      method: labelTask.method,
+    const resp = await request(linkLabelTask.route, {
+      method: linkLabelTask.method,
       headers: {
         cookie: 'token=123',
       },
@@ -51,8 +51,8 @@ describe('[api] label task', async () => {
       },
     });
 
-    const resp = await request(labelTask.route, {
-      method: labelTask.method,
+    const resp = await request(linkLabelTask.route, {
+      method: linkLabelTask.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -77,8 +77,8 @@ describe('[api] label task', async () => {
       },
     });
 
-    const resp = await request(labelTask.route, {
-      method: labelTask.method,
+    const resp = await request(linkLabelTask.route, {
+      method: linkLabelTask.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -111,8 +111,8 @@ describe('[api] label task', async () => {
       taskId: 2,
     };
 
-    const resp = await request(labelTask.route, {
-      method: labelTask.method,
+    const resp = await request(linkLabelTask.route, {
+      method: linkLabelTask.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -146,8 +146,8 @@ describe('[api] label task', async () => {
       taskId: 2,
     };
 
-    const resp = await request(labelTask.route, {
-      method: labelTask.method,
+    const resp = await request(linkLabelTask.route, {
+      method: linkLabelTask.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -186,8 +186,8 @@ describe('[api] label task', async () => {
       taskId: dbTasks[0].id,
     };
 
-    const resp = await request(labelTask.route, {
-      method: labelTask.method,
+    const resp = await request(linkLabelTask.route, {
+      method: linkLabelTask.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -223,8 +223,8 @@ describe('[api] label task', async () => {
       taskId: dbTasks[0].id,
     };
 
-    const resp = await request(labelTask.route, {
-      method: labelTask.method,
+    const resp = await request(linkLabelTask.route, {
+      method: linkLabelTask.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
