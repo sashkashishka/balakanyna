@@ -15,6 +15,7 @@ import * as labelCreate from './api/admin/label/create/middleware.js';
 import * as labelUpdate from './api/admin/label/update/middleware.js';
 import * as labelList from './api/admin/label/list/middleware.js';
 import * as labelTask from './api/admin/label/task/middleware.js';
+import * as labelImage from './api/admin/label/image/middleware.js';
 
 import * as taskCreate from './api/admin/task/create/middleware.js';
 import * as taskUpdate from './api/admin/task/update/middleware.js';
@@ -96,6 +97,11 @@ export function connectMiddlewares(router, config) {
     labelTask.route,
     verifyTokenMiddleware,
     labelTask.middleware,
+  );
+  router[labelImage.method](
+    labelImage.route,
+    verifyTokenMiddleware,
+    labelImage.middleware,
   );
 
   // task

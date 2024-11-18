@@ -1,6 +1,8 @@
 import { encryptPassword } from '../utils/encryptPassword.js';
 import {
   adminTable,
+  imageTable,
+  labelImageTable,
   labelTable,
   programTable,
   programTaskTable,
@@ -59,6 +61,14 @@ export function seedLabels(db, labels) {
 
 /**
  * @argument {import('./index.js').IDb} db
+ * @argument {Array<unknown>} images
+ */
+export function seedImages(db, images) {
+  return db.insert(imageTable).values(images).returning();
+}
+
+/**
+ * @argument {import('./index.js').IDb} db
  * @argument {Array<unknown>} programTasks
  */
 export function seedProgramTask(db, programTasks) {
@@ -71,4 +81,12 @@ export function seedProgramTask(db, programTasks) {
  */
 export function seedTaskLabels(db, taskLabels) {
   return db.insert(taskLabelTable).values(taskLabels).returning();
+}
+
+/**
+ * @argument {import('./index.js').IDb} db
+ * @argument {Array<unknown>} labelImages
+ */
+export function seedImageLabels(db, labelImages) {
+  return db.insert(labelImageTable).values(labelImages).returning();
 }
