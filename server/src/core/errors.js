@@ -56,3 +56,9 @@ export const ERR_DELETE_RELATION = createError(
   'Cannot delete because of relation',
   400,
 );
+
+export const ERR_DUPLICATE_MANY_TO_MANY_RELATION = createError(
+  'DUPLICATE_MANY_TO_MANY_RELATION',
+  'Duplicate many to many relation',
+  400,
+);

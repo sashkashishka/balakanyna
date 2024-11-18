@@ -19,6 +19,8 @@ CREATE TABLE `label_image` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`image_id` integer,
 	`label_id` integer,
+	`createdAt` text DEFAULT (datetime('now')),
+	`updatedAt` text DEFAULT (datetime('now')),
 	FOREIGN KEY (`image_id`) REFERENCES `image`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`label_id`) REFERENCES `label`(`id`) ON UPDATE no action ON DELETE no action
 );
@@ -47,6 +49,8 @@ CREATE TABLE `program_task` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`program_id` integer,
 	`task_id` integer,
+	`createdAt` text DEFAULT (datetime('now')),
+	`updatedAt` text DEFAULT (datetime('now')),
 	FOREIGN KEY (`program_id`) REFERENCES `program`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`task_id`) REFERENCES `task`(`id`) ON UPDATE no action ON DELETE no action
 );
@@ -55,6 +59,8 @@ CREATE TABLE `task_label` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`label_id` integer,
 	`task_id` integer,
+	`createdAt` text DEFAULT (datetime('now')),
+	`updatedAt` text DEFAULT (datetime('now')),
 	FOREIGN KEY (`label_id`) REFERENCES `label`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`task_id`) REFERENCES `task`(`id`) ON UPDATE no action ON DELETE no action
 );

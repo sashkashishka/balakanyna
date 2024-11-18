@@ -1,0 +1,18 @@
+{
+  "title": "LabelTaskBody",
+  "type": "object",
+  "properties": {
+    "labelId": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "taskId": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "required": [
+    "labelId",
+    "taskId"
+  ]
+}
