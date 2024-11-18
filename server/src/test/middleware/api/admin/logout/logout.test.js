@@ -8,9 +8,6 @@ describe('[api] logout', async () => {
   test('should remove token cookie and respond with ok', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
     });
 
     const resp = await request(logout.route, {

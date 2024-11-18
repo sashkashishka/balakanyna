@@ -22,9 +22,6 @@ describe('[api] link task program', async () => {
   test('should return 401 if unauthorized', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },
@@ -45,9 +42,6 @@ describe('[api] link task program', async () => {
   test('should return 400 if body is missing', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },
@@ -71,9 +65,6 @@ describe('[api] link task program', async () => {
   test('should return 400 if body is not full', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },
@@ -100,9 +91,6 @@ describe('[api] link task program', async () => {
   test('should return 400 if program does not exist', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },
@@ -134,9 +122,6 @@ describe('[api] link task program', async () => {
 
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         const dbUsers = await seedUsers(db, [user]);
@@ -173,9 +158,6 @@ describe('[api] link task program', async () => {
 
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         const dbUsers = await seedUsers(db, [user]);
@@ -216,9 +198,6 @@ describe('[api] link task program', async () => {
 
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         const dbUsers = await seedUsers(db, [user]);

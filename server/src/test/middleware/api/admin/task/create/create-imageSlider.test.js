@@ -14,9 +14,6 @@ describe('[api] task create slider', () => {
   test('should retun 400 if config is invalid', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },
@@ -48,9 +45,6 @@ describe('[api] task create slider', () => {
   test('should return 200 and create task', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },
@@ -80,9 +74,6 @@ describe('[api] task create slider', () => {
 
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         dbTasks = await seedTasks(db, [imageSliderTask]);

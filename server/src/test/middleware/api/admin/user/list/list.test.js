@@ -65,9 +65,6 @@ describe('[api] user list', async () => {
   test('should return 401 if unauthorized', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
     });
 
     const resp = await request(userList.route, {
@@ -88,9 +85,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -123,9 +117,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -185,9 +176,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -247,9 +235,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -285,9 +270,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -323,9 +305,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -361,9 +340,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -399,9 +375,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -437,9 +410,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -475,9 +445,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -513,9 +480,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -552,9 +516,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -592,9 +553,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -632,9 +590,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -673,9 +628,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -715,9 +667,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -755,9 +704,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -796,9 +742,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -838,9 +781,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -878,9 +818,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);
@@ -919,9 +856,6 @@ describe('[api] user list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedUsers(db, users);

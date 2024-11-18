@@ -11,7 +11,7 @@ describe('[api] registration', async () => {
   test('should return 403 if request was made from the restricted ip', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: { restrictions: { ip: '123' }, salt: { password: '123' } },
+      config: { restrictions: { ip: '123' } },
     });
 
     const resp = await request(registration.route, {
@@ -25,9 +25,6 @@ describe('[api] registration', async () => {
   test('should return 400 response if body misses some data', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
     });
 
     const resp = await request(registration.route, {
@@ -46,9 +43,6 @@ describe('[api] registration', async () => {
   test('should return 400 response if duplicate user', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },
@@ -70,9 +64,6 @@ describe('[api] registration', async () => {
   test('should return 200 and user data', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
     });
 
     const resp = await request(registration.route, {

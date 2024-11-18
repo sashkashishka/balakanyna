@@ -32,9 +32,6 @@ describe('[api] label list', async () => {
   test('should return 401 if unauthorized', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
     });
 
     const resp = await request(labelList.route, {
@@ -55,9 +52,6 @@ describe('[api] label list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedLabels(db, labels);
@@ -90,9 +84,6 @@ describe('[api] label list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedLabels(db, labels);
@@ -152,9 +143,6 @@ describe('[api] label list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedLabels(db, labels);
@@ -214,9 +202,6 @@ describe('[api] label list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedLabels(db, labels);
@@ -276,9 +261,6 @@ describe('[api] label list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedLabels(db, labels);
@@ -338,9 +320,6 @@ describe('[api] label list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedLabels(db, labels);
@@ -383,9 +362,6 @@ describe('[api] label list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedLabels(db, labels);
@@ -422,9 +398,6 @@ describe('[api] label list', async () => {
 
     const { request, baseUrl } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedLabels(db, labels);

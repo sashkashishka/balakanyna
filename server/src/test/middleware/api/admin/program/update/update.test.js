@@ -20,9 +20,6 @@ describe('[api] program update', async () => {
   test('should return 401 if unauthorized', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
     });
 
     const resp = await request(programUpdate.route, {
@@ -40,9 +37,6 @@ describe('[api] program update', async () => {
   test('should return 400 if body is missing', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },
@@ -66,9 +60,6 @@ describe('[api] program update', async () => {
   test('should return 400 if body is not full', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },
@@ -95,9 +86,6 @@ describe('[api] program update', async () => {
   test('should return 404 if program does not exists', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },
@@ -128,9 +116,6 @@ describe('[api] program update', async () => {
 
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         dbUsers = await seedUsers(db, [user]);
@@ -170,9 +155,6 @@ describe('[api] program update', async () => {
 
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         dbUsers = await seedUsers(db, [user]);

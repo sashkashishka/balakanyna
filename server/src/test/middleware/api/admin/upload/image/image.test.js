@@ -65,7 +65,6 @@ describe('[api] upload image', async () => {
     const { request } = await getTestServer({
       t,
       config: {
-        salt: { password: '123' },
         media: {
           saveDir,
         },
@@ -91,7 +90,6 @@ describe('[api] upload image', async () => {
     const { request } = await getTestServer({
       t,
       config: {
-        salt: { password: '123' },
         media: {
           saveDir,
         },
@@ -123,7 +121,6 @@ describe('[api] upload image', async () => {
     const { request } = await getTestServer({
       t,
       config: {
-        salt: { password: '123' },
         media: {
           fieldname,
           saveDir,
@@ -161,7 +158,6 @@ describe('[api] upload image', async () => {
     const { request } = await getTestServer({
       t,
       config: {
-        salt: { password: '123' },
         media: {
           fieldname,
           allowedExtenstion: ['jpeg'],
@@ -200,7 +196,6 @@ describe('[api] upload image', async () => {
     const { request } = await getTestServer({
       t,
       config: {
-        salt: { password: '123' },
         media: {
           fieldname,
           allowedExtenstion: ['jpeg'],
@@ -239,7 +234,6 @@ describe('[api] upload image', async () => {
     const { request } = await getTestServer({
       t,
       config: {
-        salt: { password: '123' },
         media: {
           fieldname,
           allowedExtenstion: ['jpeg'],
@@ -282,7 +276,6 @@ describe('[api] upload image', async () => {
         timeouts: {
           connection: 1000,
         },
-        salt: { password: '123' },
         media: {
           fieldname,
           allowedExtenstion: ['jpeg', 'jpg'],
@@ -336,7 +329,6 @@ describe('[api] upload image', async () => {
     const { request } = await getTestServer({
       t,
       config: {
-        salt: { password: '123' },
         media: {
           fieldname,
           parts: 1,
@@ -390,7 +382,6 @@ describe('[api] upload image', async () => {
     const { request } = await getTestServer({
       t,
       config: {
-        salt: { password: '123' },
         media: {
           fieldname,
           parts: 1,
@@ -427,7 +418,6 @@ describe('[api] upload image', async () => {
     const { request } = await getTestServer({
       t,
       config: {
-        salt: { password: '123' },
         media: {
           fieldname,
           parts: 1,
@@ -470,7 +460,6 @@ describe('[api] upload image', async () => {
     const { request } = await getTestServer({
       t,
       config: {
-        salt: { password: '123' },
         media: {
           fieldname,
           parts: 1,

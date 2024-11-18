@@ -11,9 +11,6 @@ describe('[api] login', async () => {
   test('should return 400 response if body misses some data', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },
@@ -35,9 +32,6 @@ describe('[api] login', async () => {
   test('should return 400 response if user is absent', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
     });
 
     const resp = await request(login.route, {
@@ -56,9 +50,6 @@ describe('[api] login', async () => {
   test('should return 400 response if password is wrong', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },
@@ -80,9 +71,6 @@ describe('[api] login', async () => {
   test('should return 200 and user data', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },

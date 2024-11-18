@@ -15,9 +15,6 @@ describe('[api] task update', async () => {
   test('should return 401 if unauthorized', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
     });
 
     const resp = await request(taskUpdate.route, {
@@ -35,9 +32,6 @@ describe('[api] task update', async () => {
   test('should return 400 if body is missing', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },
@@ -61,9 +55,6 @@ describe('[api] task update', async () => {
   test('should return 400 if body is not full', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },
@@ -90,9 +81,6 @@ describe('[api] task update', async () => {
   test('should return 404 if user does not exists', async (t) => {
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
       },

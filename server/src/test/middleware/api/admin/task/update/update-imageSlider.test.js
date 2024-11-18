@@ -16,9 +16,6 @@ describe('[api] task update slider', () => {
 
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         dbTasks = await seedTasks(db, [imageSliderTask]);
@@ -54,9 +51,6 @@ describe('[api] task update slider', () => {
 
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         dbTasks = await seedTasks(db, [imageSliderTask]);
@@ -104,9 +98,6 @@ describe('[api] task update slider', () => {
 
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         dbTasks = await seedTasks(db, [imageSliderTask]);
@@ -146,9 +137,6 @@ describe('[api] task update slider', () => {
 
     const { request } = await getTestServer({
       t,
-      config: {
-        salt: { password: '123' },
-      },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         dbTasks = await seedTasks(db, [imageSliderTask]);

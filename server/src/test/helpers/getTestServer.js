@@ -140,7 +140,7 @@ export function getTestConfig() {
       fieldname: 'image',
     },
     salt: {
-      password: process.env.PASSWORD_SALT,
+      password: process.env.PASSWORD_SALT || '123',
     },
     jwt: {
       cookie: 'token',
