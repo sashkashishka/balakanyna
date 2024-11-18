@@ -17,6 +17,7 @@ import * as labelList from './api/admin/label/list/middleware.js';
 
 import * as linkLabelTask from './api/admin/link/labelTask/middleware.js';
 import * as linkLabelImage from './api/admin/link/labelImage/middleware.js';
+import * as linkTaskProgram from './api/admin/link/taskProgram/middleware.js';
 
 import * as taskCreate from './api/admin/task/create/middleware.js';
 import * as taskUpdate from './api/admin/task/update/middleware.js';
@@ -144,6 +145,11 @@ export function connectMiddlewares(router, config) {
     linkLabelImage.route,
     verifyTokenMiddleware,
     linkLabelImage.middleware,
+  );
+  router[linkTaskProgram.method](
+    linkTaskProgram.route,
+    verifyTokenMiddleware,
+    linkTaskProgram.middleware,
   );
 
   if (Array.isArray(config.static)) {
