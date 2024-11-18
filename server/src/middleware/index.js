@@ -5,6 +5,7 @@ import * as login from './api/admin/login/middleware.js';
 import * as logout from './api/admin/logout/middleware.js';
 
 import * as imageUpload from './api/admin/image/upload/middleware.js';
+import * as imageList from './api/admin/image/list/middleware.js';
 
 import * as userCreate from './api/admin/user/create/middleware.js';
 import * as userGet from './api/admin/user/get/middleware.js';
@@ -54,7 +55,12 @@ export function connectMiddlewares(router, config) {
   router[imageUpload.method](
     imageUpload.route,
     verifyTokenMiddleware,
-    imageUpload.middelware,
+    imageUpload.middleware,
+  );
+  router[imageList.method](
+    imageList.route,
+    verifyTokenMiddleware,
+    imageList.middleware,
   );
 
   // user

@@ -39,7 +39,13 @@ export function getSearchParams(url) {
         obj[k] = [];
       }
 
-      obj[k].push(val);
+      let v = val;
+
+      if (!Number.isNaN(Number(val))) {
+        v = Number(val);
+      }
+
+      obj[k].push(v);
       continue;
     }
 

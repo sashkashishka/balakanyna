@@ -194,7 +194,7 @@ async function uploadImageMiddelware(ctx) {
 export const method = 'post';
 export const route = '/api/admin/image/upload';
 
-export const middelware = Composer.compose([
+export const middleware = Composer.compose([
   verifyIsMultipartFormDataContentTypeMiddleware,
   uploadImageMiddelware,
 ]);

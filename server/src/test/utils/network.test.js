@@ -57,7 +57,16 @@ describe('getSearchParams', () => {
     const url = new URL('https://example.com/?ids[]=1');
     const result = getSearchParams(url);
     const expected = {
-      ids: ['1'],
+      ids: [1],
+    };
+    assert.deepStrictEqual(result, expected);
+  });
+
+  test('should cast string to number type if possible', () => {
+    const url = new URL("https://example.com/?ids[]=1&ids[]='foo'");
+    const result = getSearchParams(url);
+    const expected = {
+      ids: [1, 'foo'],
     };
     assert.deepStrictEqual(result, expected);
   });

@@ -1,0 +1,40 @@
+{
+  "title": "ImageListSearchParams",
+  "type": "object",
+  "properties": {
+    "order_by": {
+      "type": "string",
+      "enum": [
+        "createdAt",
+        "updatedAt",
+        "filename"
+      ]
+    },
+    "dir": {
+      "type": "string",
+      "enum": [
+        "asc",
+        "desc"
+      ]
+    },
+    "min_created_at": {
+      "type": "string"
+    },
+    "max_created_at": {
+      "type": "string"
+    },
+    "filename": {
+      "type": "string"
+    },
+    "label": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    }
+  },
+  "required": [
+    "order_by",
+    "dir"
+  ]
+}
