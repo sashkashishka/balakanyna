@@ -7,7 +7,7 @@ import path from 'node:path';
 import { getTestServer } from '../../../../../helpers/getTestServer.js';
 import { getAuthCookie } from '../../../../../helpers/utils.js';
 
-import * as uploadImage from '../../../../../../middleware/api/admin/upload/image/middleware.js';
+import * as imageUpload from '../../../../../../middleware/api/admin/image/upload/middleware.js';
 
 import { seedAdmins } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
@@ -60,7 +60,7 @@ afterEach(async () => {
   await fsp.rmdir(saveDir, { recursive: true, force: true });
 });
 
-describe('[api] upload image', async () => {
+describe('[api] image upload', async () => {
   test('should return 401 if unauthorized', async (t) => {
     const { request } = await getTestServer({
       t,
@@ -74,8 +74,8 @@ describe('[api] upload image', async () => {
       },
     });
 
-    const resp = await request(uploadImage.route, {
-      method: uploadImage.method,
+    const resp = await request(imageUpload.route, {
+      method: imageUpload.method,
       headers: {
         cookie: 'token=123',
       },
@@ -99,8 +99,8 @@ describe('[api] upload image', async () => {
       },
     });
 
-    const resp = await request(uploadImage.route, {
-      method: uploadImage.method,
+    const resp = await request(imageUpload.route, {
+      method: imageUpload.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
         'content-type': 'application/x-www-form-urlencoded',
@@ -137,8 +137,8 @@ describe('[api] upload image', async () => {
 
     formData.append(wrongFieldname, file);
 
-    const resp = await request(uploadImage.route, {
-      method: uploadImage.method,
+    const resp = await request(imageUpload.route, {
+      method: imageUpload.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -175,8 +175,8 @@ describe('[api] upload image', async () => {
 
     formData.append(fieldname, file, name);
 
-    const resp = await request(uploadImage.route, {
-      method: uploadImage.method,
+    const resp = await request(imageUpload.route, {
+      method: imageUpload.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -213,8 +213,8 @@ describe('[api] upload image', async () => {
 
     formData.append(fieldname, await fsp.readFile(filepath, 'utf8'));
 
-    const resp = await request(uploadImage.route, {
-      method: uploadImage.method,
+    const resp = await request(imageUpload.route, {
+      method: imageUpload.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -252,8 +252,8 @@ describe('[api] upload image', async () => {
     formData.append('test', 1);
     formData.append(fieldname, file, name);
 
-    const resp = await request(uploadImage.route, {
-      method: uploadImage.method,
+    const resp = await request(imageUpload.route, {
+      method: imageUpload.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -294,8 +294,8 @@ describe('[api] upload image', async () => {
     formData.append(fieldname, file, name);
     formData.append('test', 1);
 
-    const resp = await request(uploadImage.route, {
-      method: uploadImage.method,
+    const resp = await request(imageUpload.route, {
+      method: imageUpload.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -347,8 +347,8 @@ describe('[api] upload image', async () => {
     formData.append(fieldname, file, name);
     formData.append(fieldname, file, name);
 
-    const resp = await request(uploadImage.route, {
-      method: uploadImage.method,
+    const resp = await request(imageUpload.route, {
+      method: imageUpload.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -395,8 +395,8 @@ describe('[api] upload image', async () => {
 
     const formData = new FormData();
 
-    const resp = await request(uploadImage.route, {
-      method: uploadImage.method,
+    const resp = await request(imageUpload.route, {
+      method: imageUpload.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -436,8 +436,8 @@ describe('[api] upload image', async () => {
 
     formData.append(fieldname, file, name);
 
-    const resp = await request(uploadImage.route, {
-      method: uploadImage.method,
+    const resp = await request(imageUpload.route, {
+      method: imageUpload.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -477,8 +477,8 @@ describe('[api] upload image', async () => {
 
     formData.append(fieldname, file, name);
 
-    const resp = await request(uploadImage.route, {
-      method: uploadImage.method,
+    const resp = await request(imageUpload.route, {
+      method: imageUpload.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -508,8 +508,8 @@ describe('[api] upload image', async () => {
     assert.equal(files[0], hashedFilename);
 
     // try to upload the same file second time
-    const resp2 = await request(uploadImage.route, {
-      method: uploadImage.method,
+    const resp2 = await request(imageUpload.route, {
+      method: imageUpload.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
