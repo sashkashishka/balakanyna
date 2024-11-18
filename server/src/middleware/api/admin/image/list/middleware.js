@@ -25,7 +25,7 @@ async function imageListMiddleware(ctx) {
     filename,
     min_created_at,
     max_created_at,
-    label,
+    labels,
   } = ctx.searchParams;
 
   const andClauses = [];
@@ -42,14 +42,14 @@ async function imageListMiddleware(ctx) {
     andClauses.push(like(imageTable.filename, `%${filename}%`));
   }
 
-  if (label) {
+  if (labels) {
     andClauses.push(
       inArray(
         imageTable.id,
         ctx.db
           .select({ imageId: labelImageTable.imageId })
           .from(labelImageTable)
-          .where(inArray(labelImageTable.labelId, label)),
+          .where(inArray(labelImageTable.labelId, labels)),
       ),
     );
   }

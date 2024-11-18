@@ -49,7 +49,7 @@ function getEndpoint(
   }
   if (label) {
     label.forEach((l) => {
-      url.searchParams.append('label[]', l);
+      url.searchParams.append('labels[]', l);
     });
   }
 

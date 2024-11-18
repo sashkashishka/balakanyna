@@ -19,6 +19,7 @@ if (file) {
 run({
   concurrency: 1,
   watch: !!process.env.TEST_WATCH,
+  only: false,
   ...options,
 })
   .on('test:fail', () => {

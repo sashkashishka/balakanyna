@@ -1,5 +1,5 @@
 {
-  "title": "ImageListSearchParams",
+  "title": "TaskListSearchParams",
   "type": "object",
   "properties": {
     "order_by": {
@@ -7,7 +7,8 @@
       "enum": [
         "createdAt",
         "updatedAt",
-        "filename"
+        "type",
+        "name"
       ]
     },
     "dir": {
@@ -23,14 +24,38 @@
     "max_created_at": {
       "type": "string"
     },
-    "filename": {
+    "min_updated_at": {
       "type": "string"
+    },
+    "max_updated_at": {
+      "type": "string"
+    },
+    "userIds": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "programIds": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     },
     "labels": {
       "type": "array",
       "items": {
         "type": "number"
       }
+    },
+    "name": {
+      "type": "string"
     }
   },
   "required": [
