@@ -3,6 +3,7 @@ import * as healthcheck from './api/healthcheck/middleware.js';
 import * as registration from './api/admin/registration/middleware.js';
 import * as login from './api/admin/login/middleware.js';
 import * as logout from './api/admin/logout/middleware.js';
+import * as adminGet from './api/admin/get/middleware.js';
 
 import * as imageUpload from './api/admin/image/upload/middleware.js';
 import * as imageList from './api/admin/image/list/middleware.js';
@@ -51,6 +52,11 @@ export function connectMiddlewares(router, config) {
   );
   router[login.method](login.route, login.middleware);
   router[logout.method](logout.route, logout.middleware);
+  router[adminGet.method](
+    adminGet.route,
+    verifyTokenMiddleware,
+    adminGet.middleware,
+  );
 
   // image
   router[imageUpload.method](
