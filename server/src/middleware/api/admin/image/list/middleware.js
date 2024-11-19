@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, gte, inArray, like, lte } from 'drizzle-orm';
+import { and, asc, desc, gte, inArray, like, lte } from 'drizzle-orm';
 import { Composer } from '../../../../../core/composer.js';
 
 import { createValidateSearchParamsMiddleware } from '../../../../auxiliary/validate/middleware.js';

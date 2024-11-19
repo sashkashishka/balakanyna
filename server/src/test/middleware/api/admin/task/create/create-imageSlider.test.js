@@ -6,7 +6,7 @@ import { getAuthCookie } from '../../../../../helpers/utils.js';
 
 import * as taskCreate from '../../../../../../middleware/api/admin/task/create/middleware.js';
 
-import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
+import { seedAdmins } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
 import { imageSliderTask } from '../../fixtures/task.js';
 

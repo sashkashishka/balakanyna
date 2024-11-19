@@ -41,6 +41,7 @@ export class Context {
   res: ServerResponse;
   logger: Logger;
   config: IConfig;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body: any;
   url: URL;
   searchParams: Record<string, unknown>;

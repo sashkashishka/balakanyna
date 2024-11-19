@@ -1,4 +1,4 @@
-import { eq, count } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 import { Composer } from '../../../../../core/composer.js';
 import {
