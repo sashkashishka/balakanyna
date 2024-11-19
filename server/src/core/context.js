@@ -31,7 +31,7 @@ export class Cookie {
   setCookie(name, value, options) {
     let cookies = [];
 
-    const resCookies = this.#res.getHeader('set-cookies');
+    const resCookies = this.#res.getHeader('set-cookie');
 
     if (resCookies === undefined) {
       cookies = [];
@@ -43,8 +43,8 @@ export class Cookie {
 
     cookies.push(cookie.serialize(name, value, options));
 
-    this.#res.removeHeader('set-cookies');
-    this.#res.setHeader('set-cookies', cookies);
+    this.#res.removeHeader('set-cookie');
+    this.#res.setHeader('set-cookie', cookies);
   }
 }
 

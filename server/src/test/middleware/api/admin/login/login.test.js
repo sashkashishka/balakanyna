@@ -88,12 +88,12 @@ describe('[api] login', async () => {
     assert.equal(Object.keys(body).length, 2);
 
     assert.match(
-      resp.headers.get('set-cookies'),
+      resp.headers.get('set-cookie'),
       /token=/,
       'token cookie should be set',
     );
     assert.match(
-      resp.headers.get('set-cookies'),
+      resp.headers.get('set-cookie'),
       /HttpOnly/i,
       'token cookie should be httpOnly',
     );
