@@ -132,12 +132,16 @@ describe('[api] image list', async () => {
       },
     });
     const body = await resp.json();
+    const { items, total } = body;
 
     assert.equal(resp.status, 200);
-    assert.equal(body.length, limit);
+    assert.equal(items.length, limit);
+    assert.equal(total, images.length);
 
-    for (let i = 1; i < body.length; i++) {
-      assert.ok(new Date(body[i - 1].createdAt) <= new Date(body[i].createdAt));
+    for (let i = 1; i < items.length; i++) {
+      assert.ok(
+        new Date(items[i - 1].createdAt) <= new Date(items[i].createdAt),
+      );
     }
   });
 
@@ -167,12 +171,16 @@ describe('[api] image list', async () => {
       },
     });
     const body = await resp.json();
+    const { items, total } = body;
 
     assert.equal(resp.status, 200);
-    assert.equal(body.length, limit);
+    assert.equal(items.length, limit);
+    assert.equal(total, images.length);
 
-    for (let i = 1; i < body.length; i++) {
-      assert.ok(new Date(body[i - 1].createdAt) <= new Date(body[i].createdAt));
+    for (let i = 1; i < items.length; i++) {
+      assert.ok(
+        new Date(items[i - 1].createdAt) <= new Date(items[i].createdAt),
+      );
     }
 
     // next page
@@ -190,423 +198,463 @@ describe('[api] image list', async () => {
       },
     });
     const body2 = await resp2.json();
+    const { items: items2, total: total2 } = body2;
 
     assert.equal(resp2.status, 200);
-    assert.deepEqual(body2.length, limit);
+    assert.equal(items2.length, limit);
+    assert.equal(total2, total);
 
     assert.ok(
-      new Date(body[body.length - 1].createdAt) < new Date(body2[0].createdAt),
+      new Date(items[items.length - 1].createdAt) <
+        new Date(items2[0].createdAt),
       'shoult be in chronological order',
     );
   });
 
-  test('should return 200 and order_by createdAt and dir asc', async (t) => {
-    const offset = 0;
-    const limit = images.length / 2;
+  describe('[order_by]', () => {
+    test('should return 200 and order_by createdAt and dir asc', async (t) => {
+      const offset = 0;
+      const limit = images.length / 2;
 
-    const { request, baseUrl } = await getTestServer({
-      t,
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        await seedImages(db, images);
-      },
-    });
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedImages(db, images);
+        },
+      });
 
-    const url = getEndpoint(baseUrl, {
-      offset,
-      limit,
-      order_by: 'createdAt',
-      dir: 'asc',
-    });
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'asc',
+      });
 
-    const resp = await request(url, {
-      method: imageList.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
-    });
-    const body = await resp.json();
+      const resp = await request(url, {
+        method: imageList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
 
-    assert.equal(resp.status, 200);
-    assert.equal(body.length, limit);
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, limit);
+      assert.equal(total, images.length);
 
-    for (let i = 1; i < body.length; i++) {
-      assert.ok(new Date(body[i - 1].createdAt) <= new Date(body[i].createdAt));
-    }
-  });
-
-  test('should return 200 and order_by createdAt and dir desc', async (t) => {
-    const offset = 0;
-    const limit = images.length / 2;
-
-    const { request, baseUrl } = await getTestServer({
-      t,
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        await seedImages(db, images);
-      },
-    });
-
-    const url = getEndpoint(baseUrl, {
-      offset,
-      limit,
-      order_by: 'createdAt',
-      dir: 'desc',
-    });
-
-    const resp = await request(url, {
-      method: imageList.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
-    });
-    const body = await resp.json();
-
-    assert.equal(resp.status, 200);
-    assert.equal(body.length, limit);
-
-    for (let i = 1; i < body.length; i++) {
-      assert.ok(new Date(body[i - 1].createdAt) >= new Date(body[i].createdAt));
-    }
-  });
-
-  test('should return 200 and order_by updatedAt and dir asc', async (t) => {
-    const offset = 0;
-    const limit = images.length / 2;
-
-    const { request, baseUrl } = await getTestServer({
-      t,
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        await seedImages(db, images);
-      },
-    });
-
-    const url = getEndpoint(baseUrl, {
-      offset,
-      limit,
-      order_by: 'updatedAt',
-      dir: 'asc',
-    });
-
-    const resp = await request(url, {
-      method: imageList.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
-    });
-    const body = await resp.json();
-
-    assert.equal(resp.status, 200);
-    assert.equal(body.length, limit);
-
-    for (let i = 1; i < body.length; i++) {
-      assert.ok(new Date(body[i - 1].updatedAt) <= new Date(body[i].updatedAt));
-    }
-  });
-
-  test('should return 200 and order_by updatedAt and dir desc', async (t) => {
-    const offset = 0;
-    const limit = images.length / 2;
-
-    const { request, baseUrl } = await getTestServer({
-      t,
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        await seedImages(db, images);
-      },
-    });
-
-    const url = getEndpoint(baseUrl, {
-      offset,
-      limit,
-      order_by: 'updatedAt',
-      dir: 'desc',
-    });
-
-    const resp = await request(url, {
-      method: imageList.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
-    });
-    const body = await resp.json();
-
-    assert.equal(resp.status, 200);
-    assert.equal(body.length, limit);
-
-    for (let i = 1; i < body.length; i++) {
-      assert.ok(new Date(body[i - 1].updatedAt) >= new Date(body[i].updatedAt));
-    }
-  });
-
-  test('should return 200 and order_by filename and dir asc', async (t) => {
-    const offset = 0;
-    const limit = images.length / 2;
-
-    const { request, baseUrl } = await getTestServer({
-      t,
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        await seedImages(db, images);
-      },
-    });
-
-    const url = getEndpoint(baseUrl, {
-      offset,
-      limit,
-      order_by: 'filename',
-      dir: 'asc',
-    });
-
-    const resp = await request(url, {
-      method: imageList.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
-    });
-    const body = await resp.json();
-
-    assert.equal(resp.status, 200);
-    assert.equal(body.length, limit);
-
-    for (let i = 1; i < body.length; i++) {
-      assert.equal(body[i - 1].filename.localeCompare(body[i].filename), -1);
-    }
-  });
-
-  test('should return 200 and order_by filename and dir desc', async (t) => {
-    const offset = 0;
-    const limit = images.length / 2;
-
-    const { request, baseUrl } = await getTestServer({
-      t,
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        await seedImages(db, images);
-      },
-    });
-
-    const url = getEndpoint(baseUrl, {
-      offset,
-      limit,
-      order_by: 'filename',
-      dir: 'desc',
-    });
-
-    const resp = await request(url, {
-      method: imageList.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
-    });
-    const body = await resp.json();
-
-    assert.equal(resp.status, 200);
-    assert.equal(body.length, limit);
-
-    for (let i = 1; i < body.length; i++) {
-      assert.equal(body[i - 1].filename.localeCompare(body[i].filename), 1);
-    }
-  });
-
-  test('should return 200 and filter by filename', async (t) => {
-    const offset = 0;
-    const limit = images.length;
-    const filename = '10';
-
-    const { request, baseUrl } = await getTestServer({
-      t,
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        await seedImages(db, images);
-      },
-    });
-
-    const url = getEndpoint(baseUrl, {
-      offset,
-      limit,
-      order_by: 'createdAt',
-      dir: 'desc',
-      filename,
-    });
-
-    const resp = await request(url, {
-      method: imageList.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
-    });
-    const body = await resp.json();
-
-    assert.equal(resp.status, 200);
-    assert.equal(body.length, 1);
-
-    for (let i = 0; i < body.length; i++) {
-      assert.match(body[i].filename, new RegExp(filename, 'i'));
-    }
-  });
-
-  test('should return 200 filter min_created_at', async (t) => {
-    const offset = 0;
-    const limit = images.length;
-    const min_created_at = new Date('2024-11-19').toISOString();
-
-    const { request, baseUrl } = await getTestServer({
-      t,
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        await seedImages(db, images);
-      },
-    });
-
-    const url = getEndpoint(baseUrl, {
-      offset,
-      limit,
-      order_by: 'createdAt',
-      dir: 'desc',
-      min_created_at,
-    });
-
-    const resp = await request(url, {
-      method: imageList.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
-    });
-    const body = await resp.json();
-
-    assert.equal(resp.status, 200);
-    assert.equal(body.length, 3);
-
-    for (let i = 0; i < body.length; i++) {
-      assert.ok(new Date(min_created_at) <= new Date(body[i].createdAt));
-    }
-  });
-
-  test('should return 200 filter max_created_at', async (t) => {
-    const offset = 0;
-    const limit = images.length;
-    const max_created_at = new Date('2024-11-19').toISOString();
-
-    const { request, baseUrl } = await getTestServer({
-      t,
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        await seedImages(db, images);
-      },
-    });
-
-    const url = getEndpoint(baseUrl, {
-      offset,
-      limit,
-      order_by: 'createdAt',
-      dir: 'desc',
-      max_created_at,
-    });
-
-    const resp = await request(url, {
-      method: imageList.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
-    });
-    const body = await resp.json();
-
-    assert.equal(resp.status, 200);
-    assert.equal(body.length, 7);
-
-    for (let i = 0; i < body.length; i++) {
-      assert.ok(new Date(max_created_at) >= new Date(body[i].createdAt));
-    }
-  });
-
-  test('should return 200 filter min_created_at and max_created_at', async (t) => {
-    const offset = 0;
-    const limit = images.length;
-    const min_created_at = new Date('2024-11-13').toISOString();
-    const max_created_at = new Date('2024-11-17').toISOString();
-
-    const { request, baseUrl } = await getTestServer({
-      t,
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        await seedImages(db, images);
-      },
-    });
-
-    const url = getEndpoint(baseUrl, {
-      offset,
-      limit,
-      order_by: 'createdAt',
-      dir: 'desc',
-      min_created_at,
-      max_created_at,
-    });
-
-    const resp = await request(url, {
-      method: imageList.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
-    });
-    const body = await resp.json();
-
-    assert.equal(resp.status, 200);
-    assert.equal(body.length, 5);
-
-    for (let i = 0; i < body.length; i++) {
-      assert.ok(new Date(max_created_at) >= new Date(body[i].createdAt));
-      assert.ok(new Date(min_created_at) <= new Date(body[i].createdAt));
-    }
-  });
-
-  test('should return 200 and filter by labels', async (t) => {
-    const offset = 0;
-    const limit = images.length;
-    let dbImageLabels = [];
-    let labelsList = [];
-
-    const { request, baseUrl } = await getTestServer({
-      t,
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        const dbImages = await seedImages(db, images);
-        const dbLabels = await seedLabels(db, labels);
-
-        labelsList = dbLabels.slice(0, 4).map((l) => l.id);
-
-        dbImageLabels = await seedImageLabels(
-          db,
-          labelsList.map((labelId, i) => ({
-            imageId: dbImages[i].id,
-            labelId,
-          })),
+      for (let i = 1; i < items.length; i++) {
+        assert.ok(
+          new Date(items[i - 1].createdAt) <= new Date(items[i].createdAt),
         );
-      },
+      }
     });
 
-    const url = getEndpoint(baseUrl, {
-      offset,
-      limit,
-      order_by: 'createdAt',
-      dir: 'asc',
-      label: labelsList,
+    test('should return 200 and order_by createdAt and dir desc', async (t) => {
+      const offset = 0;
+      const limit = images.length / 2;
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedImages(db, images);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'desc',
+      });
+
+      const resp = await request(url, {
+        method: imageList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, limit);
+      assert.equal(total, images.length);
+
+      for (let i = 1; i < items.length; i++) {
+        assert.ok(
+          new Date(items[i - 1].createdAt) >= new Date(items[i].createdAt),
+        );
+      }
     });
 
-    const resp = await request(url, {
-      method: imageList.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
+    test('should return 200 and order_by updatedAt and dir asc', async (t) => {
+      const offset = 0;
+      const limit = images.length / 2;
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedImages(db, images);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'updatedAt',
+        dir: 'asc',
+      });
+
+      const resp = await request(url, {
+        method: imageList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, limit);
+      assert.equal(total, images.length);
+
+      for (let i = 1; i < items.length; i++) {
+        assert.ok(
+          new Date(items[i - 1].updatedAt) <= new Date(items[i].updatedAt),
+        );
+      }
     });
-    const body = await resp.json();
 
-    assert.equal(resp.status, 200);
-    assert.equal(body.length, labelsList.length);
+    test('should return 200 and order_by updatedAt and dir desc', async (t) => {
+      const offset = 0;
+      const limit = images.length / 2;
 
-    for (let i = 0; i < body.length; i++) {
-      assert.equal(body[i].id, dbImageLabels[i].imageId);
-    }
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedImages(db, images);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'updatedAt',
+        dir: 'desc',
+      });
+
+      const resp = await request(url, {
+        method: imageList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, limit);
+      assert.equal(total, images.length);
+
+      for (let i = 1; i < items.length; i++) {
+        assert.ok(
+          new Date(items[i - 1].updatedAt) >= new Date(items[i].updatedAt),
+        );
+      }
+    });
+
+    test('should return 200 and order_by filename and dir asc', async (t) => {
+      const offset = 0;
+      const limit = images.length / 2;
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedImages(db, images);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'filename',
+        dir: 'asc',
+      });
+
+      const resp = await request(url, {
+        method: imageList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, limit);
+      assert.equal(total, images.length);
+
+      for (let i = 1; i < items.length; i++) {
+        assert.equal(
+          items[i - 1].filename.localeCompare(items[i].filename),
+          -1,
+        );
+      }
+    });
+
+    test('should return 200 and order_by filename and dir desc', async (t) => {
+      const offset = 0;
+      const limit = images.length / 2;
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedImages(db, images);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'filename',
+        dir: 'desc',
+      });
+
+      const resp = await request(url, {
+        method: imageList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, limit);
+      assert.equal(total, images.length);
+
+      for (let i = 1; i < items.length; i++) {
+        assert.equal(items[i - 1].filename.localeCompare(items[i].filename), 1);
+      }
+    });
+  });
+
+  describe('[filter]', () => {
+    test('should return 200 and filter by filename', async (t) => {
+      const offset = 0;
+      const limit = images.length;
+      const filename = '10';
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedImages(db, images);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'desc',
+        filename,
+      });
+
+      const resp = await request(url, {
+        method: imageList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, 1);
+      assert.equal(total, images.length);
+
+      for (let i = 0; i < items.length; i++) {
+        assert.match(items[i].filename, new RegExp(filename, 'i'));
+      }
+    });
+
+    test('should return 200 filter min_created_at', async (t) => {
+      const offset = 0;
+      const limit = images.length;
+      const min_created_at = new Date('2024-11-19').toISOString();
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedImages(db, images);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'desc',
+        min_created_at,
+      });
+
+      const resp = await request(url, {
+        method: imageList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, 3);
+      assert.equal(total, images.length);
+
+      for (let i = 0; i < items.length; i++) {
+        assert.ok(new Date(min_created_at) <= new Date(items[i].createdAt));
+      }
+    });
+
+    test('should return 200 filter max_created_at', async (t) => {
+      const offset = 0;
+      const limit = images.length;
+      const max_created_at = new Date('2024-11-19').toISOString();
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedImages(db, images);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'desc',
+        max_created_at,
+      });
+
+      const resp = await request(url, {
+        method: imageList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, 7);
+      assert.equal(total, images.length);
+
+      for (let i = 0; i < items.length; i++) {
+        assert.ok(new Date(max_created_at) >= new Date(items[i].createdAt));
+      }
+    });
+
+    test('should return 200 filter min_created_at and max_created_at', async (t) => {
+      const offset = 0;
+      const limit = images.length;
+      const min_created_at = new Date('2024-11-13').toISOString();
+      const max_created_at = new Date('2024-11-17').toISOString();
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedImages(db, images);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'desc',
+        min_created_at,
+        max_created_at,
+      });
+
+      const resp = await request(url, {
+        method: imageList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, 5);
+      assert.equal(total, images.length);
+
+      for (let i = 0; i < items.length; i++) {
+        assert.ok(new Date(max_created_at) >= new Date(items[i].createdAt));
+        assert.ok(new Date(min_created_at) <= new Date(items[i].createdAt));
+      }
+    });
+
+    test('should return 200 and filter by labels', async (t) => {
+      const offset = 0;
+      const limit = images.length;
+      let dbImageLabels = [];
+      let labelsList = [];
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          const dbImages = await seedImages(db, images);
+          const dbLabels = await seedLabels(db, labels);
+
+          labelsList = dbLabels.slice(0, 4).map((l) => l.id);
+
+          dbImageLabels = await seedImageLabels(
+            db,
+            labelsList.map((labelId, i) => ({
+              imageId: dbImages[i].id,
+              labelId,
+            })),
+          );
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'asc',
+        label: labelsList,
+      });
+
+      const resp = await request(url, {
+        method: imageList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, labelsList.length);
+      assert.equal(total, images.length);
+
+      for (let i = 0; i < items.length; i++) {
+        assert.equal(items[i].id, dbImageLabels[i].imageId);
+      }
+    });
   });
 });

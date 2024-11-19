@@ -197,12 +197,16 @@ describe('[api] task list', async () => {
       },
     });
     const body = await resp.json();
+    const { items, total } = body;
 
     assert.equal(resp.status, 200);
-    assert.equal(body.length, limit);
+    assert.equal(items.length, limit);
+    assert.equal(total, tasks.length);
 
-    for (let i = 1; i < body.length; i++) {
-      assert.ok(new Date(body[i - 1].createdAt) <= new Date(body[i].createdAt));
+    for (let i = 1; i < items.length; i++) {
+      assert.ok(
+        new Date(items[i - 1].createdAt) <= new Date(items[i].createdAt),
+      );
     }
   });
 
@@ -232,12 +236,16 @@ describe('[api] task list', async () => {
       },
     });
     const body = await resp.json();
+    const { items, total } = body;
 
     assert.equal(resp.status, 200);
-    assert.equal(body.length, limit);
+    assert.equal(items.length, limit);
+    assert.equal(total, tasks.length);
 
-    for (let i = 1; i < body.length; i++) {
-      assert.ok(new Date(body[i - 1].createdAt) <= new Date(body[i].createdAt));
+    for (let i = 1; i < items.length; i++) {
+      assert.ok(
+        new Date(items[i - 1].createdAt) <= new Date(items[i].createdAt),
+      );
     }
 
     // next page
@@ -255,12 +263,15 @@ describe('[api] task list', async () => {
       },
     });
     const body2 = await resp2.json();
+    const { items: items2, total: total2 } = body2;
 
     assert.equal(resp2.status, 200);
-    assert.deepEqual(body2.length, limit);
+    assert.deepEqual(items2.length, limit);
+    assert.equal(total2, total);
 
     assert.ok(
-      new Date(body[body.length - 1].createdAt) < new Date(body2[0].createdAt),
+      new Date(items[items.length - 1].createdAt) <
+        new Date(items2[0].createdAt),
       'shoult be in chronological order',
     );
   });
@@ -292,13 +303,15 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, limit);
+      assert.equal(items.length, limit);
+      assert.equal(total, tasks.length);
 
-      for (let i = 1; i < body.length; i++) {
+      for (let i = 1; i < items.length; i++) {
         assert.ok(
-          new Date(body[i - 1].createdAt) <= new Date(body[i].createdAt),
+          new Date(items[i - 1].createdAt) <= new Date(items[i].createdAt),
         );
       }
     });
@@ -329,13 +342,15 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, limit);
+      assert.equal(items.length, limit);
+      assert.equal(total, tasks.length);
 
-      for (let i = 1; i < body.length; i++) {
+      for (let i = 1; i < items.length; i++) {
         assert.ok(
-          new Date(body[i - 1].createdAt) >= new Date(body[i].createdAt),
+          new Date(items[i - 1].createdAt) >= new Date(items[i].createdAt),
         );
       }
     });
@@ -366,13 +381,15 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, limit);
+      assert.equal(items.length, limit);
+      assert.equal(total, tasks.length);
 
-      for (let i = 1; i < body.length; i++) {
+      for (let i = 1; i < items.length; i++) {
         assert.ok(
-          new Date(body[i - 1].updatedAt) <= new Date(body[i].updatedAt),
+          new Date(items[i - 1].updatedAt) <= new Date(items[i].updatedAt),
         );
       }
     });
@@ -403,13 +420,15 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, limit);
+      assert.equal(items.length, limit);
+      assert.equal(total, tasks.length);
 
-      for (let i = 1; i < body.length; i++) {
+      for (let i = 1; i < items.length; i++) {
         assert.ok(
-          new Date(body[i - 1].updatedAt) >= new Date(body[i].updatedAt),
+          new Date(items[i - 1].updatedAt) >= new Date(items[i].updatedAt),
         );
       }
     });
@@ -440,12 +459,14 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, limit);
+      assert.equal(items.length, limit);
+      assert.equal(total, tasks.length);
 
-      for (let i = 1; i < body.length; i++) {
-        assert.equal(body[i - 1].name.localeCompare(body[i].name), -1);
+      for (let i = 1; i < items.length; i++) {
+        assert.equal(items[i - 1].name.localeCompare(items[i].name), -1);
       }
     });
 
@@ -475,12 +496,14 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, limit);
+      assert.equal(items.length, limit);
+      assert.equal(total, tasks.length);
 
-      for (let i = 1; i < body.length; i++) {
-        assert.equal(body[i - 1].name.localeCompare(body[i].name), 1);
+      for (let i = 1; i < items.length; i++) {
+        assert.equal(items[i - 1].name.localeCompare(items[i].name), 1);
       }
     });
 
@@ -510,13 +533,15 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, limit);
+      assert.equal(items.length, limit);
+      assert.equal(total, tasks.length);
 
-      for (let i = 1; i < body.length; i++) {
+      for (let i = 1; i < items.length; i++) {
         assert.ok(
-          [-1, 0].includes(body[i - 1].type.localeCompare(body[i].type)),
+          [-1, 0].includes(items[i - 1].type.localeCompare(items[i].type)),
         );
       }
     });
@@ -547,13 +572,15 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, limit);
+      assert.equal(items.length, limit);
+      assert.equal(total, tasks.length);
 
-      for (let i = 1; i < body.length; i++) {
+      for (let i = 1; i < items.length; i++) {
         assert.ok(
-          [0, 1].includes(body[i - 1].type.localeCompare(body[i].type)),
+          [0, 1].includes(items[i - 1].type.localeCompare(items[i].type)),
         );
       }
     });
@@ -588,12 +615,14 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, 1);
+      assert.equal(items.length, 1);
+      assert.equal(total, tasks.length);
 
-      for (let i = 0; i < body.length; i++) {
-        assert.match(body[i].name, new RegExp(name, 'i'));
+      for (let i = 0; i < items.length; i++) {
+        assert.match(items[i].name, new RegExp(name, 'i'));
       }
     });
 
@@ -626,10 +655,11 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
       assert.equal(
-        body.length,
+        items.length,
         tasks.reduce((acc, curr) => {
           if (types.includes(curr.type)) {
             acc += 1;
@@ -637,9 +667,10 @@ describe('[api] task list', async () => {
           return acc;
         }, 0),
       );
+      assert.equal(total, tasks.length);
 
-      for (let i = 0; i < body.length; i++) {
-        assert.ok(types.includes(body[i].type));
+      for (let i = 0; i < items.length; i++) {
+        assert.ok(types.includes(items[i].type));
       }
     });
 
@@ -671,12 +702,14 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, 4);
+      assert.equal(items.length, 4);
+      assert.equal(total, tasks.length);
 
-      for (let i = 0; i < body.length; i++) {
-        assert.ok(new Date(min_created_at) <= new Date(body[i].createdAt));
+      for (let i = 0; i < items.length; i++) {
+        assert.ok(new Date(min_created_at) <= new Date(items[i].createdAt));
       }
     });
 
@@ -708,12 +741,14 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, 5);
+      assert.equal(items.length, 5);
+      assert.equal(total, tasks.length);
 
-      for (let i = 0; i < body.length; i++) {
-        assert.ok(new Date(max_created_at) >= new Date(body[i].createdAt));
+      for (let i = 0; i < items.length; i++) {
+        assert.ok(new Date(max_created_at) >= new Date(items[i].createdAt));
       }
     });
 
@@ -747,13 +782,15 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, 5);
+      assert.equal(items.length, 5);
+      assert.equal(total, tasks.length);
 
-      for (let i = 0; i < body.length; i++) {
-        assert.ok(new Date(max_created_at) >= new Date(body[i].createdAt));
-        assert.ok(new Date(min_created_at) <= new Date(body[i].createdAt));
+      for (let i = 0; i < items.length; i++) {
+        assert.ok(new Date(max_created_at) >= new Date(items[i].createdAt));
+        assert.ok(new Date(min_created_at) <= new Date(items[i].createdAt));
       }
     });
 
@@ -785,12 +822,14 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, 4);
+      assert.equal(items.length, 4);
+      assert.equal(total, tasks.length);
 
-      for (let i = 0; i < body.length; i++) {
-        assert.ok(new Date(min_updated_at) <= new Date(body[i].updatedAt));
+      for (let i = 0; i < items.length; i++) {
+        assert.ok(new Date(min_updated_at) <= new Date(items[i].updatedAt));
       }
     });
 
@@ -822,12 +861,14 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, 5);
+      assert.equal(items.length, 5);
+      assert.equal(total, tasks.length);
 
-      for (let i = 0; i < body.length; i++) {
-        assert.ok(new Date(max_updated_at) >= new Date(body[i].updatedAt));
+      for (let i = 0; i < items.length; i++) {
+        assert.ok(new Date(max_updated_at) >= new Date(items[i].updatedAt));
       }
     });
 
@@ -861,13 +902,15 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, 5);
+      assert.equal(items.length, 5);
+      assert.equal(total, tasks.length);
 
-      for (let i = 0; i < body.length; i++) {
-        assert.ok(new Date(max_updated_at) >= new Date(body[i].updatedAt));
-        assert.ok(new Date(min_updated_at) <= new Date(body[i].updatedAt));
+      for (let i = 0; i < items.length; i++) {
+        assert.ok(new Date(max_updated_at) >= new Date(items[i].updatedAt));
+        assert.ok(new Date(min_updated_at) <= new Date(items[i].updatedAt));
       }
     });
 
@@ -911,12 +954,14 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, labelsList.length);
+      assert.equal(items.length, labelsList.length);
+      assert.equal(total, tasks.length);
 
-      for (let i = 0; i < body.length; i++) {
-        assert.equal(body[i].id, dbTaskLabels[i].taskId);
+      for (let i = 0; i < items.length; i++) {
+        assert.equal(items[i].id, dbTaskLabels[i].taskId);
       }
     });
 
@@ -964,12 +1009,14 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, dbTaskProgram.length);
+      assert.equal(items.length, dbTaskProgram.length);
+      assert.equal(total, tasks.length);
 
-      for (let i = 0; i < body.length; i++) {
-        assert.equal(body[i].id, dbTaskProgram[i].taskId);
+      for (let i = 0; i < items.length; i++) {
+        assert.equal(items[i].id, dbTaskProgram[i].taskId);
       }
     });
 
@@ -1022,6 +1069,7 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       const userPrograms = userList.reduce(
         (acc, curr) => acc.concat(dbPrograms.filter((p) => p.userId === curr)),
@@ -1029,10 +1077,11 @@ describe('[api] task list', async () => {
       );
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, userPrograms.length);
+      assert.equal(items.length, userPrograms.length);
+      assert.equal(total, tasks.length);
 
-      for (let i = 0; i < body.length; i++) {
-        assert.equal(body[i].id, userPrograms[i].id);
+      for (let i = 0; i < items.length; i++) {
+        assert.equal(items[i].id, userPrograms[i].id);
       }
     });
 
@@ -1092,12 +1141,14 @@ describe('[api] task list', async () => {
         },
       });
       const body = await resp.json();
+      const { items, total } = body;
 
       assert.equal(resp.status, 200);
-      assert.equal(body.length, programList.length);
+      assert.equal(items.length, programList.length);
+      assert.equal(total, tasks.length);
 
-      for (let i = 0; i < body.length; i++) {
-        assert.equal(body[i].id, programList[i]);
+      for (let i = 0; i < items.length; i++) {
+        assert.equal(items[i].id, programList[i]);
       }
     });
   });
@@ -1136,15 +1187,17 @@ describe('[api] task list', async () => {
       },
     });
     const body = await resp.json();
+    const { items, total } = body;
 
     assert.equal(resp.status, 200);
-    assert.equal(body.length, 2);
+    assert.equal(items.length, 2);
+    assert.equal(total, 2);
 
     // no error as configuration is valid
-    assert.equal(body[0].errors, null);
+    assert.equal(items[0].errors, null);
 
     // should be error as configuration is valid
-    assert.notEqual(body[1].errors, null);
-    assert.ok(body[1].errors instanceof Object);
+    assert.notEqual(items[1].errors, null);
+    assert.ok(items[1].errors instanceof Object);
   });
 });

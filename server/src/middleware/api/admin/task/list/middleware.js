@@ -1,4 +1,4 @@
-import { and, asc, desc, gte, inArray, like, lte } from 'drizzle-orm';
+import { and, asc, desc, gte, count, inArray, like, lte } from 'drizzle-orm';
 import { Composer } from '../../../../../core/composer.js';
 
 import { createValidateSearchParamsMiddleware } from '../../../../auxiliary/validate/middleware.js';
@@ -118,15 +118,19 @@ async function taskListMiddleware(ctx) {
     query = query.where(and(...andClauses));
   }
 
-  let result = await query.limit(limit).offset(offset);
+  const [items, [total]] = await Promise.all([
+    query.limit(limit).offset(offset),
+    ctx.db.select({ count: count(taskTable.id) }).from(taskTable),
+  ]);
 
-  result = result.map((task) => {
-    const validate = getTaskConfigValidator(ctx.ajv, task.type);
-    validate(task.config);
-    return { ...task, errors: validate.errors };
+  ctx.json({
+    items: items.map((task) => {
+      const validate = getTaskConfigValidator(ctx.ajv, task.type);
+      validate(task.config);
+      return { ...task, errors: validate.errors };
+    }),
+    total: total.count,
   });
-
-  ctx.json(result);
 }
 
 export const method = 'get';

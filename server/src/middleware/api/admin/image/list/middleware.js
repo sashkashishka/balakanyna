@@ -1,4 +1,4 @@
-import { and, asc, desc, gte, inArray, like, lte } from 'drizzle-orm';
+import { and, asc, desc, gte, inArray, count, like, lte } from 'drizzle-orm';
 import { Composer } from '../../../../../core/composer.js';
 
 import { createValidateSearchParamsMiddleware } from '../../../../auxiliary/validate/middleware.js';
@@ -63,9 +63,12 @@ async function imageListMiddleware(ctx) {
     query = query.where(and(...andClauses));
   }
 
-  const result = await query.limit(limit).offset(offset);
+  const [items, [total]] = await Promise.all([
+    query.limit(limit).offset(offset),
+    ctx.db.select({ count: count(imageTable.id) }).from(imageTable),
+  ]);
 
-  ctx.json(result);
+  ctx.json({ items, total: total.count });
 }
 
 export const method = 'get';
