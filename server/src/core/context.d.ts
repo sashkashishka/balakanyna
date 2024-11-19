@@ -21,8 +21,8 @@ class Cookie {
 export class Jwt {
   constructor(options: IConfig['jwt']): void;
 
-  sign<P>(payload: P): Promise<string>;
-  verify<P>(token: string): Promise<false | P>;
+  sign<TPayload>(payload: TPayload): Promise<string>;
+  verify<TPayload>(token: string): Promise<false | TPayload>;
 }
 
 export class Context {

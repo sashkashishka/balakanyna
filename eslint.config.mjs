@@ -7,4 +7,21 @@ export default [
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
+  {
+    rules: {
+      '@typescript-eslint/naming-convention': [
+        'error',
+        {
+          selector: ['typeParameter', 'typeAlias'],
+          format: ['PascalCase'],
+          prefix: ['T'],
+        },
+        {
+          selector: 'interface',
+          format: ['PascalCase'],
+          prefix: ['I'],
+        },
+      ],
+    },
+  },
 ];

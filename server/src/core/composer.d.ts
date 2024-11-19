@@ -1,21 +1,21 @@
-interface MiddlewareFn<Ctx> {
-  (ctx: Ctx, next: () => Promise<void>): Promise<void> | void;
+interface IMiddlewareFn<TCtx> {
+  (ctx: TCtx, next: () => Promise<void>): Promise<void> | void;
 }
 
-interface MiddlewareObj<Ctx> {
-  middleware: MiddlewareFn<Ctx>;
+interface IMiddlewareObj<TCtx> {
+  middleware: MiddlewareFn<TCtx>;
 }
 
-export type Middleware<Ctx> = MiddlewareFn<Ctx> | MiddlewareObj<Ctx>;
+export type TMiddleware<TCtx> = IMiddlewareFn<TCtx> | IMiddlewareObj<TCtx>;
 
-export class Composer<Ctx> {
-  use(...fns: Middleware<Ctx>[]): this;
-  get(route: string, ...fns: Middleware<Ctx>[]): this;
-  put(route: string, ...fns: Middleware<Ctx>[]): this;
-  post(route: string, ...fns: Middleware<Ctx>[]): this;
-  patch(route: string, ...fns: Middleware<Ctx>[]): this;
-  delete(route: string, ...fns: Middleware<Ctx>[]): this;
-  middleware: MiddlewareFn<Ctx>;
+export class Composer<TCtx> {
+  use(...fns: TMiddleware<TCtx>[]): this;
+  get(route: string, ...fns: TMiddleware<TCtx>[]): this;
+  put(route: string, ...fns: TMiddleware<TCtx>[]): this;
+  post(route: string, ...fns: TMiddleware<TCtx>[]): this;
+  patch(route: string, ...fns: TMiddleware<TCtx>[]): this;
+  delete(route: string, ...fns: TMiddleware<TCtx>[]): this;
+  middleware: TMiddlewareFn<TCtx>;
 
-  static compose(...fns: Middleware<Ctx>[]): MiddlewareFn<Ctx>;
+  static compose(...fns: TMiddleware<TCtx>[]): TMiddlewareFn<TCtx>;
 }

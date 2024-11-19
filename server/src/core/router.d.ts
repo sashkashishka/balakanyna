@@ -10,14 +10,14 @@ export interface IDependencies {
   logger: Logger;
 }
 
-export interface IErrorHandler<Ctx> {
-  (error: Error, ctx: Ctx): Promise<void>;
+export interface IErrorHandler<TCtx> {
+  (error: Error, ctx: TCtx): Promise<void>;
 }
 
-export class Router<Ctx> extends Composer<Ctx> {
+export class Router<TCtx> extends Composer<TCtx> {
   constructor(config: IConfig, deps: IDependencies): void;
 
   handle(req: IncomingMessage, res: ServerResponse): Promise<void>;
 
-  handleError(handler: IErrorHandler<Ctx>): void;
+  handleError(handler: IErrorHandler<TCtx>): void;
 }
