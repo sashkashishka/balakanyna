@@ -6,7 +6,7 @@ import { getAuthCookie } from '../../../../../helpers/utils.js';
 
 import * as taskUpdate from '../../../../../../middleware/api/admin/task/update/middleware.js';
 
-import { seedAdmins } from '../../../../../../db/seeders.js';
+import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
 
 import { admin } from '../../fixtures/admin.js';
 import { imageSliderTask } from '../../fixtures/task.js';
@@ -78,7 +78,7 @@ describe('[api] task update', async () => {
     });
   });
 
-  test('should return 404 if user does not exists', async (t) => {
+  test('should return 404 if task does not exists', async (t) => {
     const { request } = await getTestServer({
       t,
       async seed(db, config) {
@@ -103,5 +103,124 @@ describe('[api] task update', async () => {
       error: 'NOT_FOUND',
       message: 'Not Found',
     });
+  });
+
+  test('should return 400 if config already exists', async (t) => {
+    let dbTasks = [];
+
+    const { request } = await getTestServer({
+      t,
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbTasks = await seedTasks(db, [imageSliderTask]);
+      },
+    });
+
+    const resp = await request(taskUpdate.route, {
+      method: taskUpdate.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+      body: {
+        ...imageSliderTask,
+        id: dbTasks[0].id,
+        name: 'Task New',
+      },
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 400);
+    assert.deepEqual(body, {
+      error: 'DUPLICATE_TASK',
+      message: `${dbTasks[0].id}`,
+    });
+  });
+
+  test("should return 400 if passed config's keys unsorted", async (t) => {
+    let dbTasks = [];
+
+    const { request } = await getTestServer({
+      t,
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbTasks = await seedTasks(db, [imageSliderTask]);
+      },
+    });
+
+    const resp = await request(taskUpdate.route, {
+      method: taskUpdate.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+      body: {
+        ...imageSliderTask,
+        id: dbTasks[0].id,
+        name: 'Task New',
+        config: {
+          slides: [
+            {
+              image: {
+                hashsum: 'aaa',
+                filename: 'foo.jpeg',
+                path: 'aaa.jpeg',
+                id: 1,
+              },
+            },
+          ],
+          title: 'Hello',
+        },
+      },
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 400);
+    assert.deepEqual(body, {
+      error: 'DUPLICATE_TASK',
+      message: `${dbTasks[0].id}`,
+    });
+  });
+
+  test("should sort config's keys before saving to the db", async (t) => {
+    let dbTasks = [];
+
+    const { request } = await getTestServer({
+      t,
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbTasks = await seedTasks(db, [imageSliderTask]);
+      },
+    });
+
+    const resp = await request(taskUpdate.route, {
+      method: taskUpdate.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+      body: {
+        ...imageSliderTask,
+        id: dbTasks[0].id,
+        name: 'Task New',
+        config: {
+          slides: [
+            {
+              image: {
+                hashsum: 'bbb',
+                filename: 'foo.jpeg',
+                path: 'bbb.jpeg',
+                id: 1,
+              },
+            },
+          ],
+          title: 'Hello',
+        },
+      },
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(
+      JSON.stringify(body.config),
+      '{"slides":[{"image":{"filename":"foo.jpeg","hashsum":"bbb","id":1,"path":"bbb.jpeg"}}],"title":"Hello"}',
+    );
   });
 });

@@ -2,17 +2,17 @@ export const imageSliderTask = {
   name: 'slider task',
   type: 'imageSlider',
   config: {
-    title: 'Hello',
     slides: [
       {
         image: {
-          id: 1,
-          hashsum: 'aaa',
           filename: 'foo.jpeg',
+          hashsum: 'aaa',
+          id: 1,
           path: 'aaa.jpeg',
         },
       },
     ],
+    title: 'Hello',
   },
 };
 
@@ -21,17 +21,17 @@ export const tasks = [
     name: 'Task 1',
     type: 'imageSlider',
     config: {
-      title: 'Hello',
       slides: [
         {
           image: {
-            id: 1,
-            hashsum: 'aaa',
             filename: 'foo.jpeg',
+            hashsum: 'aaa',
+            id: 1,
             path: 'aaa.jpeg',
           },
         },
       ],
+      title: 'Hello',
     },
     createdAt: '2024-03-10T00:00:00.000Z',
     updatedAt: '2024-03-10T00:00:00.000Z',
@@ -40,17 +40,17 @@ export const tasks = [
     name: 'Task 2',
     type: 'imageSlider',
     config: {
-      title: 'Hello2',
       slides: [
         {
           image: {
-            id: 2,
-            hashsum: 'bbb',
             filename: 'boo.jpeg',
+            hashsum: 'bbb',
+            id: 2,
             path: 'bbb.jpeg',
           },
         },
       ],
+      title: 'Hello2',
     },
     createdAt: '2024-03-11T00:00:00.000Z',
     updatedAt: '2024-03-11T00:00:00.000Z',
@@ -59,17 +59,17 @@ export const tasks = [
     name: 'Task 3',
     type: 'imageSlider',
     config: {
-      title: 'Hello3',
       slides: [
         {
           image: {
-            id: 3,
-            hashsum: 'ccc',
             filename: 'boom.jpeg',
+            hashsum: 'ccc',
+            id: 3,
             path: 'ccc.jpeg',
           },
         },
       ],
+      title: 'Hello3',
     },
     createdAt: '2024-03-12T00:00:00.000Z',
     updatedAt: '2024-03-12T00:00:00.000Z',
@@ -78,17 +78,17 @@ export const tasks = [
     name: 'Task 4',
     type: 'imageSlider',
     config: {
-      title: 'Hello4',
       slides: [
         {
           image: {
-            id: 4,
-            hashsum: 'ddd',
             filename: 'boom.jpeg',
+            hashsum: 'ddd',
+            id: 4,
             path: 'ddd.jpeg',
           },
         },
       ],
+      title: 'Hello4',
     },
     createdAt: '2024-03-13T00:00:00.000Z',
     updatedAt: '2024-03-13T00:00:00.000Z',
@@ -98,8 +98,8 @@ export const tasks = [
     type: 'semaphoreText',
     config: {
       colors: ['red'],
-      text: ['a'],
       delayRange: [1, 2],
+      text: ['a'],
     },
     createdAt: '2024-03-14T00:00:00.000Z',
     updatedAt: '2024-03-14T00:00:00.000Z',
@@ -109,8 +109,8 @@ export const tasks = [
     type: 'semaphoreText',
     config: {
       colors: ['green'],
-      text: ['b'],
       delayRange: [2, 3],
+      text: ['b'],
     },
     createdAt: '2024-03-15T00:00:00.000Z',
     updatedAt: '2024-03-15T00:00:00.000Z',
@@ -120,8 +120,8 @@ export const tasks = [
     type: 'semaphoreText',
     config: {
       colors: ['yellow'],
-      text: ['c'],
       delayRange: [3, 4],
+      text: ['c'],
     },
     createdAt: '2024-03-16T00:00:00.000Z',
     updatedAt: '2024-03-16T00:00:00.000Z',
@@ -131,8 +131,8 @@ export const tasks = [
     type: 'semaphoreText',
     config: {
       colors: ['brown'],
-      text: ['d'],
       delayRange: [4, 5],
+      text: ['d'],
     },
     createdAt: '2024-03-17T00:00:00.000Z',
     updatedAt: '2024-03-17T00:00:00.000Z',

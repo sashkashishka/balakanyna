@@ -11,12 +11,15 @@ import { taskTable } from '../../../../../db/schema.js';
 
 import schema from './schema.json' with { type: 'json' };
 import { verifyTaskConfigSchemaMiddleware } from '../schema/index.js';
+import { sortJsonKeys } from '../../../../../utils/json.js';
 
 const ERR_DIFFERENT_TASK_TYPE = createError(
   'DIFFERENT_TASK_TYPE',
   'Different task type',
   400,
 );
+
+const ERR_DUPLICATE_TASK = createError('DUPLICATE_TASK', '%s', 400);
 
 /**
  * @argument {import('../../../../../core/context.js').Context} ctx
@@ -59,6 +62,25 @@ async function checkIfTaskTypeTheSameMiddleware(ctx, next) {
 /**
  * @argument {import('../../../../../core/context.js').Context} ctx
  */
+async function checkDuplicateConfigurationMiddleware(ctx, next) {
+  const body = ctx.body;
+
+  const [result] = await ctx.db
+    .select({ id: taskTable.id })
+    .from(taskTable)
+    .where(eq(taskTable.config, sortJsonKeys(body.config)))
+    .limit(1);
+
+  if (result?.id) {
+    throw new ERR_DUPLICATE_TASK(result.id);
+  }
+
+  return next();
+}
+
+/**
+ * @argument {import('../../../../../core/context.js').Context} ctx
+ */
 async function updateTaskMiddleware(ctx) {
   const body = ctx.body;
 
@@ -66,7 +88,7 @@ async function updateTaskMiddleware(ctx) {
     .update(taskTable)
     .set({
       name: body.name,
-      config: body.config,
+      config: sortJsonKeys(body.config),
     })
     .where(eq(taskTable.id, body.id))
     .returning();
@@ -89,5 +111,6 @@ export const middleware = Composer.compose([
   checkIfTaskExistsMiddleware,
   checkIfTaskTypeTheSameMiddleware,
   verifyTaskConfigSchemaMiddleware,
+  checkDuplicateConfigurationMiddleware,
   updateTaskMiddleware,
 ]);
