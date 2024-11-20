@@ -6,5 +6,5 @@ export async function getAuthCookie(request, admin) {
     body: admin,
   });
 
-  return resp.headers.get('set-cookies');
+  return resp.headers.get('set-cookie');
 }

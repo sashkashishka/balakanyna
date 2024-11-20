@@ -1,24 +1,54 @@
 import { createRouter, getPagePath, openPage } from '@nanostores/router';
 
+export const ROUTE_ALIAS = {
+  HOME: 'home',
+  REGISTRATION: 'registration',
+  LOGIN: 'login',
+  USER_LIST: 'user-list',
+  USER_VIEW: 'user-view',
+  USER_CREATE: 'user-create',
+};
+
 export const $router = createRouter({
-  home: '/',
-  registration: '/registration',
-  login: '/login',
+  [ROUTE_ALIAS.HOME]: '/',
+  [ROUTE_ALIAS.REGISTRATION]: '/registration',
+  [ROUTE_ALIAS.LOGIN]: '/login',
+  [ROUTE_ALIAS.USER_LIST]: '/user/list',
+  [ROUTE_ALIAS.USER_VIEW]: '/user/view/:id',
 });
 
+export const ROUTE_TITLE = {
+  [ROUTE_ALIAS.HOME]: 'Home',
+  [ROUTE_ALIAS.USER_LIST]: 'User list',
+};
+
 export const ROUTES = {
+  home() {
+    return getPagePath($router, ROUTE_ALIAS.HOME);
+  },
   registartion() {
-    return getPagePath($router, 'registration');
+    return getPagePath($router, ROUTE_ALIAS.REGISTRATION);
   },
   login() {
-    return getPagePath($router, 'login');
+    return getPagePath($router, ROUTE_ALIAS.LOGIN);
+  },
+  userList() {
+    return getPagePath($router, ROUTE_ALIAS.USER_LIST);
+  },
+  userView(id: string) {
+    // @ts-expect-error something with router types
+    return getPagePath($router, ROUTE_ALIAS.USER_VIEW, { id });
   },
 };
 
 export function openLogin() {
-  openPage($router, 'login');
+  openPage($router, ROUTE_ALIAS.LOGIN);
 }
 
 export function openHome() {
-  openPage($router, 'home');
+  openPage($router, ROUTE_ALIAS.HOME);
+}
+
+export function openUserList() {
+  openPage($router, ROUTE_ALIAS.USER_LIST);
 }
