@@ -24,6 +24,12 @@ const filtersConfig: Array<TFilters> = [
     placeholder: 'Veronika',
   },
   {
+    type: 'search-string',
+    label: 'Surname',
+    name: 'surname',
+    placeholder: 'Balakhonova',
+  },
+  {
     type: 'date-range',
     minName: 'min_birthdate',
     maxName: 'max_birthdate',

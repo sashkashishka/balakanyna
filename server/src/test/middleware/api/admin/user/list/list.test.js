@@ -27,6 +27,7 @@ function getEndpoint(
     min_grade,
     max_grade,
     name,
+    surname,
   },
 ) {
   const url = getUrl(userList.route, baseUrl);
@@ -53,6 +54,9 @@ function getEndpoint(
   }
   if (max_grade !== undefined) {
     url.searchParams.set('max_grade', max_grade);
+  }
+  if (surname) {
+    url.searchParams.set('surname', surname);
   }
   if (name) {
     url.searchParams.set('name', name);
@@ -600,6 +604,45 @@ describe('[api] user list', async () => {
 
       for (let i = 0; i < items.length; i++) {
         assert.match(items[i].name, new RegExp(name, 'i'));
+      }
+    });
+
+    test('should return 200 and filter by surname', async (t) => {
+      const offset = 0;
+      const limit = 2;
+      const surname = 'i';
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedUsers(db, users);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'desc',
+        surname,
+      });
+
+      const resp = await request(url, {
+        method: userList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, 2);
+      assert.equal(total, 3);
+
+      for (let i = 0; i < items.length; i++) {
+        assert.match(items[i].surname, new RegExp(surname, 'i'));
       }
     });
 

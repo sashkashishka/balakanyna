@@ -39,6 +39,9 @@
     },
     "name": {
       "type": "string"
+    },
+    "surname": {
+      "type": "string"
     }
   },
   "required": [

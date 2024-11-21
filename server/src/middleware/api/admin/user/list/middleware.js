@@ -29,6 +29,7 @@ async function userListMiddleware(ctx) {
     min_grade,
     max_grade,
     name,
+    surname,
   } = ctx.searchParams;
 
   const andClauses = [];
@@ -59,6 +60,10 @@ async function userListMiddleware(ctx) {
 
   if (name) {
     andClauses.push(like(userTable.name, `%${name}%`));
+  }
+
+  if (surname) {
+    andClauses.push(like(userTable.surname, `%${surname}%`));
   }
 
   let query = ctx.db
