@@ -455,7 +455,46 @@ describe('[api] label list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 4);
-      assert.equal(total, labels.length);
+      assert.equal(total, 4);
+
+      for (let i = 0; i < items.length; i++) {
+        assert.match(items[i].name, new RegExp(name, 'i'));
+      }
+    });
+
+    test('should return 200 and total should not be limited to limit param', async (t) => {
+      const offset = 0;
+      const limit = 2;
+      const name = 'B';
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedLabels(db, labels);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'desc',
+        name,
+      });
+
+      const resp = await request(url, {
+        method: labelList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, 2);
+      assert.equal(total, 4);
 
       for (let i = 0; i < items.length; i++) {
         assert.match(items[i].name, new RegExp(name, 'i'));

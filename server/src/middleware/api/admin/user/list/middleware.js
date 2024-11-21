@@ -66,13 +66,18 @@ async function userListMiddleware(ctx) {
     .from(userTable)
     .orderBy(direction[dir](userTable[order_by]));
 
+  let countQuery = ctx.db
+    .select({ count: count(userTable.id) })
+    .from(userTable);
+
   if (andClauses.length) {
     query = query.where(and(...andClauses));
+    countQuery = countQuery.where(and(...andClauses));
   }
 
   const [items, [total]] = await Promise.all([
     query.limit(limit).offset(offset),
-    ctx.db.select({ count: count(userTable.id) }).from(userTable),
+    countQuery,
   ]);
 
   ctx.json({ items, total: total.count });

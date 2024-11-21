@@ -114,13 +114,18 @@ async function taskListMiddleware(ctx) {
     .from(taskTable)
     .orderBy(direction[dir](taskTable[order_by]));
 
+  let countQuery = ctx.db
+    .select({ count: count(taskTable.id) })
+    .from(taskTable);
+
   if (andClauses.length) {
     query = query.where(and(...andClauses));
+    countQuery = countQuery.where(and(...andClauses));
   }
 
   const [items, [total]] = await Promise.all([
     query.limit(limit).offset(offset),
-    ctx.db.select({ count: count(taskTable.id) }).from(taskTable),
+    countQuery,
   ]);
 
   ctx.json({

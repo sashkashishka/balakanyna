@@ -619,7 +619,7 @@ describe('[api] task list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 1);
-      assert.equal(total, tasks.length);
+      assert.equal(total, 1);
 
       for (let i = 0; i < items.length; i++) {
         assert.match(items[i].name, new RegExp(name, 'i'));
@@ -657,17 +657,16 @@ describe('[api] task list', async () => {
       const body = await resp.json();
       const { items, total } = body;
 
+      const amount = tasks.reduce((acc, curr) => {
+        if (types.includes(curr.type)) {
+          acc += 1;
+        }
+        return acc;
+      }, 0);
+
       assert.equal(resp.status, 200);
-      assert.equal(
-        items.length,
-        tasks.reduce((acc, curr) => {
-          if (types.includes(curr.type)) {
-            acc += 1;
-          }
-          return acc;
-        }, 0),
-      );
-      assert.equal(total, tasks.length);
+      assert.equal(items.length, amount);
+      assert.equal(total, amount);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(types.includes(items[i].type));
@@ -706,7 +705,7 @@ describe('[api] task list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 4);
-      assert.equal(total, tasks.length);
+      assert.equal(total, 4);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(new Date(min_created_at) <= new Date(items[i].createdAt));
@@ -745,7 +744,7 @@ describe('[api] task list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 5);
-      assert.equal(total, tasks.length);
+      assert.equal(total, 5);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(new Date(max_created_at) >= new Date(items[i].createdAt));
@@ -786,7 +785,7 @@ describe('[api] task list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 5);
-      assert.equal(total, tasks.length);
+      assert.equal(total, 5);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(new Date(max_created_at) >= new Date(items[i].createdAt));
@@ -826,7 +825,7 @@ describe('[api] task list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 4);
-      assert.equal(total, tasks.length);
+      assert.equal(total, 4);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(new Date(min_updated_at) <= new Date(items[i].updatedAt));
@@ -865,7 +864,7 @@ describe('[api] task list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 5);
-      assert.equal(total, tasks.length);
+      assert.equal(total, 5);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(new Date(max_updated_at) >= new Date(items[i].updatedAt));
@@ -906,7 +905,7 @@ describe('[api] task list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 5);
-      assert.equal(total, tasks.length);
+      assert.equal(total, 5);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(new Date(max_updated_at) >= new Date(items[i].updatedAt));
@@ -958,7 +957,7 @@ describe('[api] task list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, labelsList.length);
-      assert.equal(total, tasks.length);
+      assert.equal(total, labelsList.length);
 
       for (let i = 0; i < items.length; i++) {
         assert.equal(items[i].id, dbTaskLabels[i].taskId);
@@ -1013,7 +1012,7 @@ describe('[api] task list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, dbTaskProgram.length);
-      assert.equal(total, tasks.length);
+      assert.equal(total, dbTaskProgram.length);
 
       for (let i = 0; i < items.length; i++) {
         assert.equal(items[i].id, dbTaskProgram[i].taskId);
@@ -1078,7 +1077,7 @@ describe('[api] task list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, userPrograms.length);
-      assert.equal(total, tasks.length);
+      assert.equal(total, userPrograms.length);
 
       for (let i = 0; i < items.length; i++) {
         assert.equal(items[i].id, userPrograms[i].id);
@@ -1145,10 +1144,49 @@ describe('[api] task list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, programList.length);
-      assert.equal(total, tasks.length);
+      assert.equal(total, programList.length);
 
       for (let i = 0; i < items.length; i++) {
         assert.equal(items[i].id, programList[i]);
+      }
+    });
+
+    test('should return 200 and total should not be limited to limit param', async (t) => {
+      const offset = 0;
+      const limit = 2;
+      const name = 'Task';
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedTasks(db, tasks);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'desc',
+        name,
+      });
+
+      const resp = await request(url, {
+        method: taskList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, limit);
+      assert.equal(total, 8);
+
+      for (let i = 0; i < items.length; i++) {
+        assert.match(items[i].name, new RegExp(name, 'i'));
       }
     });
   });

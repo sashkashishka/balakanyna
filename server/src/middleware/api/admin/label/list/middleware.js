@@ -30,13 +30,18 @@ async function labelListMiddleware(ctx) {
     .from(labelTable)
     .orderBy(direction[dir](labelTable[order_by]));
 
+  let countQuery = ctx.db
+    .select({ count: count(labelTable.id) })
+    .from(labelTable);
+
   if (andClauses.length) {
     query = query.where(and(...andClauses));
+    countQuery = countQuery.where(and(...andClauses));
   }
 
   const [items, [total]] = await Promise.all([
     query.limit(limit).offset(offset),
-    ctx.db.select({ count: count(labelTable.id) }).from(labelTable),
+    countQuery,
   ]);
 
   ctx.json({ items, total: total.count });

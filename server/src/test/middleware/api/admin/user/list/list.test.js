@@ -596,7 +596,7 @@ describe('[api] user list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 2);
-      assert.equal(total, users.length);
+      assert.equal(total, 2);
 
       for (let i = 0; i < items.length; i++) {
         assert.match(items[i].name, new RegExp(name, 'i'));
@@ -635,7 +635,7 @@ describe('[api] user list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 3);
-      assert.equal(total, users.length);
+      assert.equal(total, 3);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(new Date(min_created_at) <= new Date(items[i].createdAt));
@@ -674,7 +674,7 @@ describe('[api] user list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 3);
-      assert.equal(total, users.length);
+      assert.equal(total, 3);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(new Date(max_created_at) >= new Date(items[i].createdAt));
@@ -715,7 +715,7 @@ describe('[api] user list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 1);
-      assert.equal(total, users.length);
+      assert.equal(total, 1);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(new Date(max_created_at) >= new Date(items[i].createdAt));
@@ -755,7 +755,7 @@ describe('[api] user list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 2);
-      assert.equal(total, users.length);
+      assert.equal(total, 2);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(min_grade <= items[i].grade);
@@ -794,7 +794,7 @@ describe('[api] user list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 5);
-      assert.equal(total, users.length);
+      assert.equal(total, 5);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(max_grade >= items[i].grade);
@@ -835,7 +835,7 @@ describe('[api] user list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 5);
-      assert.equal(total, users.length);
+      assert.equal(total, 5);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(min_grade <= items[i].grade);
@@ -875,7 +875,7 @@ describe('[api] user list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 5);
-      assert.equal(total, users.length);
+      assert.equal(total, 5);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(new Date(min_birthdate) <= new Date(items[i].birthdate));
@@ -914,7 +914,7 @@ describe('[api] user list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 1);
-      assert.equal(total, users.length);
+      assert.equal(total, 1);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(new Date(max_birthdate) >= new Date(items[i].birthdate));
@@ -955,11 +955,50 @@ describe('[api] user list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 2);
-      assert.equal(total, users.length);
+      assert.equal(total, 2);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(new Date(min_birthdate) <= new Date(items[i].birthdate));
         assert.ok(new Date(max_birthdate) >= new Date(items[i].birthdate));
+      }
+    });
+
+    test('should return 200 and total should not be limited to limit param', async (t) => {
+      const offset = 0;
+      const limit = 2;
+      const name = 'e';
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedUsers(db, users);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'desc',
+        name,
+      });
+
+      const resp = await request(url, {
+        method: userList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, 2);
+      assert.equal(total, 4);
+
+      for (let i = 0; i < items.length; i++) {
+        assert.match(items[i].name, new RegExp(name, 'i'));
       }
     });
   });

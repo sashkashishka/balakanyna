@@ -479,7 +479,7 @@ describe('[api] image list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 1);
-      assert.equal(total, images.length);
+      assert.equal(total, 1);
 
       for (let i = 0; i < items.length; i++) {
         assert.match(items[i].filename, new RegExp(filename, 'i'));
@@ -518,7 +518,7 @@ describe('[api] image list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 3);
-      assert.equal(total, images.length);
+      assert.equal(total, 3);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(new Date(min_created_at) <= new Date(items[i].createdAt));
@@ -557,7 +557,7 @@ describe('[api] image list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 7);
-      assert.equal(total, images.length);
+      assert.equal(total, 7);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(new Date(max_created_at) >= new Date(items[i].createdAt));
@@ -598,7 +598,7 @@ describe('[api] image list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, 5);
-      assert.equal(total, images.length);
+      assert.equal(total, 5);
 
       for (let i = 0; i < items.length; i++) {
         assert.ok(new Date(max_created_at) >= new Date(items[i].createdAt));
@@ -650,10 +650,49 @@ describe('[api] image list', async () => {
 
       assert.equal(resp.status, 200);
       assert.equal(items.length, labelsList.length);
-      assert.equal(total, images.length);
+      assert.equal(total, labelsList.length);
 
       for (let i = 0; i < items.length; i++) {
         assert.equal(items[i].id, dbImageLabels[i].imageId);
+      }
+    });
+
+    test('should return 200 and total should not be limited to limit param', async (t) => {
+      const offset = 0;
+      const limit = 2;
+      const filename = 'image';
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedImages(db, images);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'desc',
+        filename,
+      });
+
+      const resp = await request(url, {
+        method: imageList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, 2);
+      assert.equal(total, 10);
+
+      for (let i = 0; i < items.length; i++) {
+        assert.match(items[i].filename, new RegExp(filename, 'i'));
       }
     });
   });

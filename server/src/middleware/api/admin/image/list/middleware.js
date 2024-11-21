@@ -59,13 +59,18 @@ async function imageListMiddleware(ctx) {
     .from(imageTable)
     .orderBy(direction[dir](imageTable[order_by]));
 
+  let countQuery = ctx.db
+    .select({ count: count(imageTable.id) })
+    .from(imageTable);
+
   if (andClauses.length) {
     query = query.where(and(...andClauses));
+    countQuery = countQuery.where(and(...andClauses));
   }
 
   const [items, [total]] = await Promise.all([
     query.limit(limit).offset(offset),
-    ctx.db.select({ count: count(imageTable.id) }).from(imageTable),
+    countQuery,
   ]);
 
   ctx.json({ items, total: total.count });
