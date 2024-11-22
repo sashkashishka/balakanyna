@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '@nanostores/react';
 import {
+  DownOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
@@ -11,26 +12,27 @@ import {
   Menu,
   Layout,
   Image,
-  Typography,
   Button,
-  Breadcrumb,
+  Dropdown,
+  Space,
+  type MenuProps,
 } from 'antd';
 
 import {
   $router,
-  openHome,
+  openUserCreate,
   openUserList,
   ROUTE_ALIAS,
-  ROUTE_TITLE,
 } from '@/stores/router';
 
 import logoImg from '@/images/logo-blue.png';
 
+import { Breadcrumbs } from './Breadcrumbs';
+
 const { Header, Content, Sider } = Layout;
-const { Title } = Typography;
 
 const layoutStyle: React.CSSProperties = {
-  height: '100vh',
+  minHeight: '100vh',
 };
 
 const headerStyle: React.CSSProperties = {
@@ -46,12 +48,21 @@ const siderStyle: React.CSSProperties = {
   // backgroundColor: 'red',
 };
 
+const createButtons: MenuProps['items'] = [
+  {
+    key: ROUTE_ALIAS.USER_CREATE,
+    label: 'User',
+    icon: <UserOutlined />,
+    onClick: openUserCreate,
+  },
+];
+
 interface IProps {
   children: React.ReactNode;
 }
 
 export function PanelLayout({ children }: IProps) {
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const router = useStore($router);
 
   const {
@@ -80,7 +91,14 @@ export function PanelLayout({ children }: IProps) {
           >
             <Image preview={false} src={logoImg} width={80} height={80} />
 
-            <Title level={2}>Balakanyna</Title>
+            <Dropdown menu={{ items: createButtons }}>
+              <Button variant="solid" color="primary" size="large">
+                <Space>
+                  Create
+                  <DownOutlined />
+                </Space>
+              </Button>
+            </Dropdown>
           </Flex>
         </Flex>
       </Header>
@@ -98,43 +116,18 @@ export function PanelLayout({ children }: IProps) {
             selectedKeys={[String(router?.route)]}
             items={[
               {
-                key: '1',
+                key: ROUTE_ALIAS.USER_LIST,
                 icon: <UserOutlined />,
-                label: <span data-testid="1">'User'</span>,
-
-                children: [
-                  {
-                    key: ROUTE_ALIAS.USER_LIST,
-                    label: 'List',
-                    onClick() {
-                      openUserList();
-                    },
-                  },
-                ],
+                label: 'User list',
+                onClick() {
+                  openUserList();
+                },
               },
             ]}
           />
         </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>
-          <Breadcrumb
-            items={[
-              {
-                title: ROUTE_TITLE[ROUTE_ALIAS.HOME],
-                path: '',
-                onClick(e) {
-                  e.preventDefault();
-                  openHome();
-                },
-              },
-              {
-                title:
-                  router!.route === ROUTE_ALIAS.HOME
-                    ? undefined
-                    : ROUTE_TITLE[router!.route!],
-              },
-            ]}
-            style={{ margin: '16px 0' }}
-          />
+          <Breadcrumbs />
           <Content
             style={{
               padding: 24,

@@ -12,7 +12,7 @@
       "@/*": [
         "./src/*"
       ],
-    }
+    },
     /* Bundler mode */
     "moduleResolution": "bundler",
     "isolatedModules": true,

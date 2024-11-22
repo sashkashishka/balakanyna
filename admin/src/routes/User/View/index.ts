@@ -1,0 +1,1 @@
+export { UserViewPage } from './View';
