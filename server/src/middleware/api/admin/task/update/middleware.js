@@ -103,7 +103,7 @@ async function updateTaskMiddleware(ctx) {
   });
 }
 
-export const method = 'post';
+export const method = 'patch';
 export const route = '/api/admin/task/update';
 
 export const middleware = Composer.compose([

@@ -87,7 +87,7 @@ async function updateUserMiddleware(ctx) {
   });
 }
 
-export const method = 'post';
+export const method = 'patch';
 export const route = '/api/admin/user/update';
 
 export const middleware = Composer.compose([
