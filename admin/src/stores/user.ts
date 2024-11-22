@@ -1,8 +1,8 @@
 import { atom, computed } from 'nanostores';
-import { createFetcherStore } from './_query';
+import type { IUser } from '@/types/user';
+import type { IPaginatorResponse } from '@/types';
+import { createFetcherStore, createMutatorStore } from './_query';
 import { createListFilters, type IFilters } from './_list-filter';
-import type { IPaginatorResponse } from '../types';
-import type { IUser } from '../types/user';
 
 interface IUserListFilters extends IFilters {
   min_created_at?: string;

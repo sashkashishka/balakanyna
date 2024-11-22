@@ -1,0 +1,1 @@
+export { UserCreatePage } from './UserCreate';

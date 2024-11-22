@@ -1,6 +1,6 @@
 import { computed, map, onMount, onSet, type ReadableAtom } from 'nanostores';
+import { safeParse } from '@/utils/json';
 import { $router } from './router';
-import { safeParse } from '../utils/json';
 
 export interface IFilters {
   page: number;

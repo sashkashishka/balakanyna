@@ -9,9 +9,9 @@ import {
   notification,
 } from 'antd';
 
-import { $login } from '../../stores/auth';
-import type { ICredentials } from '../../types/auth';
-import { openHome, ROUTES } from '../../stores/router';
+import { $login } from '@/stores/auth';
+import type { ICredentials } from '@/types/auth';
+import { openHome, ROUTES } from '@/stores/router';
 
 const { Title } = Typography;
 const { Link } = Anchor;

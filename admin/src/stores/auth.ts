@@ -1,6 +1,6 @@
 import { computed } from 'nanostores';
+import type { IAdmin, ICredentials } from '@/types/auth';
 import { createFetcherStore, createMutatorStore } from './_query';
-import type { IAdmin, ICredentials } from '../types/auth';
 
 export const ADMIN_KEYS = {
   admin: ['get'],

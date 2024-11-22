@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flex, Layout, Image, Typography } from 'antd';
 
-import logoImg from '../../../images/logo-blue.png';
+import logoImg from '@/images/logo-blue.png';
 
 const { Header, Content } = Layout;
 const { Title } = Typography;

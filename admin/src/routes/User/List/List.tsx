@@ -1,7 +1,7 @@
 import { Table, Space } from 'antd';
 import type { TableProps } from 'antd';
 import { useStore } from '@nanostores/react';
-import type { IUser } from '../../types/user';
+import type { IUser } from '@/types/user';
 import {
   $filters,
   $activeFilterCount,
@@ -10,11 +10,11 @@ import {
   setListFilter,
   defaultUserListFilters,
   setPageSize,
-} from '../../stores/user';
-import { formatDate } from '../../utils/date';
-import { ROUTES } from '../../stores/router';
-import { Filters } from '../../components/Filters';
-import type { TFilters } from '../../components/Filters/types';
+} from '@/stores/user';
+import { formatDate } from '@/utils/date';
+import { ROUTES } from '@/stores/router';
+import { Filters } from '@/components/Filters';
+import type { TFilters } from '@/components/Filters/types';
 
 const filtersConfig: Array<TFilters> = [
   {

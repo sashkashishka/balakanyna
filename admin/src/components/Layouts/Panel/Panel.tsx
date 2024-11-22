@@ -22,9 +22,9 @@ import {
   openUserList,
   ROUTE_ALIAS,
   ROUTE_TITLE,
-} from '../../../stores/router';
+} from '@/stores/router';
 
-import logoImg from '../../../images/logo-blue.png';
+import logoImg from '@/images/logo-blue.png';
 
 const { Header, Content, Sider } = Layout;
 const { Title } = Typography;

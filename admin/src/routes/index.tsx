@@ -1,12 +1,14 @@
 import { useStore } from '@nanostores/react';
 
-import { $router, ROUTE_ALIAS } from '../stores/router';
-import { $admin, $isLoggedIn } from '../stores/auth';
-import { AuthLayout } from '../components/Layouts/Auth';
+import { $router, ROUTE_ALIAS } from '@/stores/router';
+import { $admin, $isLoggedIn } from '@/stores/auth';
+import { AuthLayout } from '@/components/Layouts/Auth';
+import { PanelLayout } from '@/components/Layouts/Panel';
+
 import { LoginPage } from './Login/Login';
 import { RegistrationPage } from './Registration/Registration';
-import { PanelLayout } from '../components/Layouts/Panel';
-import { UserListPage } from './UserList';
+import { UserListPage } from './User/List';
+import { UserCreatePage } from './User/Create';
 
 export function Router() {
   const router = useStore($router);
@@ -44,6 +46,9 @@ export function PrivateRouter() {
     }
     case ROUTE_ALIAS.USER_LIST: {
       return <UserListPage />;
+    }
+    case ROUTE_ALIAS.USER_CREATE: {
+      return <UserCreatePage />;
     }
     default:
       return 'not found';
