@@ -10,12 +10,15 @@ import * as programGet from '../../../../../../middleware/api/admin/program/get/
 import {
   seedAdmins,
   seedPrograms,
+  seedProgramTask,
+  seedTasks,
   seedUsers,
 } from '../../../../../../db/seeders.js';
 
 import { admin } from '../../fixtures/admin.js';
 import { user } from '../../fixtures/user.js';
 import { getProgram } from '../../fixtures/program.js';
+import { tasks } from '../../fixtures/task.js';
 
 function getEndpoint(baseUrl, { id }) {
   const url = getUrl(programGet.route, baseUrl);
@@ -149,10 +152,97 @@ describe('[api] program get', async () => {
     assert.equal(body.userId, dbPrograms[0].userId);
     assert.equal(body.startDatetime, dbPrograms[0].startDatetime);
     assert.equal(body.expirationDatetime, dbPrograms[0].expirationDatetime);
+    assert.ok(Array.isArray(body.tasks));
+    assert.equal(body.tasks.length, 0);
     assert.equal(isNaN(new Date(body.startDatetime)), false);
     assert.equal(isNaN(new Date(body.expirationDatetime)), false);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 7);
+    assert.equal(Object.keys(body).length, 8);
+  });
+
+  test('should return 200 and list of task ids', async (t) => {
+    let dbUsers = [];
+    let dbPrograms = [];
+    let dbTasks = [];
+    let dbProgramTasks = [];
+
+    const { request, baseUrl } = await getTestServer({
+      t,
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbUsers = await seedUsers(db, [user]);
+        dbPrograms = await seedPrograms(db, [
+          getProgram({
+            userId: dbUsers[0].id,
+          }),
+          getProgram({
+            userId: dbUsers[0].id,
+          }),
+          getProgram({
+            userId: dbUsers[0].id,
+          }),
+        ]);
+        dbTasks = await seedTasks(db, tasks);
+
+        dbProgramTasks = await seedProgramTask(db, [
+          {
+            taskId: dbTasks[0].id,
+            programId: dbPrograms[0].id,
+          },
+          {
+            taskId: dbTasks[1].id,
+            programId: dbPrograms[0].id,
+          },
+          {
+            taskId: dbTasks[2].id,
+            programId: dbPrograms[0].id,
+          },
+          {
+            taskId: dbTasks[2].id,
+            programId: dbPrograms[1].id,
+          },
+          {
+            taskId: dbTasks[2].id,
+            programId: dbPrograms[2].id,
+          },
+        ]);
+      },
+    });
+
+    const endpoint = getEndpoint(baseUrl, { id: dbPrograms[0].id });
+
+    const resp = await request(endpoint, {
+      method: programGet.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(typeof body.id, 'number');
+    assert.equal(body.name, dbPrograms[0].name);
+    assert.equal(body.userId, dbPrograms[0].userId);
+    assert.equal(body.startDatetime, dbPrograms[0].startDatetime);
+    assert.equal(body.expirationDatetime, dbPrograms[0].expirationDatetime);
+    assert.ok(Array.isArray(body.tasks));
+    assert.equal(body.tasks.length, 3);
+
+    for (let i = 0; i < body.tasks.length; i++) {
+      assert.equal(body.tasks[i].id, dbProgramTasks[i].taskId);
+      assert.ok(body.tasks[i].name);
+      assert.ok(body.tasks[i].type);
+      assert.ok(body.tasks[i].config);
+      assert.ok(body.tasks[i].createdAt);
+      assert.ok(body.tasks[i].updatedAt);
+      assert.equal(Object.keys(body.tasks[i]).length, 6);
+    }
+
+    assert.equal(isNaN(new Date(body.startDatetime)), false);
+    assert.equal(isNaN(new Date(body.expirationDatetime)), false);
+    assert.equal(isNaN(new Date(body.createdAt)), false);
+    assert.equal(isNaN(new Date(body.updatedAt)), false);
+    assert.equal(Object.keys(body).length, 8);
   });
 });
