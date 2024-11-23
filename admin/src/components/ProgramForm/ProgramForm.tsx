@@ -8,7 +8,10 @@ import { $createProgram, $updateProgram } from '@/stores/program';
 interface IProps {
   name: string;
   action: 'update' | 'create';
-  initialValues?: Omit<IProgram, 'birthdate'> & { birthdate: Dayjs };
+  initialValues?: Omit<IProgram, 'startDatetime' | 'expirationDatetime'> & {
+    expirationDatetime: Dayjs;
+    startDatetime: Dayjs;
+  };
   onSuccess?(p: IProgram): void;
 }
 
@@ -111,6 +114,12 @@ export function ProgramForm({
             <DatePicker />
           </Form.Item>
         </Col>
+
+        {/* TODO:
+         * add here field to add tasks with preview
+         * either create from scratch
+         * or add existing one
+         */}
 
         <Col span={24}>
           <Form.Item style={{ marginBottom: 0 }}>

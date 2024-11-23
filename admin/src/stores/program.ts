@@ -1,11 +1,9 @@
-import dayjs from 'dayjs';
-import { atom, computed } from 'nanostores';
+import { type ReadableAtom } from 'nanostores';
 import type { IPaginatorResponse } from '@/types';
 import { createFetcherStore, createMutatorStore } from './_query';
-import { createListFilters, type IFilters } from './_list-filter';
-import { $router, ROUTE_ALIAS } from './router';
-import { getIdSearchParam } from '@/utils/network';
+import { type IFilters } from './_list-filter';
 import type { IProgram, IProgramFull } from '@/types/program';
+import { getIdSearchParam } from '@/utils/network';
 
 export interface IProgramListFilters extends IFilters {
   min_created_at?: string;
@@ -29,77 +27,34 @@ export const defaultProgramListFilters: IProgramListFilters = {
   dir: 'descend',
 };
 
-export const {
-  $pageSize,
-  $filters,
-  $activeFilterCount,
-  $filtersSearchParams,
-  setPageSize,
-  setListFilter,
-  resetListFilter,
-} = createListFilters(defaultProgramListFilters);
-
-export const $programId = computed([$router], (router) => {
-  const defaultValue = '0';
-
-  if (!router) return defaultValue;
-
-  const { route, params } = router;
-
-  switch (route) {
-    case ROUTE_ALIAS.PROGRAM_VIEW: {
-      return 'pid' in params ? params.pid : defaultValue;
-    }
-
-    default:
-      return defaultValue;
-  }
-});
-export const $programIdSearchParam = computed([$programId], (programId) => {
-  if (!programId) return '';
-  return getIdSearchParam(programId);
-});
-
 export const PROGRAM_KEYS = {
   list: 'program/list',
-  getList(search = $filtersSearchParams) {
+  getList(search: ReadableAtom<string>) {
     return [this.list, search];
   },
   program: 'program/get',
-  getProgram(search = $programIdSearchParam) {
-    return ['program/get', search];
+  getProgram(programId: string | number) {
+    return ['program/get', getIdSearchParam(programId)];
   },
 };
 
-export function makeProgramsStore(search = $filtersSearchParams) {
+// list and item fetcher store fabrics
+export function makeProgramsStore(search: ReadableAtom<string>) {
   const $programs = createFetcherStore<IPaginatorResponse<IProgram>>(
     PROGRAM_KEYS.getList(search),
   );
   return $programs;
 }
-export const $programs = makeProgramsStore();
 
-export function makeProgramStore(search = $programIdSearchParam) {
+export function makeProgramStore(programId: string | number) {
   const $program = createFetcherStore<IProgramFull>(
-    PROGRAM_KEYS.getProgram(search),
-  );
-  const $programFormValues = computed(
-    [$program],
-    ({ data, loading, error }) => {
-      if (loading || error || !data) return undefined;
-
-      return {
-        ...data,
-        startDatetime: dayjs(data.startDatetime),
-        expirationDatetime: dayjs(data.expirationDatetime),
-      };
-    },
+    PROGRAM_KEYS.getProgram(programId),
   );
 
-  return { $program, $programFormValues };
+  return $program;
 }
-export const { $program, $programFormValues } = makeProgramStore();
 
+// mutators
 export const $createProgram = createMutatorStore<IProgram>(
   async ({ data, invalidate }) => {
     const resp = await fetch('/api/admin/program/create', {

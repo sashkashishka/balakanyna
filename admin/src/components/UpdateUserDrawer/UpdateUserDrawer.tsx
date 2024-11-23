@@ -1,14 +1,26 @@
-import { useState } from 'react';
-import { Button, Drawer } from 'antd';
+import { useMemo, useState } from 'react';
+import { Button, Drawer, Flex, Spin } from 'antd';
 import { useStore } from '@nanostores/react';
+import type { FetcherStore } from '@nanostores/query';
+import dayjs from 'dayjs';
 
-import { $userFormValues } from '@/stores/user';
+import type { IUser } from '@/types/user';
 
 import { UserForm } from '../UserForm';
 
-export function UpdateUserDrawer() {
+interface IProps {
+  user: IUser;
+}
+
+export function UpdateUserDrawer({ user }: IProps) {
   const [open, setOpen] = useState(false);
-  const userFormValues = useStore($userFormValues);
+
+  const userFormValues = useMemo(() => {
+    return {
+      ...user,
+      birthdate: dayjs(user.birthdate),
+    };
+  }, [user]);
 
   return (
     <>

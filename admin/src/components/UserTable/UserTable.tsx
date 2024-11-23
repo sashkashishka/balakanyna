@@ -1,44 +1,35 @@
 import { Table, Space } from 'antd';
 import type { TableProps } from 'antd';
-import type { FetcherStore } from '@nanostores/query';
-import type { ReadableAtom, WritableAtom } from 'nanostores';
 import { useStore } from '@nanostores/react';
 
+import type { IUser } from '@/types/user';
+import { type IUserListFilters } from '@/stores/user';
 import { formatDate } from '@/utils/date';
 import { ROUTES } from '@/stores/router';
 import { Filters } from '@/components/Filters';
 import type { TFilters } from '@/components/Filters/types';
-import type { IProgram } from '@/types/program';
+import type { FetcherStore } from '@nanostores/query';
 import type { IPaginatorResponse } from '@/types';
-import type { IProgramListFilters } from '@/stores/program';
+import type { ReadableAtom, WritableAtom } from 'nanostores';
 
-// TODO move it to separate file to make them pickable
-// to compose custom filter options
 const filtersConfig: Array<TFilters> = [
   {
     type: 'search-string',
     label: 'Name',
     name: 'name',
-    placeholder: 'Program Veronika',
-  },
-  // TODO: add user id search
-  {
-    type: 'date-range',
-    minName: 'min_start_datetime',
-    maxName: 'max_start_datetime',
-    label: 'Start datetime range',
+    placeholder: 'Veronika',
   },
   {
-    type: 'date-range',
-    minName: 'min_expiration_datetime',
-    maxName: 'max_expiration_datetime',
-    label: 'Expiration datetime range',
+    type: 'search-string',
+    label: 'Surname',
+    name: 'surname',
+    placeholder: 'Balakhonova',
   },
   {
     type: 'date-range',
-    minName: 'min_updated_at',
-    maxName: 'max_updated_at',
-    label: 'Updating range',
+    minName: 'min_birthdate',
+    maxName: 'max_birthdate',
+    label: 'Birthdate range',
   },
   {
     type: 'date-range',
@@ -46,12 +37,18 @@ const filtersConfig: Array<TFilters> = [
     maxName: 'max_created_at',
     label: 'Creation range',
   },
+  {
+    type: 'number-range',
+    minName: 'min_grade',
+    maxName: 'max_grade',
+    label: 'Grade range',
+  },
 ];
 
 interface IProps {
-  defaultFilters: IProgramListFilters;
-  $programs: FetcherStore<IPaginatorResponse<IProgram>>;
-  $filters: WritableAtom<IProgramListFilters>;
+  defaultFilters: IUserListFilters;
+  $users: FetcherStore<IPaginatorResponse<IUser>>;
+  $filters: WritableAtom<IUserListFilters>;
   $pageSize: WritableAtom<number>;
   $activeFilterCount: ReadableAtom<number>;
   setPageSize(v: number): void;
@@ -59,55 +56,59 @@ interface IProps {
   resetListFilter(): void;
 }
 
-export function ProgramTable({
+export function UserTable({
   defaultFilters,
-  $programs,
+  $users,
   $filters,
   $pageSize,
   $activeFilterCount,
   setPageSize,
   setListFilter,
 }: IProps) {
-  const { data, loading } = useStore($programs);
+  const { data, loading } = useStore($users);
   const filters = useStore($filters);
   const pageSize = useStore($pageSize);
   const activeFilterCount = useStore($activeFilterCount);
 
   const totalPages = data?.total || 0;
 
-  const columns: TableProps<IProgram>['columns'] = [
+  const columns: TableProps<IUser>['columns'] = [
     {
       title: 'ID',
       dataIndex: 'id',
       render(id: string) {
-        return <a href={ROUTES.programView(id)}>{id}</a>;
+        return <a href={ROUTES.userView(id)}>{id}</a>;
       },
     },
     {
-      title: 'Name',
+      title: 'Name Surname',
       dataIndex: 'name',
       render(_id, record) {
-        return <Space direction="vertical">{record.name}</Space>;
+        return (
+          <Space direction="vertical">
+            {record.name}
+            {record.surname}
+          </Space>
+        );
       },
       sorter: true,
       sortDirections: ['descend', 'ascend'],
       sortOrder: filters.order_by === 'name' ? filters.dir : null,
     },
     {
-      title: 'Start date',
-      dataIndex: 'startDatetime',
+      title: 'Birth date',
+      dataIndex: 'birthdate',
       render: formatDate,
       sorter: true,
       sortDirections: ['descend', 'ascend'],
-      sortOrder: filters.order_by === 'startDatetime' ? filters.dir : null,
+      sortOrder: filters.order_by === 'birthdate' ? filters.dir : null,
     },
     {
-      title: 'Expiration date',
-      dataIndex: 'expirationDatetime',
-      render: formatDate,
+      title: 'Grade',
+      dataIndex: 'grade',
       sorter: true,
       sortDirections: ['descend', 'ascend'],
-      sortOrder: filters.order_by === 'expirationDatetime' ? filters.dir : null,
+      sortOrder: filters.order_by === 'grade' ? filters.dir : null,
     },
     {
       title: 'Created',
@@ -116,14 +117,6 @@ export function ProgramTable({
       sorter: true,
       sortDirections: ['descend', 'ascend'],
       sortOrder: filters.order_by === 'createdAt' ? filters.dir : null,
-    },
-    {
-      title: 'Updated',
-      dataIndex: 'updatedAt',
-      render: formatDate,
-      sorter: true,
-      sortDirections: ['descend', 'ascend'],
-      sortOrder: filters.order_by === 'updatedAt' ? filters.dir : null,
     },
   ];
 
