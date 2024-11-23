@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { PlusCircleFilled } from '@ant-design/icons';
-import { Drawer, FloatButton } from 'antd';
+import { Button, Drawer } from 'antd';
 
 import { UserForm } from '../UserForm';
 
@@ -9,14 +8,9 @@ export function CreateUserDrawer() {
 
   return (
     <>
-      <FloatButton
-        shape="square"
-        type="primary"
-        tooltip="Create new user"
-        icon={<PlusCircleFilled />}
-        onClick={() => setOpen(true)}
-        style={{ insetInlineEnd: 94 }}
-      />
+      <Button type="primary" onClick={() => setOpen(true)}>
+        Create new user
+      </Button>
 
       <Drawer
         size="large"

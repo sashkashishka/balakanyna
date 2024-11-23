@@ -1,21 +1,25 @@
 import type { SelectProps } from 'antd';
 import type { ReactNode } from 'react';
 
-interface IDateRangeFilter {
+interface IFilter {
+  disabled?: boolean;
+}
+
+interface IDateRangeFilter extends IFilter {
   type: 'date-range';
   label: ReactNode;
   minName: string;
   maxName: string;
 }
 
-interface ISearchStringFilter {
+interface ISearchStringFilter extends IFilter {
   type: 'search-string';
   label: ReactNode;
   name: string;
   placeholder?: string;
 }
 
-interface ISearchSelectorFilter {
+interface ISearchSelectorFilter extends IFilter {
   type: 'user-selector';
   label: ReactNode;
   name: string;
@@ -23,14 +27,14 @@ interface ISearchSelectorFilter {
   maxCount: number;
 }
 
-interface INumberRangeFilter {
+interface INumberRangeFilter extends IFilter {
   type: 'number-range';
   label: ReactNode;
   minName: string;
   maxName: string;
 }
 
-interface ISelectFilter {
+interface ISelectFilter extends IFilter {
   type: 'select';
   name: string;
   label: ReactNode;

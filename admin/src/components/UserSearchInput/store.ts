@@ -14,7 +14,8 @@ export function makeTmpValueStore(
 ) {
   const initTmpValue = Array.isArray(initialValue)
     ? initialValue.map((v) => ({
-        label: cache.get(String(v)) as string,
+        label:
+          cache.get(String(v)) === -1 ? v : (cache.get(String(v)) as string),
         value: v,
       }))
     : [];

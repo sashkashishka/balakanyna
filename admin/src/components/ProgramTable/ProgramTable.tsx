@@ -13,48 +13,10 @@ import type { IPaginatorResponse } from '@/types';
 import type { IProgramListFilters } from '@/stores/program';
 import { UpdateProgramDrawer } from '../UpdateProgramDrawer';
 
-// TODO move it to separate file to make them pickable
-// to compose custom filter options
-const filtersConfig: Array<TFilters> = [
-  {
-    type: 'search-string',
-    label: 'Name',
-    name: 'name',
-    placeholder: 'Program Veronika',
-  },
-  {
-    type: 'user-selector',
-    label: 'Users',
-    name: 'userIds',
-    maxCount: 50,
-  },
-  {
-    type: 'date-range',
-    minName: 'min_start_datetime',
-    maxName: 'max_start_datetime',
-    label: 'Start datetime range',
-  },
-  {
-    type: 'date-range',
-    minName: 'min_expiration_datetime',
-    maxName: 'max_expiration_datetime',
-    label: 'Expiration datetime range',
-  },
-  {
-    type: 'date-range',
-    minName: 'min_updated_at',
-    maxName: 'max_updated_at',
-    label: 'Updating range',
-  },
-  {
-    type: 'date-range',
-    minName: 'min_created_at',
-    maxName: 'max_created_at',
-    label: 'Creation range',
-  },
-];
+import { filtersConfig as defaultFiltersConfig } from './constants';
 
 interface IProps {
+  filtersConfig?: TFilters[];
   defaultFilters: IProgramListFilters;
   $programs: FetcherStore<IPaginatorResponse<IProgram>>;
   $filters: WritableAtom<IProgramListFilters>;
@@ -73,6 +35,7 @@ export function ProgramTable({
   $activeFilterCount,
   setPageSize,
   setListFilter,
+  filtersConfig = defaultFiltersConfig,
 }: IProps) {
   const { data, loading } = useStore($programs);
   const filters = useStore($filters);

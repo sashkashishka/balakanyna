@@ -52,6 +52,7 @@ export function Filters<T extends Record<string, any>>({
             >
               {filter.label}
               <Select
+                disabled={filter.disabled}
                 style={{ width: '100%' }}
                 value={tmpFilters[filter.name]}
                 options={filter.options}
@@ -76,6 +77,7 @@ export function Filters<T extends Record<string, any>>({
             >
               {filter.label}
               <UserSearchInput
+                disabled={filter.disabled}
                 value={tmpFilters[filter.name]}
                 onChange={(v) => {
                   setTmpFilters({
@@ -94,6 +96,7 @@ export function Filters<T extends Record<string, any>>({
             <Space key={`${filter.type}${i}`} direction="vertical">
               {filter.label}
               <Input
+                disabled={filter.disabled}
                 placeholder={filter.placeholder}
                 value={tmpFilters[filter.name]}
                 type="text"
@@ -114,6 +117,7 @@ export function Filters<T extends Record<string, any>>({
             <Space key={`${filter.type}${i}`} direction="vertical">
               {filter.label}
               <Input
+                disabled={filter.disabled}
                 value={tmpFilters[filter.minName]}
                 placeholder="Min"
                 type="number"
@@ -126,6 +130,7 @@ export function Filters<T extends Record<string, any>>({
                 allowClear
               />
               <Input
+                disabled={filter.disabled}
                 value={tmpFilters[filter.maxName]}
                 placeholder="Max"
                 type="number"
@@ -146,6 +151,7 @@ export function Filters<T extends Record<string, any>>({
             <Space key={`${filter.type}${i}`} direction="vertical">
               {filter.label}
               <DateRange
+                disabled={filter.disabled}
                 mindate={tmpFilters[filter.minName]}
                 maxdate={tmpFilters[filter.maxName]}
                 onChange={(min, max) => {

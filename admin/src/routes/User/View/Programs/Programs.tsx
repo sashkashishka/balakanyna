@@ -7,6 +7,20 @@ import { $router } from '@/stores/router';
 import { defaultProgramListFilters, makeProgramsStore } from '@/stores/program';
 import { ProgramTable } from '@/components/ProgramTable';
 import { CreateProgramDrawer } from '@/components/CreateProgramDrawer';
+import * as filters from '@/components/ProgramTable/constants';
+import type { TFilters } from '@/components/Filters/types';
+
+const filtersConfig: TFilters[] = [
+  filters.name,
+  {
+    ...filters.userIds,
+    disabled: true,
+  },
+  filters.startDatetime,
+  filters.expirationDatetime,
+  filters.updatedAt,
+  filters.createdAt,
+];
 
 export function UserPrograms() {
   const { params } = useStore($router)!;
@@ -42,6 +56,7 @@ export function UserPrograms() {
       </Flex>
 
       <ProgramTable
+        filtersConfig={filtersConfig}
         defaultFilters={defaultFilters}
         $programs={$programs}
         $filters={$filters}
