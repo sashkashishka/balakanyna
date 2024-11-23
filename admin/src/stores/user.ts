@@ -7,6 +7,7 @@ import { createFetcherStore, createMutatorStore } from './_query';
 import { createListFilters, type IFilters } from './_list-filter';
 import { $router, ROUTE_ALIAS } from './router';
 import { formatDate } from '@/utils/date';
+import { getIdSearchParam } from '@/utils/network';
 
 interface IUserListFilters extends IFilters {
   min_created_at?: string;
@@ -58,9 +59,7 @@ export const $userId = computed([$router], (router) => {
 });
 const $userIdSearchParam = computed([$userId], (userId) => {
   if (!userId) return '';
-  const searchParams = new URLSearchParams();
-  searchParams.set('id', userId);
-  return `?${searchParams.toString()}`;
+  return getIdSearchParam(userId);
 });
 
 export const USER_KEYS = {
