@@ -32,6 +32,7 @@ async function taskListMiddleware(ctx) {
     max_created_at,
     min_updated_at,
     max_updated_at,
+    ids,
     userIds,
     programIds,
     types,
@@ -63,6 +64,10 @@ async function taskListMiddleware(ctx) {
 
   if (types) {
     andClauses.push(inArray(taskTable.type, types));
+  }
+
+  if (ids) {
+    andClauses.push(inArray(taskTable.id, ids));
   }
 
   if (userIds) {

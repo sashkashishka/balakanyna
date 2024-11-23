@@ -34,6 +34,7 @@ function getEndpoint(
     max_created_at,
     min_updated_at,
     max_updated_at,
+    ids,
     userIds,
     programIds,
     types,
@@ -62,6 +63,11 @@ function getEndpoint(
   }
   if (name) {
     url.searchParams.set('name', name);
+  }
+  if (ids) {
+    ids.forEach((id) => {
+      url.searchParams.append('ids[]', id);
+    });
   }
   if (userIds) {
     userIds.forEach((u) => {
@@ -1016,6 +1022,47 @@ describe('[api] task list', async () => {
 
       for (let i = 0; i < items.length; i++) {
         assert.equal(items[i].id, dbTaskProgram[i].taskId);
+      }
+    });
+
+    test('should return 200 and filter by ids', async (t) => {
+      const offset = 0;
+      const limit = tasks.length;
+      let dbTasks = [];
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          dbTasks = await seedTasks(db, tasks);
+        },
+      });
+
+      const ids = dbTasks.slice(0, 3).map(({ id }) => id);
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'asc',
+        ids,
+      });
+
+      const resp = await request(url, {
+        method: taskList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, ids.length);
+      assert.equal(total, ids.length);
+
+      for (let i = 0; i < items.length; i++) {
+        assert.equal(items[i].id, dbTasks[i].id);
       }
     });
 

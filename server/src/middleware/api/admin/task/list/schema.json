@@ -30,6 +30,12 @@
     "max_updated_at": {
       "type": "string"
     },
+    "ids": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
     "userIds": {
       "type": "array",
       "items": {
