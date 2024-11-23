@@ -7,7 +7,7 @@ import { $router, ROUTE_ALIAS } from './router';
 import { getIdSearchParam } from '@/utils/network';
 import type { IProgram, IProgramFull } from '@/types/program';
 
-interface IProgramListFilters extends IFilters {
+export interface IProgramListFilters extends IFilters {
   min_created_at?: string;
   max_created_at?: string;
   min_updated_at?: string;
@@ -29,18 +29,15 @@ export const defaultProgramListFilters: IProgramListFilters = {
   dir: 'descend',
 };
 
-export const $pageSize = atom(20);
-export function setPageSize(v: number) {
-  $pageSize.set(v);
-}
-
 export const {
+  $pageSize,
   $filters,
   $activeFilterCount,
   $filtersSearchParams,
+  setPageSize,
   setListFilter,
   resetListFilter,
-} = createListFilters(defaultProgramListFilters, { limit: $pageSize });
+} = createListFilters(defaultProgramListFilters);
 
 export const $programId = computed([$router], (router) => {
   const defaultValue = '0';

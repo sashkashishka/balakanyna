@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import type { DescriptionsProps } from 'antd';
-import { atom, computed } from 'nanostores';
+import { computed } from 'nanostores';
 import type { IUser } from '@/types/user';
 import type { IPaginatorResponse } from '@/types';
 import { createFetcherStore, createMutatorStore } from './_query';
@@ -9,7 +9,7 @@ import { $router, ROUTE_ALIAS } from './router';
 import { formatDate } from '@/utils/date';
 import { getIdSearchParam } from '@/utils/network';
 
-interface IUserListFilters extends IFilters {
+export interface IUserListFilters extends IFilters {
   min_created_at?: string;
   max_created_at?: string;
   min_birthdate?: string;
@@ -25,18 +25,15 @@ export const defaultUserListFilters: IUserListFilters = {
   dir: 'descend',
 };
 
-export const $pageSize = atom(20);
-export function setPageSize(v: number) {
-  $pageSize.set(v);
-}
-
 export const {
+  $pageSize,
   $filters,
   $activeFilterCount,
   $filtersSearchParams,
+  setPageSize,
   setListFilter,
   resetListFilter,
-} = createListFilters(defaultUserListFilters, { limit: $pageSize });
+} = createListFilters(defaultUserListFilters);
 
 export const $userId = computed([$router], (router) => {
   const defaultValue = '0';
@@ -115,19 +112,21 @@ export const $userDescriptionItems = computed(
   },
 );
 
-export const $createUser = createMutatorStore<IUser>(async ({ data, invalidate }) => {
-  const resp = await fetch('/api/admin/user/create', {
-    method: 'POST',
-    body: JSON.stringify(data),
-    headers: { 'content-type': 'application/json' },
-  });
+export const $createUser = createMutatorStore<IUser>(
+  async ({ data, invalidate }) => {
+    const resp = await fetch('/api/admin/user/create', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { 'content-type': 'application/json' },
+    });
 
-  invalidate(
-    (k) => k.startsWith(USER_KEYS.user) || k.startsWith(USER_KEYS.list),
-  );
+    invalidate(
+      (k) => k.startsWith(USER_KEYS.user) || k.startsWith(USER_KEYS.list),
+    );
 
-  return resp;
-});
+    return resp;
+  },
+);
 
 export const $updateUser = createMutatorStore<IUser>(
   async ({ data, invalidate }) => {
