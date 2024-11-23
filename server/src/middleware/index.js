@@ -23,6 +23,10 @@ import * as linkLabelTask from './api/admin/link/labelTask/middleware.js';
 import * as linkLabelImage from './api/admin/link/labelImage/middleware.js';
 import * as linkTaskProgram from './api/admin/link/taskProgram/middleware.js';
 
+import * as unlinkLabelTask from './api/admin/unlink/labelTask/middleware.js';
+import * as unlinkLabelImage from './api/admin/unlink/labelImage/middleware.js';
+import * as unlinkTaskProgram from './api/admin/unlink/taskProgram/middleware.js';
+
 import * as taskCreate from './api/admin/task/create/middleware.js';
 import * as taskUpdate from './api/admin/task/update/middleware.js';
 import * as taskDelete from './api/admin/task/delete/middleware.js';
@@ -186,6 +190,23 @@ export function connectMiddlewares(router, config) {
     linkTaskProgram.route,
     verifyTokenMiddleware,
     linkTaskProgram.middleware,
+  );
+
+  // unlink
+  router[unlinkLabelTask.method](
+    unlinkLabelTask.route,
+    verifyTokenMiddleware,
+    unlinkLabelTask.middleware,
+  );
+  router[unlinkLabelImage.method](
+    unlinkLabelImage.route,
+    verifyTokenMiddleware,
+    unlinkLabelImage.middleware,
+  );
+  router[unlinkTaskProgram.method](
+    unlinkTaskProgram.route,
+    verifyTokenMiddleware,
+    unlinkTaskProgram.middleware,
   );
 
   if (Array.isArray(config.static)) {

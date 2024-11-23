@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { getTestServer } from '../../../../../helpers/getTestServer.js';
 import { getAuthCookie } from '../../../../../helpers/utils.js';
 
-import * as linkLabelImage from '../../../../../../middleware/api/admin/link/labelImage/middleware.js';
+import * as unlinkLabelImage from '../../../../../../middleware/api/admin/unlink/labelImage/middleware.js';
 
 import {
   seedAdmins,
@@ -16,7 +16,7 @@ import { admin } from '../../fixtures/admin.js';
 import { label } from '../../fixtures/label.js';
 import { image } from '../../fixtures/image.js';
 
-describe('[api] link label image', async () => {
+describe('[api] unlink label image', async () => {
   test('should return 401 if unauthorized', async (t) => {
     const { request } = await getTestServer({
       t,
@@ -25,8 +25,8 @@ describe('[api] link label image', async () => {
       },
     });
 
-    const resp = await request(linkLabelImage.route, {
-      method: linkLabelImage.method,
+    const resp = await request(unlinkLabelImage.route, {
+      method: unlinkLabelImage.method,
       headers: {
         cookie: 'token=123',
       },
@@ -45,8 +45,8 @@ describe('[api] link label image', async () => {
       },
     });
 
-    const resp = await request(linkLabelImage.route, {
-      method: linkLabelImage.method,
+    const resp = await request(unlinkLabelImage.route, {
+      method: unlinkLabelImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -68,8 +68,8 @@ describe('[api] link label image', async () => {
       },
     });
 
-    const resp = await request(linkLabelImage.route, {
-      method: linkLabelImage.method,
+    const resp = await request(unlinkLabelImage.route, {
+      method: unlinkLabelImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -99,8 +99,8 @@ describe('[api] link label image', async () => {
       imageId: 2,
     };
 
-    const resp = await request(linkLabelImage.route, {
-      method: linkLabelImage.method,
+    const resp = await request(unlinkLabelImage.route, {
+      method: unlinkLabelImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -131,8 +131,8 @@ describe('[api] link label image', async () => {
       imageId: 2,
     };
 
-    const resp = await request(linkLabelImage.route, {
-      method: linkLabelImage.method,
+    const resp = await request(unlinkLabelImage.route, {
+      method: unlinkLabelImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -147,7 +147,38 @@ describe('[api] link label image', async () => {
     });
   });
 
-  test('should return 400 if such record already exist', async (t) => {
+  test('should return 200 if record does not exist', async (t) => {
+    let dbLabels = [];
+    let dbImages = [];
+
+    const { request } = await getTestServer({
+      t,
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbLabels = await seedLabels(db, [label]);
+        dbImages = await seedImages(db, [image]);
+      },
+    });
+
+    const payload = {
+      labelId: dbLabels[0].id,
+      imageId: dbImages[0].id,
+    };
+
+    const resp = await request(unlinkLabelImage.route, {
+      method: unlinkLabelImage.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+      body: payload,
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.deepEqual(body, { ok: true });
+  });
+
+  test('should return 200', async (t) => {
     let dbLabels = [];
     let dbImages = [];
 
@@ -168,42 +199,8 @@ describe('[api] link label image', async () => {
       imageId: dbImages[0].id,
     };
 
-    const resp = await request(linkLabelImage.route, {
-      method: linkLabelImage.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
-      body: payload,
-    });
-    const body = await resp.json();
-
-    assert.equal(resp.status, 400);
-    assert.deepEqual(body, {
-      error: 'DUPLICATE_MANY_TO_MANY_RELATION',
-      message: 'Duplicate many to many relation',
-    });
-  });
-
-  test('should return 200', async (t) => {
-    let dbLabels = [];
-    let dbImages = [];
-
-    const { request } = await getTestServer({
-      t,
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        dbLabels = await seedLabels(db, [label]);
-        dbImages = await seedImages(db, [image]);
-      },
-    });
-
-    const payload = {
-      labelId: dbLabels[0].id,
-      imageId: dbImages[0].id,
-    };
-
-    const resp = await request(linkLabelImage.route, {
-      method: linkLabelImage.method,
+    const resp = await request(unlinkLabelImage.route, {
+      method: unlinkLabelImage.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
@@ -212,12 +209,6 @@ describe('[api] link label image', async () => {
     const body = await resp.json();
 
     assert.equal(resp.status, 200);
-    assert.equal(typeof body.id, 'number');
-    assert.equal(body.imageId, payload.imageId);
-    assert.equal(body.labelId, payload.labelId);
-    assert.equal(isNaN(new Date(body.createdAt)), false);
-    assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 5);
+    assert.deepEqual(body, { ok: true });
   });
 });
-
