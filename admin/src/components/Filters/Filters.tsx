@@ -1,9 +1,10 @@
-import { Drawer, FloatButton, Space, Button, Input } from 'antd';
+import { Drawer, FloatButton, Space, Button, Input, Select } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
 
 import type { TFilters } from './types';
 import { useMemo, useState } from 'react';
 import { DateRange } from '../DateRange';
+import { UserSearchInput } from '../UserSearchInput';
 
 interface IProps<T> {
   values: T;
@@ -42,6 +43,52 @@ export function Filters<T extends Record<string, any>>({
   const content = useMemo(() => {
     return config.map((filter, i) => {
       switch (filter.type) {
+        case 'select': {
+          return (
+            <Space
+              key={`${filter.type}${i}`}
+              direction="vertical"
+              style={{ width: '100%' }}
+            >
+              {filter.label}
+              <Select
+                style={{ width: '100%' }}
+                value={tmpFilters[filter.name]}
+                options={filter.options}
+                allowClear
+                onChange={(v) => {
+                  setTmpFilters({
+                    ...tmpFilters,
+                    [filter.name]: v,
+                  });
+                }}
+              />
+            </Space>
+          );
+        }
+
+        case 'user-selector': {
+          return (
+            <Space
+              key={`${filter.type}${i}`}
+              direction="vertical"
+              style={{ width: '100%' }}
+            >
+              {filter.label}
+              <UserSearchInput
+                value={tmpFilters[filter.name]}
+                onChange={(v) => {
+                  setTmpFilters({
+                    ...tmpFilters,
+                    [filter.name]: v,
+                  });
+                }}
+                maxCount={filter.maxCount}
+              />
+            </Space>
+          );
+        }
+
         case 'search-string': {
           return (
             <Space key={`${filter.type}${i}`} direction="vertical">
