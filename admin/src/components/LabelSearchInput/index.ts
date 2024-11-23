@@ -1,0 +1,1 @@
+export { LabelSearchInput } from './LabelSearchInput';
