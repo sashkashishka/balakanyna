@@ -124,6 +124,7 @@ export function Filters<T extends Record<string, any>>({
       <FloatButton
         shape="square"
         type="primary"
+        tooltip="Open filters"
         icon={<FilterOutlined />}
         badge={{
           count: activeCount,
@@ -135,12 +136,12 @@ export function Filters<T extends Record<string, any>>({
         title="Filters"
         open={showDrawer}
         onClose={onDrawerClose}
-        extra={
+        footer={
           <Space>
-            <Button onClick={onDrawerClose}>Cancel</Button>
             <Button onClick={onApplyTmpFilters} type="primary">
               Submit
             </Button>
+            <Button onClick={onDrawerClose}>Cancel</Button>
           </Space>
         }
       >
