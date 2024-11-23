@@ -21,6 +21,6 @@ describe('[api] logout', async () => {
     assert.equal(resp.status, 200);
     assert.deepEqual(body, { ok: true });
 
-    assert.equal(resp.headers.get('set-cookies'), 'token=');
+    assert.equal(resp.headers.get('set-cookie'), 'token=');
   });
 });

@@ -40,7 +40,7 @@ describe('[auxiliary] receive json body', async () => {
       },
     });
 
-    const resp = await request('/');
+    const resp = await request('/', { method: 'get' });
 
     assert.equal(resp.status, 200);
   });

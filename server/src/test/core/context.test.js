@@ -17,7 +17,7 @@ describe('[core] context', async () => {
       connectMiddleware,
     });
 
-    const resp = await instance.request(route);
+    const resp = await instance.request(route, { method: 'get' });
 
     assert.equal(resp.status, 500);
     const body = await resp.json();

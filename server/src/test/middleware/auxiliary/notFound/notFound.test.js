@@ -6,7 +6,7 @@ describe('[middleware] not found', async () => {
   test('should return 404 if route not found', async (t) => {
     const { request } = await getTestServer({ t });
 
-    const resp = await request(`/${Date.now()}`);
+    const resp = await request(`/${Date.now()}`, { method: 'get' });
 
     assert.equal(resp.status, 404);
     const body = await resp.json();

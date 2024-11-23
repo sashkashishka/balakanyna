@@ -20,7 +20,7 @@ describe('[auxiliary] limit by ip', async () => {
       },
     });
 
-    const resp = await request('/');
+    const resp = await request('/', { method: 'get'});
     const body = await resp.json();
 
     assert.equal(resp.status, 403);
@@ -41,7 +41,7 @@ describe('[auxiliary] limit by ip', async () => {
       },
     });
 
-    const resp = await request('/');
+    const resp = await request('/', { method: 'get'});
     const body = await resp.json();
 
     assert.equal(resp.status, 403);
@@ -66,7 +66,7 @@ describe('[auxiliary] limit by ip', async () => {
       },
     });
 
-    const resp = await request('/');
+    const resp = await request('/', { method: 'get'});
     const body = await resp.json();
 
     assert.equal(resp.status, 200);

@@ -30,7 +30,7 @@ describe('[auxiliary] serve static files', async () => {
       },
     });
 
-    const resp = await request(file);
+    const resp = await request(file, { method: 'get'});
 
     assert.equal(resp.status, 200);
     assert.equal(resp.headers.get('content-type'), 'text/plain');
@@ -61,7 +61,7 @@ describe('[auxiliary] serve static files', async () => {
       },
     });
 
-    const resp = await request(file);
+    const resp = await request(file, { method: 'get'});
 
     assert.equal(resp.status, 404);
     const body = await resp.json();
@@ -89,7 +89,7 @@ describe('[auxiliary] serve static files', async () => {
       },
     });
 
-    const resp = await request(file);
+    const resp = await request(file, { method: 'get'});
 
     assert.equal(resp.status, 404);
     const body = await resp.json();
@@ -117,7 +117,7 @@ describe('[auxiliary] serve static files', async () => {
       },
     });
 
-    const resp = await request(file);
+    const resp = await request(file, { method: 'get'});
 
     assert.equal(resp.status, 404);
     const body = await resp.json();
@@ -162,7 +162,7 @@ describe('[auxiliary] serve static files', async () => {
       },
     });
 
-    const resp = await request(file);
+    const resp = await request(file, { method: 'get'});
 
     assert.equal(resp.status, 500);
     const body = await resp.json();

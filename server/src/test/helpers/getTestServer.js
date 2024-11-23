@@ -80,6 +80,7 @@ export async function getTestServer({
 
     return fetch(url, {
       ...options,
+      method: options.method.toUpperCase(),
       headers: {
         ...headers,
         ...options.headers,
