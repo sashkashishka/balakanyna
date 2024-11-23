@@ -13,7 +13,7 @@ import { seedLabels } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
 import { labels } from '../../fixtures/label.js';
 
-function getEndpoint(baseUrl, { limit, offset, order_by, dir, name }) {
+function getEndpoint(baseUrl, { limit, offset, order_by, dir, name, type }) {
   const url = getUrl(labelList.route, baseUrl);
 
   url.searchParams.set('limit', limit);
@@ -23,6 +23,9 @@ function getEndpoint(baseUrl, { limit, offset, order_by, dir, name }) {
 
   if (name) {
     url.searchParams.set('name', name);
+  }
+  if (type) {
+    url.searchParams.set('type', type);
   }
 
   return url;
@@ -461,6 +464,46 @@ describe('[api] label list', async () => {
         assert.match(items[i].name, new RegExp(name, 'i'));
       }
     });
+
+    test('should return 200 and filter by type', async (t) => {
+      const offset = 0;
+      const limit = labels.length;
+      const type = 'task';
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedLabels(db, labels);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'desc',
+        type,
+      });
+
+      const resp = await request(url, {
+        method: labelList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, 2);
+      assert.equal(total, 2);
+
+      for (let i = 0; i < items.length; i++) {
+        assert.match(items[i].type, new RegExp(type, 'i'));
+      }
+    });
+
 
     test('should return 200 and total should not be limited to limit param', async (t) => {
       const offset = 0;

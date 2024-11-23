@@ -1,4 +1,4 @@
-import { and, asc, desc, count, like } from 'drizzle-orm';
+import { and, asc, desc, count, like, eq } from 'drizzle-orm';
 import { Composer } from '../../../../../core/composer.js';
 
 import { createValidateSearchParamsMiddleware } from '../../../../auxiliary/validate/middleware.js';
@@ -17,12 +17,16 @@ const direction = {
  * @argument {import('../../../../../core/context.js').Context} ctx
  */
 async function labelListMiddleware(ctx) {
-  const { limit, offset, order_by, dir, name } = ctx.searchParams;
+  const { limit, offset, order_by, dir, type, name } = ctx.searchParams;
 
   const andClauses = [];
 
   if (name) {
     andClauses.push(like(labelTable.name, `%${name}%`));
+  }
+
+  if (type) {
+    andClauses.push(eq(labelTable.type, type));
   }
 
   const query = ctx.db
