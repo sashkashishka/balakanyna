@@ -223,4 +223,62 @@ describe('[api] task update', async () => {
       '{"slides":[{"image":{"filename":"foo.jpeg","hashsum":"bbb","id":1,"path":"bbb.jpeg"}}],"title":"Hello"}',
     );
   });
+  test('should return 200 and update task', async (t) => {
+    let dbTasks = [];
+
+    const { request } = await getTestServer({
+      t,
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbTasks = await seedTasks(db, [imageSliderTask]);
+      },
+    });
+
+    const payload = {
+      ...imageSliderTask,
+      id: dbTasks[0].id,
+      name: 'BrandNewName',
+      config: {
+        title: 'BrandNewTitle',
+        slides: [
+          {
+            image: {
+              id: 2,
+              hashsum: 'bbb',
+              filename: 'baz.png',
+              path: 'bbb.png',
+            },
+          },
+        ],
+      },
+    };
+
+    const resp = await request(taskUpdate.route, {
+      method: taskUpdate.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+      body: payload,
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(body.id, dbTasks[0].id);
+    assert.equal(body.name, payload.name);
+    assert.equal(body.type, payload.type);
+    assert.deepEqual(body.config, payload.config);
+    assert.equal(isNaN(new Date(body.createdAt)), false);
+    assert.equal(isNaN(new Date(body.updatedAt)), false);
+    assert.equal(Object.keys(body).length, 6);
+
+    assert.notEqual(
+      new Date(body.updatedAt).getTime(),
+      new Date(dbTasks[0].updatedAt).getTime(),
+      'should update updatetAt field',
+    );
+    assert.equal(
+      new Date(body.createdAt).getTime(),
+      new Date(dbTasks[0].createdAt).getTime(),
+    );
+  });
 });

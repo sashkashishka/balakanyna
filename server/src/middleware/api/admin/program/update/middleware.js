@@ -64,6 +64,7 @@ async function updateProgramMiddleware(ctx) {
       name: body.name,
       startDatetime: body.startDatetime,
       expirationDatetime: body.expirationDatetime,
+      updatedAt: new Date().toISOString(),
     })
     .where(eq(programTable.id, body.id))
     .returning();

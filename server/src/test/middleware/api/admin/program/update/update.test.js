@@ -192,5 +192,15 @@ describe('[api] program update', async () => {
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
     assert.equal(Object.keys(body).length, 7);
+
+    assert.notEqual(
+      new Date(body.updatedAt).getTime(),
+      new Date(dbPrograms[0].updatedAt).getTime(),
+      'should update updatetAt field',
+    );
+    assert.equal(
+      new Date(body.createdAt).getTime(),
+      new Date(dbPrograms[0].createdAt).getTime(),
+    );
   });
 });

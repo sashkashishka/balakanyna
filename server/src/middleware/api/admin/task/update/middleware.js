@@ -89,6 +89,7 @@ async function updateTaskMiddleware(ctx) {
     .set({
       name: body.name,
       config: sortJsonKeys(body.config),
+      updatedAt: new Date().toISOString(),
     })
     .where(eq(taskTable.id, body.id))
     .returning();
