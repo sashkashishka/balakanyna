@@ -22,7 +22,12 @@ const filtersConfig: Array<TFilters> = [
     name: 'name',
     placeholder: 'Program Veronika',
   },
-  // TODO: add user id search
+  {
+    type: 'user-selector',
+    label: 'Users',
+    name: 'userIds',
+    maxCount: 50,
+  },
   {
     type: 'date-range',
     minName: 'min_start_datetime',

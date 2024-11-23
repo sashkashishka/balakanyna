@@ -8,7 +8,8 @@ import { $createProgram, $updateProgram } from '@/stores/program';
 import { UserSearchInput } from '../UserSearchInput';
 
 export interface IProgramFormInitialValues
-  extends Omit<IProgram, 'startDatetime' | 'expirationDatetime'> {
+  extends Omit<IProgram, 'startDatetime' | 'expirationDatetime' | 'userId'> {
+  userId: number[];
   expirationDatetime: Dayjs;
   startDatetime: Dayjs;
 }
@@ -39,7 +40,7 @@ export function ProgramForm({
       const body = { ...data };
 
       if (Array.isArray(body.userId)) {
-        body.userId = body.userId[0].value;
+        body.userId = body.userId[0];
       }
 
       const resp = (await mutate(body)) as Response;

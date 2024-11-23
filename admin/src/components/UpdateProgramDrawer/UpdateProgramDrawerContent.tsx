@@ -20,6 +20,7 @@ export function UpdateProgramDrawerContent({ $program }: IProps) {
 
     return {
       ...data,
+      userId: [data.userId],
       startDatetime: dayjs(data.startDatetime),
       expirationDatetime: dayjs(data.expirationDatetime),
     };

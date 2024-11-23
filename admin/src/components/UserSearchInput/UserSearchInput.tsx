@@ -6,16 +6,29 @@ import { Select, type SelectProps, Spin } from 'antd';
 import { makeUserSearchStore } from '@/stores/user';
 import { debounce } from '@/utils/debounce';
 import { getSearchParam } from '@/utils/network';
+import { makeTmpValueStore } from './store';
 
 const DEBOUNCE_DELAY = 200;
 
 interface IProps {
-  value?: number;
-  onChange?(id: number): void;
+  maxCount?: number;
+  value?: number[];
+  onChange?(ids: number[]): void;
   disabled?: boolean;
 }
 
-export function UserSearchInput({ disabled, value, onChange }: IProps) {
+export function UserSearchInput({
+  maxCount = 1,
+  disabled,
+  value,
+  onChange,
+}: IProps) {
+  const [{ $tmpValue, setTmpValue }] = useState(
+    makeTmpValueStore(value!, onChange!),
+  );
+
+  const tmpValue = useStore($tmpValue);
+
   const [$search] = useState(() => atom(''));
   const [$searchParams] = useState(() =>
     computed([$search], (search) => getSearchParam('search', search)),
@@ -40,17 +53,20 @@ export function UserSearchInput({ disabled, value, onChange }: IProps) {
 
   return (
     <Select
+      style={{ width: '100%' }}
       disabled={disabled}
       mode="multiple"
-      maxCount={1}
+      maxCount={maxCount}
       allowClear
       labelInValue
       filterOption={false}
       onSearch={handleSearch}
       notFoundContent={loading ? <Spin size="small" /> : null}
-      value={value}
+      value={tmpValue}
       placeholder="Alice"
-      onChange={onChange}
+      onChange={(values) => {
+        setTmpValue(values);
+      }}
       options={options}
     />
   );

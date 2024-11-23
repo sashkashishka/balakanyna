@@ -36,7 +36,7 @@ export function UserPrograms() {
         <CreateProgramDrawer
           initialValues={{
             // @ts-expect-error uid does exist
-            userId: Number(params.uid),
+            userId: [Number(params.uid)],
           }}
         />
       </Flex>
