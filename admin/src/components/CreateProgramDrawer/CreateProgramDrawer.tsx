@@ -23,6 +23,7 @@ export function CreateProgramDrawer({ initialValues, onSuccess }: IProps) {
         title="Create new program"
         open={open}
         onClose={() => setOpen(false)}
+        destroyOnClose
       >
         <ProgramForm
           name="program-create"

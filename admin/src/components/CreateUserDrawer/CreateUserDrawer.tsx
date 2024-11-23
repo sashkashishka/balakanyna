@@ -18,7 +18,13 @@ export function CreateUserDrawer() {
         style={{ insetInlineEnd: 94 }}
       />
 
-      <Drawer size="large" title="Create new user" open={open} onClose={() => setOpen(false)}>
+      <Drawer
+        size="large"
+        title="Create new user"
+        open={open}
+        onClose={() => setOpen(false)}
+        destroyOnClose
+      >
         <UserForm name="user-create" action="create" />
       </Drawer>
     </>
