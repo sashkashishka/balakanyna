@@ -3,8 +3,9 @@ import { Flex, Space, Spin, Tabs, Typography } from 'antd';
 
 import { $router, openRoute, ROUTE_ALIAS } from '@/stores/router';
 import { $user } from '@/stores/user';
-import { UserInfo } from './Info';
 import { UpdateUserDrawer } from '@/components/UpdateUserDrawer';
+import { UserInfo } from './Info';
+import { UserPrograms } from './Programs';
 
 const { Paragraph } = Typography;
 
@@ -17,7 +18,7 @@ const tabs = [
   {
     key: ROUTE_ALIAS.USER_VIEW_PROGRAMS,
     label: 'Programs',
-    children: 'user program',
+    children: <UserPrograms />,
   },
   {
     key: ROUTE_ALIAS.USER_VIEW_TASKS,

@@ -3,6 +3,7 @@ import type { TTask } from './task';
 export interface IProgram {
   id: number;
   name: string;
+  userId: number;
   startDatetime: string;
   expirationDatetime: string;
   updatedAt: string;

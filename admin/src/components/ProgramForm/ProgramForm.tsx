@@ -1,27 +1,23 @@
 import type { Dayjs } from 'dayjs';
 import { useStore } from '@nanostores/react';
-import {
-  Button,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  notification,
-  Row,
-} from 'antd';
+import { Button, Col, DatePicker, Form, Input, notification, Row } from 'antd';
 
-import { redirectProgramView } from '@/stores/router';
-import type { IProgram } from '@/types/user';
+import type { IProgram } from '@/types/program';
 import { $createProgram, $updateProgram } from '@/stores/program';
 
 interface IProps {
   name: string;
   action: 'update' | 'create';
   initialValues?: Omit<IProgram, 'birthdate'> & { birthdate: Dayjs };
+  onSuccess?(p: IProgram): void;
 }
 
-export function ProgramForm({ name, action, initialValues }: IProps) {
+export function ProgramForm({
+  name,
+  action,
+  initialValues,
+  onSuccess,
+}: IProps) {
   const { mutate: createProgram } = useStore($createProgram);
   const { mutate: updateProgram } = useStore($updateProgram);
 
@@ -41,7 +37,7 @@ export function ProgramForm({ name, action, initialValues }: IProps) {
         notification.success({ message });
 
         if (isCreate) {
-          return redirectProgramView(respData.id);
+          return onSuccess?.(respData);
         }
 
         return;
@@ -76,9 +72,7 @@ export function ProgramForm({ name, action, initialValues }: IProps) {
           <Form.Item<IProgram>
             label="User"
             name="userId"
-            rules={[
-              { required: true, message: 'Please pick the user!' },
-            ]}
+            rules={[{ required: true, message: 'Please pick the user!' }]}
           >
             <Input disabled={isUpdate} />
           </Form.Item>
@@ -96,7 +90,7 @@ export function ProgramForm({ name, action, initialValues }: IProps) {
 
         <Col span={24} sm={12}>
           <Form.Item<IProgram>
-            label="Birthdate"
+            label="Start date"
             name="startDatetime"
             rules={[
               { required: true, message: 'Please pick a start datetime' },
@@ -108,7 +102,7 @@ export function ProgramForm({ name, action, initialValues }: IProps) {
 
         <Col span={24} sm={12}>
           <Form.Item<IProgram>
-            label="Birthdate"
+            label="Expiration date"
             name="expirationDatetime"
             rules={[
               { required: true, message: 'Please pick an expiration datetime' },
