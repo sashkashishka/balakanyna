@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { Button, Drawer } from 'antd';
 
-import { ProgramForm } from '../ProgramForm';
+import { ProgramForm, type IProgramFormInitialValues } from '../ProgramForm';
 import type { IProgram } from '@/types/program';
 
 interface IProps {
+  initialValues?: Partial<IProgramFormInitialValues>;
   onSuccess?(p: IProgram): void;
 }
 
-export function CreateProgramDrawer({ onSuccess }: IProps) {
+export function CreateProgramDrawer({ initialValues, onSuccess }: IProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -30,6 +31,7 @@ export function CreateProgramDrawer({ onSuccess }: IProps) {
             setOpen(false);
             onSuccess?.(p);
           }}
+          initialValues={initialValues}
         />
       </Drawer>
     </>

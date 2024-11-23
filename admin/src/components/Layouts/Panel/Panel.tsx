@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { useStore } from '@nanostores/react';
 import {
+  DatabaseOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import { theme, Flex, Menu, Layout, Image, Typography, Button } from 'antd';
 
-import { $router, openUserList, ROUTE_ALIAS } from '@/stores/router';
+import {
+  $router,
+  openProgramList,
+  openUserList,
+  ROUTE_ALIAS,
+} from '@/stores/router';
 
 import logoImg from '@/images/logo-blue.png';
 
@@ -90,6 +96,14 @@ export function PanelLayout({ children }: IProps) {
                 label: 'User list',
                 onClick() {
                   openUserList();
+                },
+              },
+              {
+                key: ROUTE_ALIAS.PROGRAM_LIST,
+                icon: <DatabaseOutlined />,
+                label: 'Program list',
+                onClick() {
+                  openProgramList();
                 },
               },
             ]}

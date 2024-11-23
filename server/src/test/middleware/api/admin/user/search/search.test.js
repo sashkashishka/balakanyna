@@ -16,9 +16,7 @@ import { users } from '../../fixtures/user.js';
 function getEndpoint(baseUrl, { search } = {}) {
   const url = getUrl(userSearch.route, baseUrl);
 
-  if (search) {
-    url.searchParams.set('search', search);
-  }
+  url.searchParams.set('search', search);
 
   return url;
 }
@@ -50,7 +48,9 @@ describe('[api] user search', async () => {
       },
     });
 
-    const url = getEndpoint(baseUrl);
+    const url = getEndpoint(baseUrl, {
+      search: '',
+    });
 
     const resp = await request(url, {
       method: userSearch.method,

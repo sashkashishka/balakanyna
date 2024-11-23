@@ -5,13 +5,18 @@ import { Button, Col, DatePicker, Form, Input, notification, Row } from 'antd';
 import type { IProgram } from '@/types/program';
 import { $createProgram, $updateProgram } from '@/stores/program';
 
+import { UserSearchInput } from '../UserSearchInput';
+
+export interface IProgramFormInitialValues
+  extends Omit<IProgram, 'startDatetime' | 'expirationDatetime'> {
+  expirationDatetime: Dayjs;
+  startDatetime: Dayjs;
+}
+
 interface IProps {
   name: string;
   action: 'update' | 'create';
-  initialValues?: Omit<IProgram, 'startDatetime' | 'expirationDatetime'> & {
-    expirationDatetime: Dayjs;
-    startDatetime: Dayjs;
-  };
+  initialValues?: Partial<IProgramFormInitialValues>;
   onSuccess?(p: IProgram): void;
 }
 
@@ -31,7 +36,13 @@ export function ProgramForm({
     try {
       const mutate = isCreate ? createProgram : updateProgram;
 
-      const resp = (await mutate(data)) as Response;
+      const body = { ...data };
+
+      if (Array.isArray(body.userId)) {
+        body.userId = body.userId[0].value;
+      }
+
+      const resp = (await mutate(body)) as Response;
       const respData = await resp.json();
 
       if (resp.ok) {
@@ -77,7 +88,9 @@ export function ProgramForm({
             name="userId"
             rules={[{ required: true, message: 'Please pick the user!' }]}
           >
-            <Input disabled={isUpdate} />
+            <UserSearchInput
+              disabled={Boolean(initialValues?.userId) || isUpdate}
+            />
           </Form.Item>
         </Col>
 

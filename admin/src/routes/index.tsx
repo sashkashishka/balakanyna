@@ -9,6 +9,7 @@ import { LoginPage } from './Login/Login';
 import { RegistrationPage } from './Registration/Registration';
 import { UserListPage } from './User/List';
 import { UserViewPage } from './User/View';
+import { ProgramListPage } from './Program/List';
 
 export function Router() {
   const router = useStore($router);
@@ -42,6 +43,7 @@ export function PrivateRouter() {
 
   switch (router?.route) {
     case ROUTE_ALIAS.HOME: {
+      // TODO make a greeting window with welcoming to visit sidebar and pick desired entity
       return 'home';
     }
 
@@ -53,6 +55,10 @@ export function PrivateRouter() {
     case ROUTE_ALIAS.USER_VIEW_PROGRAMS:
     case ROUTE_ALIAS.USER_VIEW_TASKS: {
       return <UserViewPage />;
+    }
+
+    case ROUTE_ALIAS.PROGRAM_LIST: {
+      return <ProgramListPage />;
     }
 
     default:

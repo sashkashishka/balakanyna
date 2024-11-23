@@ -16,7 +16,6 @@ export const ROUTE_ALIAS = {
   USER_VIEW_TASKS: 'user-view-tasks',
 
   PROGRAM_LIST: 'program-list',
-  PROGRAM_VIEW: 'program-view',
 };
 
 export const $router = createRouter({
@@ -30,7 +29,6 @@ export const $router = createRouter({
   [ROUTE_ALIAS.USER_VIEW_TASKS]: '/user/view/:uid/tasks',
 
   [ROUTE_ALIAS.PROGRAM_LIST]: '/program/list',
-  [ROUTE_ALIAS.PROGRAM_VIEW]: '/program/view/:pid',
 });
 
 export const ROUTE_TITLE = {
@@ -42,7 +40,6 @@ export const ROUTE_TITLE = {
   [ROUTE_ALIAS.USER_VIEW_TASKS]: 'Tasks',
 
   [ROUTE_ALIAS.PROGRAM_LIST]: 'Program list',
-  [ROUTE_ALIAS.PROGRAM_VIEW]: 'Info',
 };
 
 export const ROUTES = {
@@ -61,10 +58,6 @@ export const ROUTES = {
   userView(uid: string) {
     // @ts-expect-error something with router types
     return getPagePath($router, ROUTE_ALIAS.USER_VIEW, { uid });
-  },
-  programView(pid: string) {
-    // @ts-expect-error something with router types
-    return getPagePath($router, ROUTE_ALIAS.PROGRAM_VIEW, { pid });
   },
 };
 
@@ -89,11 +82,6 @@ export function openUserView(uid: string) {
   // @ts-expect-error something with router types
   openPage($router, ROUTE_ALIAS.USER_VIEW, { uid });
 }
-export function redirectProgramView(pid: string) {
-  // @ts-expect-error something with router types
-  redirectPage($router, ROUTE_ALIAS.PROGRAM_VIEW, { pid });
-}
-export function openProgramView(pid: string) {
-  // @ts-expect-error something with router types
-  openPage($router, ROUTE_ALIAS.PROGRAM_VIEW, { pid });
+export function openProgramList() {
+  openPage($router, ROUTE_ALIAS.PROGRAM_LIST);
 }

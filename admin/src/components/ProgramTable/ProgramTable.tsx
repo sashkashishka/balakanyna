@@ -1,4 +1,4 @@
-import { Table, Space } from 'antd';
+import { Table, Space, Button } from 'antd';
 import type { TableProps } from 'antd';
 import type { FetcherStore } from '@nanostores/query';
 import type { ReadableAtom, WritableAtom } from 'nanostores';
@@ -11,6 +11,7 @@ import type { TFilters } from '@/components/Filters/types';
 import type { IProgram } from '@/types/program';
 import type { IPaginatorResponse } from '@/types';
 import type { IProgramListFilters } from '@/stores/program';
+import { UpdateProgramDrawer } from '../UpdateProgramDrawer';
 
 // TODO move it to separate file to make them pickable
 // to compose custom filter options
@@ -79,8 +80,20 @@ export function ProgramTable({
     {
       title: 'ID',
       dataIndex: 'id',
-      render(id: string) {
-        return <a href={ROUTES.programView(id)}>{id}</a>;
+      render(id) {
+        return (
+          <UpdateProgramDrawer
+            programId={id}
+            children={<Button type="link">{id}</Button>}
+          />
+        );
+      },
+    },
+    {
+      title: 'User',
+      dataIndex: 'userId',
+      render(id) {
+        return <a href={ROUTES.userView(id)}>{id}</a>;
       },
     },
     {

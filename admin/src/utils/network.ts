@@ -1,5 +1,5 @@
-export function getIdSearchParam(id: string | number): string {
+export function getSearchParam(name: string, value: string | number): string {
   const searchParams = new URLSearchParams();
-  searchParams.set('id', String(id));
+  searchParams.set(name, String(value));
   return `?${searchParams.toString()}`;
 }

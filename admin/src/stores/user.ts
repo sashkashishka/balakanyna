@@ -3,7 +3,7 @@ import type { IUser } from '@/types/user';
 import type { IPaginatorResponse } from '@/types';
 import { createFetcherStore, createMutatorStore } from './_query';
 import { type IFilters } from './_list-filter';
-import { getIdSearchParam } from '@/utils/network';
+import { getSearchParam } from '@/utils/network';
 
 export interface IUserListFilters extends IFilters {
   min_created_at?: string;
@@ -28,7 +28,11 @@ export const USER_KEYS = {
   },
   user: 'user/get',
   getUser(userId: number | string) {
-    return [this.user, getIdSearchParam(userId)];
+    return [this.user, getSearchParam('id', userId)];
+  },
+  search: 'user/search',
+  getSearch(search: ReadableAtom<string>) {
+    return [this.search, search];
   },
 };
 
@@ -45,6 +49,11 @@ export function makeUserStore(userId: string | number) {
   const $user = createFetcherStore<IUser>(USER_KEYS.getUser(userId));
 
   return $user;
+}
+
+export function makeUserSearchStore(search: ReadableAtom<string>) {
+  const $userSearch = createFetcherStore<IUser[]>(USER_KEYS.getSearch(search));
+  return $userSearch;
 }
 
 // mutators

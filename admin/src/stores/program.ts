@@ -3,7 +3,7 @@ import type { IPaginatorResponse } from '@/types';
 import { createFetcherStore, createMutatorStore } from './_query';
 import { type IFilters } from './_list-filter';
 import type { IProgram, IProgramFull } from '@/types/program';
-import { getIdSearchParam } from '@/utils/network';
+import { getSearchParam } from '@/utils/network';
 
 export interface IProgramListFilters extends IFilters {
   min_created_at?: string;
@@ -34,7 +34,7 @@ export const PROGRAM_KEYS = {
   },
   program: 'program/get',
   getProgram(programId: string | number) {
-    return ['program/get', getIdSearchParam(programId)];
+    return ['program/get', getSearchParam('id', programId)];
   },
 };
 
