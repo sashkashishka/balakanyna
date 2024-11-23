@@ -54,24 +54,20 @@ async function imageListMiddleware(ctx) {
     );
   }
 
-  let query = ctx.db
+  const query = ctx.db
     .select()
     .from(imageTable)
-    .orderBy(direction[dir](imageTable[order_by]));
+    .orderBy(direction[dir](imageTable[order_by]))
+    .where(and(...andClauses))
+    .limit(limit)
+    .offset(offset);
 
-  let countQuery = ctx.db
+  const countQuery = ctx.db
     .select({ count: count(imageTable.id) })
-    .from(imageTable);
+    .from(imageTable)
+    .where(and(...andClauses));
 
-  if (andClauses.length) {
-    query = query.where(and(...andClauses));
-    countQuery = countQuery.where(and(...andClauses));
-  }
-
-  const [items, [total]] = await Promise.all([
-    query.limit(limit).offset(offset),
-    countQuery,
-  ]);
+  const [items, [total]] = await Promise.all([query, countQuery]);
 
   ctx.json({ items, total: total.count });
 }

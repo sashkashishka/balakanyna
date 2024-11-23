@@ -25,24 +25,20 @@ async function labelListMiddleware(ctx) {
     andClauses.push(like(labelTable.name, `%${name}%`));
   }
 
-  let query = ctx.db
+  const query = ctx.db
     .select()
     .from(labelTable)
-    .orderBy(direction[dir](labelTable[order_by]));
+    .orderBy(direction[dir](labelTable[order_by]))
+    .where(and(...andClauses))
+    .limit(limit)
+    .offset(offset);
 
-  let countQuery = ctx.db
+  const countQuery = ctx.db
     .select({ count: count(labelTable.id) })
-    .from(labelTable);
+    .from(labelTable)
+    .where(and(...andClauses));
 
-  if (andClauses.length) {
-    query = query.where(and(...andClauses));
-    countQuery = countQuery.where(and(...andClauses));
-  }
-
-  const [items, [total]] = await Promise.all([
-    query.limit(limit).offset(offset),
-    countQuery,
-  ]);
+  const [items, [total]] = await Promise.all([query, countQuery]);
 
   ctx.json({ items, total: total.count });
 }

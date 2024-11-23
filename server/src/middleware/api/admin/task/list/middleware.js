@@ -114,24 +114,20 @@ async function taskListMiddleware(ctx) {
     );
   }
 
-  let query = ctx.db
+  const query = ctx.db
     .select()
     .from(taskTable)
-    .orderBy(direction[dir](taskTable[order_by]));
+    .orderBy(direction[dir](taskTable[order_by]))
+    .where(and(...andClauses))
+    .limit(limit)
+    .offset(offset);
 
-  let countQuery = ctx.db
+  const countQuery = ctx.db
     .select({ count: count(taskTable.id) })
-    .from(taskTable);
+    .from(taskTable)
+    .where(and(...andClauses));
 
-  if (andClauses.length) {
-    query = query.where(and(...andClauses));
-    countQuery = countQuery.where(and(...andClauses));
-  }
-
-  const [items, [total]] = await Promise.all([
-    query.limit(limit).offset(offset),
-    countQuery,
-  ]);
+  const [items, [total]] = await Promise.all([query, countQuery]);
 
   ctx.json({
     items: items.map((task) => {
