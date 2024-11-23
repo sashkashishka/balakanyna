@@ -8,7 +8,6 @@ import { PanelLayout } from '@/components/Layouts/Panel';
 import { LoginPage } from './Login/Login';
 import { RegistrationPage } from './Registration/Registration';
 import { UserListPage } from './User/List';
-import { UserCreatePage } from './User/Create';
 import { UserViewPage } from './User/View';
 
 export function Router() {
@@ -45,17 +44,17 @@ export function PrivateRouter() {
     case ROUTE_ALIAS.HOME: {
       return 'home';
     }
+
     case ROUTE_ALIAS.USER_LIST: {
       return <UserListPage />;
     }
-    case ROUTE_ALIAS.USER_CREATE: {
-      return <UserCreatePage />;
-    }
+
     case ROUTE_ALIAS.USER_VIEW:
     case ROUTE_ALIAS.USER_VIEW_PROGRAMS:
     case ROUTE_ALIAS.USER_VIEW_TASKS: {
       return <UserViewPage />;
     }
+
     default:
       return 'not found';
   }
