@@ -4,6 +4,7 @@ import { useStore } from '@nanostores/react';
 import {
   $router,
   openHome,
+  openProgramView,
   openUserView,
   ROUTE_ALIAS,
   ROUTE_TITLE,
@@ -26,6 +27,24 @@ export function Breadcrumbs() {
     ];
 
     switch (route) {
+      case ROUTE_ALIAS.PROGRAM_VIEW: {
+        tmpItems.push(
+          {
+            title: 'Program',
+            path: '',
+            onClick(e) {
+              e.preventDefault();
+              // @ts-expect-error id does exist
+              openProgramView(params.pid);
+            },
+          },
+          {
+            title: ROUTE_TITLE[route!],
+          },
+        );
+        break;
+      }
+
       case ROUTE_ALIAS.USER_VIEW:
       case ROUTE_ALIAS.USER_VIEW_TASKS:
       case ROUTE_ALIAS.USER_VIEW_PROGRAMS: {
@@ -36,7 +55,7 @@ export function Breadcrumbs() {
             onClick(e) {
               e.preventDefault();
               // @ts-expect-error id does exist
-              openUserView(params.id);
+              openUserView(params.uid);
             },
           },
           {

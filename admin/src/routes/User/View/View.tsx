@@ -1,7 +1,12 @@
-import { $router, openRoute, ROUTE_ALIAS } from '@/stores/router';
 import { useStore } from '@nanostores/react';
-import { Tabs } from 'antd';
+import { Flex, Space, Spin, Tabs, Typography } from 'antd';
+
+import { $router, openRoute, ROUTE_ALIAS } from '@/stores/router';
+import { $user } from '@/stores/user';
 import { UserInfo } from './Info';
+import { UpdateUserDrawer } from '@/components/UpdateUserDrawer';
+
+const { Paragraph } = Typography;
 
 const tabs = [
   {
@@ -23,18 +28,40 @@ const tabs = [
 
 export function UserViewPage() {
   const { route, params } = useStore($router)!;
+  const { data: user, loading, error } = useStore($user);
+
+  if (loading || error || !user) {
+    return (
+      <Flex align="center" justify="center" style={{ height: '100%' }}>
+        <Spin />
+      </Flex>
+    );
+  }
 
   const onTabChange = (key: string) => {
     // @ts-expect-error id param exists
-    openRoute(key, { id: params.id });
+    openRoute(key, { uid: params.uid });
   };
 
   return (
-    <Tabs
-      onChange={onTabChange}
-      type="card"
-      items={tabs}
-      activeKey={String(route)}
-    />
+    <Space direction="vertical" style={{ width: '100%'}}>
+      <Flex justify="space-between">
+        <Space>
+          <Paragraph strong>
+            {user.name} {user.surname}
+          </Paragraph>
+          <Paragraph copyable>{user.id}</Paragraph>
+        </Space>
+
+        <UpdateUserDrawer />
+      </Flex>
+
+      <Tabs
+        onChange={onTabChange}
+        type="card"
+        items={tabs}
+        activeKey={String(route)}
+      />
+    </Space>
   );
 }

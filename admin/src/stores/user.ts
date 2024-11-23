@@ -26,7 +26,6 @@ export const defaultUserListFilters: IUserListFilters = {
 };
 
 export const $pageSize = atom(20);
-
 export function setPageSize(v: number) {
   $pageSize.set(v);
 }
@@ -50,7 +49,7 @@ export const $userId = computed([$router], (router) => {
     case ROUTE_ALIAS.USER_VIEW_PROGRAMS:
     case ROUTE_ALIAS.USER_VIEW_TASKS:
     case ROUTE_ALIAS.USER_VIEW: {
-      return 'id' in params ? params.id : defaultValue;
+      return 'uid' in params ? params.uid : defaultValue;
     }
 
     default:
@@ -63,11 +62,13 @@ const $userIdSearchParam = computed([$userId], (userId) => {
 });
 
 export const USER_KEYS = {
+  list: 'user/list',
   filteredList() {
-    return ['user/list', $filtersSearchParams];
+    return [this.list, $filtersSearchParams];
   },
+  user: 'user/get',
   getUser() {
-    return ['user/get', $userIdSearchParam];
+    return [this.user, $userIdSearchParam];
   },
 };
 
@@ -114,28 +115,32 @@ export const $userDescriptionItems = computed(
   },
 );
 
-export const $createUser = createMutatorStore<IUser>(async ({ data }) => {
+export const $createUser = createMutatorStore<IUser>(async ({ data, invalidate }) => {
   const resp = await fetch('/api/admin/user/create', {
     method: 'POST',
     body: JSON.stringify(data),
     headers: { 'content-type': 'application/json' },
   });
 
-  $users.revalidate();
-  $user.revalidate();
+  invalidate(
+    (k) => k.startsWith(USER_KEYS.user) || k.startsWith(USER_KEYS.list),
+  );
 
   return resp;
 });
 
-export const $updateUser = createMutatorStore<IUser>(async ({ data }) => {
-  const resp = await fetch(`/api/admin/user/update?id=${data.id}`, {
-    method: 'PATCH',
-    body: JSON.stringify(data),
-    headers: { 'content-type': 'application/json' },
-  });
+export const $updateUser = createMutatorStore<IUser>(
+  async ({ data, invalidate }) => {
+    const resp = await fetch(`/api/admin/user/update?id=${data.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+      headers: { 'content-type': 'application/json' },
+    });
 
-  $users.revalidate();
-  $user.revalidate();
+    invalidate(
+      (k) => k.startsWith(USER_KEYS.user) || k.startsWith(USER_KEYS.list),
+    );
 
-  return resp;
-});
+    return resp;
+  },
+);

@@ -1,6 +1,8 @@
 import { Table, Space } from 'antd';
 import type { TableProps } from 'antd';
+
 import { useStore } from '@nanostores/react';
+
 import type { IUser } from '@/types/user';
 import {
   $filters,
@@ -15,6 +17,7 @@ import { formatDate } from '@/utils/date';
 import { ROUTES } from '@/stores/router';
 import { Filters } from '@/components/Filters';
 import type { TFilters } from '@/components/Filters/types';
+import { CreateUserDrawer } from '@/components/CreateUserDrawer';
 
 const filtersConfig: Array<TFilters> = [
   {
@@ -107,6 +110,8 @@ export function UserListPage() {
 
   return (
     <>
+      <CreateUserDrawer />
+
       <Filters
         values={filters}
         onChange={setListFilter}

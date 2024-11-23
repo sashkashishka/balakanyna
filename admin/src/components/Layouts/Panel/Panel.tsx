@@ -1,35 +1,20 @@
 import React, { useState } from 'react';
 import { useStore } from '@nanostores/react';
 import {
-  DownOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import {
-  theme,
-  Flex,
-  Menu,
-  Layout,
-  Image,
-  Button,
-  Dropdown,
-  Space,
-  type MenuProps,
-} from 'antd';
+import { theme, Flex, Menu, Layout, Image, Typography, Button } from 'antd';
 
-import {
-  $router,
-  openUserCreate,
-  openUserList,
-  ROUTE_ALIAS,
-} from '@/stores/router';
+import { $router, openUserList, ROUTE_ALIAS } from '@/stores/router';
 
 import logoImg from '@/images/logo-blue.png';
 
 import { Breadcrumbs } from './Breadcrumbs';
 
 const { Header, Content, Sider } = Layout;
+const { Title } = Typography;
 
 const layoutStyle: React.CSSProperties = {
   minHeight: '100vh',
@@ -47,15 +32,6 @@ const headerStyle: React.CSSProperties = {
 const siderStyle: React.CSSProperties = {
   // backgroundColor: 'red',
 };
-
-const createButtons: MenuProps['items'] = [
-  {
-    key: ROUTE_ALIAS.USER_CREATE,
-    label: 'User',
-    icon: <UserOutlined />,
-    onClick: openUserCreate,
-  },
-];
 
 interface IProps {
   children: React.ReactNode;
@@ -91,14 +67,7 @@ export function PanelLayout({ children }: IProps) {
           >
             <Image preview={false} src={logoImg} width={80} height={80} />
 
-            <Dropdown menu={{ items: createButtons }}>
-              <Button variant="solid" color="primary" size="large">
-                <Space>
-                  Create
-                  <DownOutlined />
-                </Space>
-              </Button>
-            </Dropdown>
+            <Title level={2}>Balakanyna</Title>
           </Flex>
         </Flex>
       </Header>
