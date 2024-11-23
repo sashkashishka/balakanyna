@@ -1,0 +1,1 @@
+export { LabelListPage } from './List';

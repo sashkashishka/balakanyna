@@ -10,6 +10,7 @@ import { RegistrationPage } from './Registration/Registration';
 import { UserListPage } from './User/List';
 import { UserViewPage } from './User/View';
 import { ProgramListPage } from './Program/List';
+import { LabelListPage } from './Label/List';
 
 export function Router() {
   const router = useStore($router);
@@ -59,6 +60,10 @@ export function PrivateRouter() {
 
     case ROUTE_ALIAS.PROGRAM_LIST: {
       return <ProgramListPage />;
+    }
+
+    case ROUTE_ALIAS.LABEL_LIST: {
+      return <LabelListPage />;
     }
 
     default:

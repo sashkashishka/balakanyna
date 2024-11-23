@@ -4,12 +4,14 @@ import {
   DatabaseOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  TagOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import { theme, Flex, Menu, Layout, Image, Typography, Button } from 'antd';
 
 import {
   $router,
+  openLabelList,
   openProgramList,
   openUserList,
   ROUTE_ALIAS,
@@ -104,6 +106,14 @@ export function PanelLayout({ children }: IProps) {
                 label: 'Program list',
                 onClick() {
                   openProgramList();
+                },
+              },
+              {
+                key: ROUTE_ALIAS.LABEL_LIST,
+                icon: <TagOutlined />,
+                label: 'Label list',
+                onClick() {
+                  openLabelList();
                 },
               },
             ]}

@@ -1,0 +1,1 @@
+export { LabelTable } from './LabelTable';

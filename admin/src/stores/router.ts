@@ -16,6 +16,8 @@ export const ROUTE_ALIAS = {
   USER_VIEW_TASKS: 'user-view-tasks',
 
   PROGRAM_LIST: 'program-list',
+
+  LABEL_LIST: 'label-list',
 };
 
 export const $router = createRouter({
@@ -29,6 +31,8 @@ export const $router = createRouter({
   [ROUTE_ALIAS.USER_VIEW_TASKS]: '/user/view/:uid/tasks',
 
   [ROUTE_ALIAS.PROGRAM_LIST]: '/program/list',
+
+  [ROUTE_ALIAS.LABEL_LIST]: '/label/list',
 });
 
 export const ROUTE_TITLE = {
@@ -40,6 +44,8 @@ export const ROUTE_TITLE = {
   [ROUTE_ALIAS.USER_VIEW_TASKS]: 'Tasks',
 
   [ROUTE_ALIAS.PROGRAM_LIST]: 'Program list',
+
+  [ROUTE_ALIAS.LABEL_LIST]: 'Label list',
 };
 
 export const ROUTES = {
@@ -84,4 +90,7 @@ export function openUserView(uid: string) {
 }
 export function openProgramList() {
   openPage($router, ROUTE_ALIAS.PROGRAM_LIST);
+}
+export function openLabelList() {
+  openPage($router, ROUTE_ALIAS.LABEL_LIST);
 }
