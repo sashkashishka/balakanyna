@@ -21,6 +21,9 @@ const config = {
     request: 5000,
     close: 3000,
   },
+  search: {
+    limit: 50,
+  },
   media: {
     saveDir: path.resolve(import.meta.dirname, '../static/media'),
     files: 1,

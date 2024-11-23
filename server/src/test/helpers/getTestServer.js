@@ -127,6 +127,9 @@ export function getTestConfig() {
         dir: path.resolve(import.meta.dirname, '../static'),
       },
     ],
+    search: {
+      limit: 50,
+    },
     timeouts: {
       connection: 1000,
       request: 500,

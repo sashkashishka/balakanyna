@@ -12,6 +12,7 @@ import * as userCreate from './api/admin/user/create/middleware.js';
 import * as userGet from './api/admin/user/get/middleware.js';
 import * as userUpdate from './api/admin/user/update/middleware.js';
 import * as userList from './api/admin/user/list/middleware.js';
+import * as userSearch from './api/admin/user/search/middleware.js';
 
 import * as labelCreate from './api/admin/label/create/middleware.js';
 import * as labelUpdate from './api/admin/label/update/middleware.js';
@@ -30,7 +31,7 @@ import * as taskList from './api/admin/task/list/middleware.js';
 import * as programCreate from './api/admin/program/create/middleware.js';
 import * as programUpdate from './api/admin/program/update/middleware.js';
 import * as programGet from './api/admin/program/get/middleware.js';
-import * as programList from './api/admin/program/list/middleware.js'
+import * as programList from './api/admin/program/list/middleware.js';
 
 import { receiveJsonBodyMiddleware } from './auxiliary/receiveJsonBody/middleware.js';
 import { createStaticMiddleware } from './auxiliary/static/middleware.js';
@@ -91,6 +92,11 @@ export function connectMiddlewares(router, config) {
     userList.route,
     verifyTokenMiddleware,
     userList.middleware,
+  );
+  router[userSearch.method](
+    userSearch.route,
+    verifyTokenMiddleware,
+    userSearch.middleware,
   );
 
   // label

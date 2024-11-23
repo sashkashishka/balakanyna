@@ -21,6 +21,9 @@ export interface IConfig {
     request: number;
     close: number;
   };
+  search: {
+    limit: number;
+  };
   salt: {
     password: string;
   };
