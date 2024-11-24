@@ -7,6 +7,7 @@ import * as adminGet from './api/admin/get/middleware.js';
 
 import * as imageUpload from './api/admin/image/upload/middleware.js';
 import * as imageList from './api/admin/image/list/middleware.js';
+import * as imageGet from './api/admin/image/get/middleware.js';
 
 import * as userCreate from './api/admin/user/create/middleware.js';
 import * as userGet from './api/admin/user/get/middleware.js';
@@ -75,6 +76,11 @@ export function connectMiddlewares(router, config) {
     imageList.route,
     verifyTokenMiddleware,
     imageList.middleware,
+  );
+  router[imageGet.method](
+    imageGet.route,
+    verifyTokenMiddleware,
+    imageGet.middleware,
   );
 
   // user
