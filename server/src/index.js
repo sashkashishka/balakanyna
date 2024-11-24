@@ -13,7 +13,7 @@ const config = {
   static: [
     {
       prefix: '/media',
-      dir: path.resolve(import.meta.dirname, '../static'),
+      dir: path.resolve(import.meta.dirname, '../static/media'),
     },
   ],
   timeouts: {

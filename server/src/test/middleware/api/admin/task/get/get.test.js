@@ -7,10 +7,16 @@ import { getAuthCookie } from '../../../../../helpers/utils.js';
 
 import * as taskGet from '../../../../../../middleware/api/admin/task/get/middleware.js';
 
-import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
+import {
+  seedAdmins,
+  seedLabels,
+  seedTaskLabels,
+  seedTasks,
+} from '../../../../../../db/seeders.js';
 
 import { admin } from '../../fixtures/admin.js';
 import { imageSliderTask } from '../../fixtures/task.js';
+import { labels } from '../../fixtures/label.js';
 
 function getEndpoint(baseUrl, { id }) {
   const url = getUrl(taskGet.route, baseUrl);
@@ -111,6 +117,68 @@ describe('[api] task get', async () => {
     });
   });
 
+  test('should return 200 and list of labels', async (t) => {
+    let dbTasks = [];
+    let dbTaskLabels = [];
+
+    const { request, baseUrl } = await getTestServer({
+      t,
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        const dbLabels = await seedLabels(db, labels);
+        dbTasks = await seedTasks(db, [imageSliderTask]);
+
+        dbTaskLabels = await seedTaskLabels(db, [
+          {
+            labelId: dbLabels[0].id,
+            taskId: dbTasks[0].id,
+          },
+          {
+            labelId: dbLabels[1].id,
+            taskId: dbTasks[0].id,
+          },
+          {
+            taskId: dbTasks[0].id,
+            labelId: dbLabels[2].id,
+          },
+        ]);
+      },
+    });
+
+    const endpoint = getEndpoint(baseUrl, { id: dbTasks[0].id });
+
+    const resp = await request(endpoint, {
+      method: taskGet.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(body.id, dbTasks[0].id);
+    assert.equal(body.name, imageSliderTask.name);
+    assert.equal(body.type, imageSliderTask.type);
+    assert.deepEqual(body.config, imageSliderTask.config);
+    assert.equal(body.errors, null);
+    assert.ok(Array.isArray(body.labels));
+    assert.equal(body.labels.length, 3);
+
+    for (let i = 0; i < body.labels.length; i++) {
+      assert.equal(body.labels[i].id, dbTaskLabels[i].labelId);
+      assert.ok(body.labels[i].name);
+      assert.ok(body.labels[i].type);
+      assert.ok(body.labels[i].config);
+      assert.ok(body.labels[i].createdAt);
+      assert.ok(body.labels[i].updatedAt);
+      assert.equal(Object.keys(body.labels[i]).length, 6);
+    }
+
+    assert.equal(isNaN(new Date(body.createdAt)), false);
+    assert.equal(isNaN(new Date(body.updatedAt)), false);
+    assert.equal(Object.keys(body).length, 8);
+  });
+
   test('should return 200 and task with empty err', async (t) => {
     let dbTasks = [];
 
@@ -138,9 +206,11 @@ describe('[api] task get', async () => {
     assert.equal(body.type, imageSliderTask.type);
     assert.deepEqual(body.config, imageSliderTask.config);
     assert.equal(body.errors, null);
+    assert.ok(Array.isArray(body.labels));
+    assert.equal(body.labels.length, 0);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 7);
+    assert.equal(Object.keys(body).length, 8);
   });
 
   test('should return 200 and task validation err if saved in db data is invalid', async (t) => {
@@ -178,8 +248,10 @@ describe('[api] task get', async () => {
     assert.deepEqual(body.config, invalidConfigTask.config);
     assert.notEqual(body.errors, null);
     assert.ok(body.errors instanceof Object);
+    assert.ok(Array.isArray(body.labels));
+    assert.equal(body.labels.length, 0);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 7);
+    assert.equal(Object.keys(body).length, 8);
   });
 });
