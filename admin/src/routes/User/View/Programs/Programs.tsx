@@ -9,17 +9,21 @@ import { ProgramTable } from '@/components/ProgramTable';
 import { CreateProgramDrawer } from '@/components/CreateProgramDrawer';
 import * as filters from '@/components/ProgramTable/constants';
 import type { TFilters } from '@/components/Filters/types';
+import {
+  getCreatedAtFilter,
+  getUpdatedAtFilter,
+  getUserSelectorFilter,
+} from '@/components/Filters/constants';
 
 const filtersConfig: TFilters[] = [
   filters.name,
-  {
-    ...filters.userIds,
+  getUserSelectorFilter({
     disabled: true,
-  },
+  }),
   filters.startDatetime,
   filters.expirationDatetime,
-  filters.updatedAt,
-  filters.createdAt,
+  getCreatedAtFilter(),
+  getUpdatedAtFilter(),
 ];
 
 export function UserPrograms() {

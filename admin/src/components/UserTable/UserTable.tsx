@@ -7,43 +7,11 @@ import { type IUserListFilters } from '@/stores/user';
 import { formatDate } from '@/utils/date';
 import { ROUTES } from '@/stores/router';
 import { Filters } from '@/components/Filters';
-import type { TFilters } from '@/components/Filters/types';
 import type { FetcherStore } from '@nanostores/query';
 import type { IPaginatorResponse } from '@/types';
 import type { ReadableAtom, WritableAtom } from 'nanostores';
 
-const filtersConfig: Array<TFilters> = [
-  {
-    type: 'search-string',
-    label: 'Name',
-    name: 'name',
-    placeholder: 'Veronika',
-  },
-  {
-    type: 'search-string',
-    label: 'Surname',
-    name: 'surname',
-    placeholder: 'Balakhonova',
-  },
-  {
-    type: 'date-range',
-    minName: 'min_birthdate',
-    maxName: 'max_birthdate',
-    label: 'Birthdate range',
-  },
-  {
-    type: 'date-range',
-    minName: 'min_created_at',
-    maxName: 'max_created_at',
-    label: 'Creation range',
-  },
-  {
-    type: 'number-range',
-    minName: 'min_grade',
-    maxName: 'max_grade',
-    label: 'Grade range',
-  },
-];
+import { filtersConfig } from '../ProgramTable/constants';
 
 interface IProps {
   defaultFilters: IUserListFilters;

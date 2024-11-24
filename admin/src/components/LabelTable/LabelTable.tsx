@@ -6,29 +6,12 @@ import { useStore } from '@nanostores/react';
 
 import { formatDate } from '@/utils/date';
 import { Filters } from '@/components/Filters';
-import type { TFilters } from '@/components/Filters/types';
 import type { ILabel } from '@/types/label';
 import type { IPaginatorResponse } from '@/types';
 import type { ILabelListFilters } from '@/stores/label';
 import { UpdateLabelDrawer } from '../UpdateLabelDrawer';
 
-const filtersConfig: Array<TFilters> = [
-  {
-    type: 'search-string',
-    label: 'Name',
-    name: 'name',
-    placeholder: 'Label Veronika',
-  },
-  {
-    type: 'select',
-    label: 'Type',
-    name: 'type',
-    options: [
-      { label: 'Image', value: 'image' },
-      { label: 'Task', value: 'task' },
-    ],
-  },
-];
+import { filtersConfig } from './constant';
 
 interface IProps {
   defaultFilters: ILabelListFilters;

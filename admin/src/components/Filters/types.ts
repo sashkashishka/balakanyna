@@ -5,21 +5,21 @@ interface IFilter {
   disabled?: boolean;
 }
 
-interface IDateRangeFilter extends IFilter {
+export interface IDateRangeFilter extends IFilter {
   type: 'date-range';
   label: ReactNode;
   minName: string;
   maxName: string;
 }
 
-interface ISearchStringFilter extends IFilter {
+export interface ISearchStringFilter extends IFilter {
   type: 'search-string';
   label: ReactNode;
   name: string;
   placeholder?: string;
 }
 
-interface ISearchSelectorFilter extends IFilter {
+export interface IUserSelectorFilter extends IFilter {
   type: 'user-selector';
   label: ReactNode;
   name: string;
@@ -27,14 +27,14 @@ interface ISearchSelectorFilter extends IFilter {
   maxCount: number;
 }
 
-interface INumberRangeFilter extends IFilter {
+export interface INumberRangeFilter extends IFilter {
   type: 'number-range';
   label: ReactNode;
   minName: string;
   maxName: string;
 }
 
-interface ISelectFilter extends IFilter {
+export interface ISelectFilter extends IFilter {
   type: 'select';
   name: string;
   label: ReactNode;
@@ -44,6 +44,6 @@ interface ISelectFilter extends IFilter {
 export type TFilters =
   | IDateRangeFilter
   | ISearchStringFilter
-  | ISearchSelectorFilter
+  | IUserSelectorFilter
   | ISelectFilter
   | INumberRangeFilter;
