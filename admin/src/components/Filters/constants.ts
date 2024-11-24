@@ -1,5 +1,7 @@
+import type { ILabel } from '@/types/label';
 import type {
   IDateRangeFilter,
+  ILabelSelectorFilter,
   INumberRangeFilter,
   ISearchStringFilter,
   ISelectFilter,
@@ -41,6 +43,7 @@ export function getUserSelectorFilter(
     label = 'Users',
     name = 'userIds',
     maxCount = 50,
+    placeholder,
     disabled,
   }: Partial<Omit<IUserSelectorFilter, 'type'>> = {
     label: 'Users',
@@ -53,6 +56,7 @@ export function getUserSelectorFilter(
     label,
     name,
     maxCount,
+    placeholder,
     disabled,
   };
 }
@@ -98,6 +102,23 @@ export function getSelectFilter({
     label,
     name,
     options,
+    disabled,
+  };
+}
+
+export function getLabelSelectorFilter({
+  label,
+  name,
+  placeholder,
+  maxCount,
+  disabled,
+}: Omit<ILabelSelectorFilter, 'type'>): ILabelSelectorFilter {
+  return {
+    type: 'label-selector',
+    label,
+    name,
+    placeholder,
+    maxCount,
     disabled,
   };
 }

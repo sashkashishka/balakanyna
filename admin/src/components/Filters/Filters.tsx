@@ -5,6 +5,7 @@ import type { TFilters } from './types';
 import { useMemo, useState } from 'react';
 import { DateRange } from '../DateRange';
 import { UserSearchInput } from '../UserSearchInput';
+import { LabelSearchInput } from '../LabelSearchInput';
 
 interface IProps<T> {
   values: T;
@@ -63,6 +64,29 @@ export function Filters<T extends Record<string, any>>({
                     [filter.name]: v,
                   });
                 }}
+              />
+            </Space>
+          );
+        }
+
+        case 'label-selector': {
+          return (
+            <Space
+              key={`${filter.type}${i}`}
+              direction="vertical"
+              style={{ width: '100%' }}
+            >
+              {filter.label}
+              <LabelSearchInput
+                disabled={filter.disabled}
+                value={tmpFilters[filter.name]}
+                onChange={(v) => {
+                  setTmpFilters({
+                    ...tmpFilters,
+                    [filter.name]: v,
+                  });
+                }}
+                maxCount={filter.maxCount}
               />
             </Space>
           );

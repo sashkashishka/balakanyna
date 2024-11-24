@@ -41,9 +41,18 @@ export interface ISelectFilter extends IFilter {
   options: SelectProps['options'];
 }
 
+export interface ILabelSelectorFilter extends IFilter {
+  type: 'label-selector';
+  label: ReactNode;
+  name: string;
+  placeholder?: string;
+  maxCount: number;
+}
+
 export type TFilters =
   | IDateRangeFilter
   | ISearchStringFilter
   | IUserSelectorFilter
   | ISelectFilter
+  | ILabelSelectorFilter
   | INumberRangeFilter;
