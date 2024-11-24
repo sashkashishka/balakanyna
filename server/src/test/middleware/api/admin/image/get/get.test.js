@@ -67,7 +67,7 @@ describe('[api] image get', async () => {
     });
   });
 
-  test('should return 404 if search parasm are invalid', async (t) => {
+  test('should return 404 if search params are invalid', async (t) => {
     const { request, baseUrl } = await getTestServer({
       t,
       async seed(db, config) {
@@ -118,10 +118,12 @@ describe('[api] image get', async () => {
   });
 
   test('should return 200', async (t) => {
+    const prefix = 'foo';
     let dbImages = [];
 
     const { request, baseUrl } = await getTestServer({
       t,
+      config: { media: { prefix } },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         dbImages = await seedImages(db, images);
@@ -142,8 +144,8 @@ describe('[api] image get', async () => {
     assert.equal(body.id, dbImages[0].id);
     assert.equal(body.filename, dbImages[0].filename);
     assert.equal(body.hashsum, dbImages[0].hashsum);
-    // TODO: add check for prefix
-    assert.equal(body.path, dbImages[0].path);
+    assert.match(body.path, new RegExp(dbImages[0].path));
+    assert.ok(body.path.startsWith('/foo/'), 'should add prefix to url');
     assert.ok(Array.isArray(body.labels));
     assert.equal(body.labels.length, 0);
     assert.equal(isNaN(new Date(body.createdAt)), false);
@@ -152,12 +154,14 @@ describe('[api] image get', async () => {
   });
 
   test('should return 200 and list of task ids', async (t) => {
+    const prefix = 'foo';
     let dbImages = [];
     let dbLabels = [];
     let dbLabelImages = [];
 
     const { request, baseUrl } = await getTestServer({
       t,
+      config: { media: { prefix } },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         dbImages = await seedImages(db, images);
@@ -202,8 +206,8 @@ describe('[api] image get', async () => {
     assert.equal(body.id, dbImages[0].id);
     assert.equal(body.filename, dbImages[0].filename);
     assert.equal(body.hashsum, dbImages[0].hashsum);
-    // TODO: add check for prefix
-    assert.equal(body.path, dbImages[0].path);
+    assert.match(body.path, new RegExp(dbImages[0].path));
+    assert.ok(body.path.startsWith('/foo/'), 'should add prefix to url');
     assert.ok(Array.isArray(body.labels));
     assert.equal(body.labels.length, 3);
 

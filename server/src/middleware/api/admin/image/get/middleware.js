@@ -11,6 +11,7 @@ import {
   labelTable,
 } from '../../../../../db/schema.js';
 import { createValidateSearchParamsMiddleware } from '../../../../auxiliary/validate/middleware.js';
+import { addPrefixToPathname } from '../../../../../utils/network.js';
 
 import schema from './schema.json' with { type: 'json' };
 
@@ -53,7 +54,7 @@ async function getImageMiddleware(ctx) {
     id: image.id,
     filename: image.filename,
     hashsum: image.hashsum,
-    path: image.path,
+    path: addPrefixToPathname(image.path, ctx.config.media.prefix),
     labels,
     createdAt: image.createdAt,
     updatedAt: image.updatedAt,

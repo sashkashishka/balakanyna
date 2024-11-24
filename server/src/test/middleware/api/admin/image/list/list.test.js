@@ -107,11 +107,13 @@ describe('[api] image list', async () => {
   });
 
   test('should return 200 and all images', async (t) => {
+    const prefix = 'foo';
     const offset = 0;
     const limit = images.length;
 
     const { request, baseUrl } = await getTestServer({
       t,
+      config: { media: { prefix } },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedImages(db, images);
@@ -142,6 +144,7 @@ describe('[api] image list', async () => {
       assert.ok(
         new Date(items[i - 1].createdAt) <= new Date(items[i].createdAt),
       );
+      assert.ok(items[i].path.startsWith('/foo/'), 'should add prefix to url');
     }
   });
 

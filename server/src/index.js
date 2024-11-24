@@ -25,6 +25,7 @@ const config = {
     limit: 50,
   },
   media: {
+    prefix: 'media',
     saveDir: path.resolve(import.meta.dirname, '../static/media'),
     files: 1,
     fileSize: 1024 * 1024 * 10,

@@ -50,7 +50,11 @@ export async function setupDb(dbUrl) {
  * Deletes copied db after test run
  */
 export async function clearDb(dbUrl) {
-  await fs.rm(dbUrl);
+  try {
+    await fs.rm(dbUrl);
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 export const dbStub = {

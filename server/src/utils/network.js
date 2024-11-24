@@ -1,3 +1,4 @@
+import path from 'node:path';
 /**
  * @argument {import('node:http').IncomingMessage} req
  */
@@ -24,6 +25,12 @@ export function jsonParse(buffer) {
 
 export function getUrl(urlString, base = 'http://localhost') {
   return new URL(urlString, base);
+}
+
+export function addPrefixToPathname(pathname, prefix) {
+  const url = new URL(path.join(prefix, pathname), 'http://a');
+
+  return url.pathname;
 }
 
 export function getSearchParams(url) {

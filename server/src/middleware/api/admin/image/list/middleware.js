@@ -7,6 +7,7 @@ import { imageTable, labelImageTable } from '../../../../../db/schema.js';
 
 import paginationSchema from '../../../../../schema/pagination.json' with { type: 'json' };
 import schema from './schema.json' with { type: 'json' };
+import { addPrefixToPathname } from '../../../../../utils/network.js';
 
 const direction = {
   asc,
@@ -69,7 +70,13 @@ async function imageListMiddleware(ctx) {
 
   const [items, [total]] = await Promise.all([query, countQuery]);
 
-  ctx.json({ items, total: total.count });
+  ctx.json({
+    items: items.map((item) => ({
+      ...item,
+      path: addPrefixToPathname(item.path, ctx.config.media.prefix),
+    })),
+    total: total.count,
+  });
 }
 
 export const method = 'get';

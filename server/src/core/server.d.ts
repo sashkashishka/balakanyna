@@ -28,6 +28,10 @@ export interface IConfig {
     password: string;
   };
   media: {
+    /**
+     * Url prefix to reach media content after uploading
+     */
+    prefix: string;
     saveDir: string;
     /**
      * For multipart forms, the max file size (in bytes)
