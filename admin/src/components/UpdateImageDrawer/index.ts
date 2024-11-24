@@ -1,0 +1,1 @@
+export { UpdateImageDrawer } from './UpdateImageDrawer';
