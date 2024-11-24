@@ -11,6 +11,7 @@ import { UserListPage } from './User/List';
 import { UserViewPage } from './User/View';
 import { ProgramListPage } from './Program/List';
 import { LabelListPage } from './Label/List';
+import { ImageListPage } from './Image/List';
 
 export function Router() {
   const router = useStore($router);
@@ -64,6 +65,10 @@ export function PrivateRouter() {
 
     case ROUTE_ALIAS.LABEL_LIST: {
       return <LabelListPage />;
+    }
+
+    case ROUTE_ALIAS.IMAGE_LIST: {
+      return <ImageListPage />;
     }
 
     default:

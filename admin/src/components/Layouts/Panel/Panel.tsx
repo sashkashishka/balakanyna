@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useStore } from '@nanostores/react';
 import {
   DatabaseOutlined,
+  FileImageOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   TagOutlined,
@@ -11,6 +12,7 @@ import { theme, Flex, Menu, Layout, Image, Typography, Button } from 'antd';
 
 import {
   $router,
+  openImageList,
   openLabelList,
   openProgramList,
   openUserList,
@@ -114,6 +116,14 @@ export function PanelLayout({ children }: IProps) {
                 label: 'Label list',
                 onClick() {
                   openLabelList();
+                },
+              },
+              {
+                key: ROUTE_ALIAS.IMAGE_LIST,
+                icon: <FileImageOutlined />,
+                label: 'Image list',
+                onClick() {
+                  openImageList();
                 },
               },
             ]}
