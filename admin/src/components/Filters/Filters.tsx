@@ -78,6 +78,7 @@ export function Filters<T extends Record<string, any>>({
             >
               {filter.label}
               <LabelSearchInput
+                labelType={filter.labelType}
                 disabled={filter.disabled}
                 value={tmpFilters[filter.name]}
                 onChange={(v) => {

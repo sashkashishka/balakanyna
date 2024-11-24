@@ -5,10 +5,12 @@ import { Select, type SelectProps, Spin, Tag } from 'antd';
 import { debounce } from '@/utils/debounce';
 import { defaultLabelListFilters, makeLabelsStore } from '@/stores/label';
 import { createListFilters } from '@/stores/_list-filter';
+import type { ILabel } from '@/types/label';
 
 const DEBOUNCE_DELAY = 200;
 
 interface IProps {
+  labelType: ILabel['type'];
   maxCount?: number;
   value?: number[];
   onChange?(ids: number[]): void;
@@ -19,10 +21,11 @@ export function LabelSearchInput({
   maxCount = 1,
   disabled,
   value,
+  labelType,
   onChange,
 }: IProps) {
   const [{ $filtersSearchParams, setListFilter }] = useState(() =>
-    createListFilters(defaultLabelListFilters),
+    createListFilters({ ...defaultLabelListFilters, type: labelType }),
   );
   const [$labels] = useState(() => makeLabelsStore($filtersSearchParams));
 

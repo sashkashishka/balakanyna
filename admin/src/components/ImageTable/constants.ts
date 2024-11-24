@@ -15,6 +15,7 @@ export const label = getLabelSelectorFilter({
   label: 'Labels',
   name: 'label',
   maxCount: 50,
+  labelType: 'image',
 });
 
 export const filtersConfig: Array<TFilters> = [

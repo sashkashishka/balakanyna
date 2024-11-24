@@ -109,6 +109,7 @@ export function getSelectFilter({
 export function getLabelSelectorFilter({
   label,
   name,
+  labelType,
   placeholder,
   maxCount,
   disabled,
@@ -116,6 +117,7 @@ export function getLabelSelectorFilter({
   return {
     type: 'label-selector',
     label,
+    labelType,
     name,
     placeholder,
     maxCount,

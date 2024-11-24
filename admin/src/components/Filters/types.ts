@@ -1,3 +1,4 @@
+import type { ILabel } from '@/types/label';
 import type { SelectProps } from 'antd';
 import type { ReactNode } from 'react';
 
@@ -44,6 +45,7 @@ export interface ISelectFilter extends IFilter {
 export interface ILabelSelectorFilter extends IFilter {
   type: 'label-selector';
   label: ReactNode;
+  labelType: ILabel['type'];
   name: string;
   placeholder?: string;
   maxCount: number;
