@@ -121,8 +121,16 @@ async function uploadImageMiddelware(ctx) {
         if (record) {
           await safeFileRm(tmpSaveTo, ctx.logger.error);
 
+          const result = await ctx.db
+            .update(imageTable)
+            .set({
+              updatedAt: new Date().toISOString(),
+            })
+            .where(eq(imageTable.id, record.id))
+            .returning();
+
           if (!ctx.res.closed) {
-            ctx.json([record]);
+            ctx.json(result);
           }
 
           resolve();

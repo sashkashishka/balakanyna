@@ -457,6 +457,8 @@ describe('[api] image upload', async () => {
   });
 
   test('should return 200 if try to upload duplicate image', async (t) => {
+    t.mock.timers.enable({ apis: ['Date'], now: new Date() });
+
     const { request } = await getTestServer({
       t,
       config: {
@@ -507,6 +509,8 @@ describe('[api] image upload', async () => {
     assert.equal(files.length, 1, 'should save any file');
     assert.equal(files[0], hashedFilename);
 
+    t.mock.timers.tick(2000);
+
     // try to upload the same file second time
     const resp2 = await request(imageUpload.route, {
       method: imageUpload.method,
@@ -521,7 +525,7 @@ describe('[api] image upload', async () => {
     assert.equal(resp2.status, 200);
     assert.ok(Array.isArray(body2));
 
-    const [image2] = body;
+    const [image2] = body2;
 
     assert.ok(image2);
     assert.equal(image2.id, image.id);
@@ -529,7 +533,11 @@ describe('[api] image upload', async () => {
     assert.equal(image2.hashsum, image.hashsum);
     assert.equal(image2.path, image.path);
     assert.equal(image2.createdAt, image.createdAt);
-    assert.equal(image2.updatedAt, image.updatedAt);
+    assert.notEqual(
+      image2.updatedAt,
+      image.updatedAt,
+      'should update this column on duplicate image upload',
+    );
     assert.equal(isNaN(new Date(image2.createdAt)), false);
     assert.equal(isNaN(new Date(image2.updatedAt)), false);
     assert.equal(Object.keys(image2).length, 6);
