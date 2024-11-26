@@ -19,7 +19,9 @@
       "items": {
         "type": "integer",
         "minimum": 0
-      }
+      },
+      "minItems": 2,
+      "maxItems": 2
     }
   },
   "required": [

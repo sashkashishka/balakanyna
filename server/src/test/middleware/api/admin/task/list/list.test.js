@@ -1281,7 +1281,7 @@ describe('[api] task list', async () => {
     // no error as configuration is valid
     assert.equal(items[0].errors, null);
 
-    // should be error as configuration is valid
+    // should be error as configuration is invalid
     assert.notEqual(items[1].errors, null);
     assert.ok(items[1].errors instanceof Object);
   });
