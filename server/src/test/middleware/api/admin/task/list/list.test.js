@@ -180,12 +180,33 @@ describe('[api] task list', async () => {
   test('should return 200 and all tasks', async (t) => {
     const offset = 0;
     const limit = tasks.length;
+    let dbTaskLabels = [];
 
     const { request, baseUrl } = await getTestServer({
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        await seedTasks(db, tasks);
+        const dbLabels = await seedLabels(db, labels);
+        const dbTasks = await seedTasks(db, tasks);
+
+        dbTaskLabels = await seedTaskLabels(db, [
+          {
+            labelId: dbLabels[0].id,
+            taskId: dbTasks[0].id,
+          },
+          {
+            labelId: dbLabels[1].id,
+            taskId: dbTasks[0].id,
+          },
+          {
+            labelId: dbLabels[1].id,
+            taskId: dbTasks[1].id,
+          },
+          {
+            taskId: dbTasks[2].id,
+            labelId: dbLabels[2].id,
+          },
+        ]);
       },
     });
 
@@ -213,6 +234,22 @@ describe('[api] task list', async () => {
       assert.ok(
         new Date(items[i - 1].createdAt) <= new Date(items[i].createdAt),
       );
+      assert.ok(Array.isArray(items[i].labels));
+
+      for (let j = 0; j < items[i].labels.length; j++) {
+        assert.ok(
+          dbTaskLabels.some(
+            ({ labelId }) => labelId === items[i].labels[j].id,
+          ),
+          'label id is from junction table'
+        );
+        assert.ok(items[i].labels[j].name);
+        assert.ok(items[i].labels[j].type);
+        assert.ok(items[i].labels[j].config);
+        assert.ok(items[i].labels[j].createdAt);
+        assert.ok(items[i].labels[j].updatedAt);
+        assert.equal(Object.keys(items[i].labels[j]).length, 6);
+      }
     }
   });
 

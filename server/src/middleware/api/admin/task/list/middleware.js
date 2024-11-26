@@ -1,4 +1,14 @@
-import { and, asc, desc, gte, count, inArray, like, lte } from 'drizzle-orm';
+import {
+  and,
+  asc,
+  desc,
+  gte,
+  count,
+  inArray,
+  like,
+  lte,
+  eq,
+} from 'drizzle-orm';
 import { Composer } from '../../../../../core/composer.js';
 
 import { createValidateSearchParamsMiddleware } from '../../../../auxiliary/validate/middleware.js';
@@ -8,6 +18,7 @@ import {
   taskLabelTable,
   programTaskTable,
   programTable,
+  labelTable,
 } from '../../../../../db/schema.js';
 import { getTaskConfigValidator } from '../schema/index.js';
 
@@ -114,13 +125,35 @@ async function taskListMiddleware(ctx) {
     );
   }
 
-  const query = ctx.db
+  const tasksSq = ctx.db
     .select()
     .from(taskTable)
-    .orderBy(direction[dir](taskTable[order_by]))
     .where(and(...andClauses))
+    .orderBy(direction[dir](taskTable[order_by]))
     .limit(limit)
-    .offset(offset);
+    .offset(offset)
+    .as('tasksSq');
+
+  const query = ctx.db
+    .select({
+      id: tasksSq.id,
+      name: tasksSq.name,
+      type: tasksSq.type,
+      config: tasksSq.config,
+      createdAt: tasksSq.createdAt,
+      updatedAt: tasksSq.updatedAt,
+      label: {
+        id: labelTable.id,
+        name: labelTable.name,
+        type: labelTable.type,
+        config: labelTable.config,
+        updatedAt: labelTable.updatedAt,
+        createdAt: labelTable.createdAt,
+      },
+    })
+    .from(tasksSq)
+    .leftJoin(taskLabelTable, eq(tasksSq.id, taskLabelTable.taskId))
+    .leftJoin(labelTable, eq(taskLabelTable.labelId, labelTable.id));
 
   const countQuery = ctx.db
     .select({ count: count(taskTable.id) })
@@ -129,8 +162,30 @@ async function taskListMiddleware(ctx) {
 
   const [items, [total]] = await Promise.all([query, countQuery]);
 
+  const itemsMap = items.reduce((acc, curr) => {
+    const { id } = curr;
+
+    if (!acc.has(id)) {
+      acc.set(id, {
+        id,
+        name: curr.name,
+        type: curr.type,
+        config: curr.config,
+        createdAt: curr.createdAt,
+        updatedAt: curr.updatedAt,
+        labels: [],
+      });
+    }
+
+    if (curr.label) {
+      acc.get(id).labels.push(curr.label);
+    }
+
+    return acc;
+  }, new Map());
+
   ctx.json({
-    items: items.map((task) => {
+    items: [...itemsMap.values()].map((task) => {
       const validate = getTaskConfigValidator(ctx.ajv, task.type);
       validate(task.config);
       return { ...task, errors: validate.errors };
