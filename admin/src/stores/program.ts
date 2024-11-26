@@ -23,7 +23,7 @@ export interface IProgramListFilters extends IFilters {
 
 export const defaultProgramListFilters: IProgramListFilters = {
   page: 1,
-  order_by: 'createdAt',
+  order_by: 'updatedAt',
   dir: 'descend',
 };
 

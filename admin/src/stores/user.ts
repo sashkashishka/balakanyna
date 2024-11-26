@@ -17,7 +17,7 @@ export interface IUserListFilters extends IFilters {
 
 export const defaultUserListFilters: IUserListFilters = {
   page: 1,
-  order_by: 'createdAt',
+  order_by: 'updatedAt',
   dir: 'descend',
 };
 

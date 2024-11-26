@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { Button, Drawer } from 'antd';
 
 import { makeImageStore } from '@/stores/image';
+import { invalidateImageLabel } from '@/stores/link';
 
 import { UpdateImageDrawerContent } from './UpdateImageDrawerContent';
 
@@ -21,10 +22,13 @@ export function UpdateImageDrawer({ imageId, children }: IProps) {
       </div>
 
       <Drawer
-        size="large"
+        size="default"
         title="Update image"
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          invalidateImageLabel();
+          setOpen(false);
+        }}
       >
         <UpdateImageDrawerContent $image={$image} />
       </Drawer>

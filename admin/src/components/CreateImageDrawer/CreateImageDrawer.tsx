@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { Button, Drawer } from 'antd';
 
-import { ImageForm, type IImageFormInitialValues } from '../ImageForm';
 import type { IImage } from '@/types/image';
 
+import { ImageForm } from '../ImageForm';
+
 interface IProps {
-  initialValues?: Partial<IImageFormInitialValues>;
   onSuccess?(p: IImage): void;
 }
 
-export function CreateImageDrawer({ initialValues, onSuccess }: IProps) {
+export function CreateImageDrawer({ onSuccess }: IProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -19,20 +19,17 @@ export function CreateImageDrawer({ initialValues, onSuccess }: IProps) {
       </Button>
 
       <Drawer
-        size="large"
+        size="default"
         title="Create new image"
         open={open}
         onClose={() => setOpen(false)}
         destroyOnClose
       >
         <ImageForm
-          name="image-create"
-          action="create"
           onSuccess={(p) => {
             setOpen(false);
             onSuccess?.(p);
           }}
-          initialValues={initialValues}
         />
       </Drawer>
     </>

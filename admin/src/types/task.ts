@@ -1,8 +1,11 @@
+import type { ILabel } from './label';
+
 export type TTaskType = 'semaphoreText' | 'imageSlider';
 
 interface ITask {
   id: number;
   name: number;
+  labels: ILabel[];
 }
 
 interface ISemaphoreTextTask extends ITask {

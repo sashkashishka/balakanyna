@@ -12,7 +12,7 @@ export interface ILabelListFilters extends IFilters {
 
 export const defaultLabelListFilters: ILabelListFilters = {
   page: 1,
-  order_by: 'createdAt',
+  order_by: 'updatedAt',
   dir: 'descend',
 };
 

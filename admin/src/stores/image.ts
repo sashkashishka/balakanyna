@@ -14,7 +14,7 @@ export interface IImageListFilters extends IFilters {
 
 export const defaultImageListFilters: IImageListFilters = {
   page: 1,
-  order_by: 'createdAt',
+  order_by: 'updatedAt',
   dir: 'descend',
 };
 

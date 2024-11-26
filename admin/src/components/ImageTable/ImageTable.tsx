@@ -1,4 +1,4 @@
-import { Table, Button, Tag } from 'antd';
+import { Table, Button, Image, Space, Tag } from 'antd';
 import type { TableProps } from 'antd';
 import type { FetcherStore } from '@nanostores/query';
 import type { ReadableAtom, WritableAtom } from 'nanostores';
@@ -13,6 +13,7 @@ import type { IImageListFilters } from '@/stores/image';
 import { UpdateImageDrawer } from '../UpdateImageDrawer';
 
 import { filtersConfig as defaultFiltersConfig } from './constants';
+import type { ILabel } from '@/types/label';
 
 interface IProps {
   defaultFilters: IImageListFilters;
@@ -56,24 +57,46 @@ export function ImageTable({
         );
       },
     },
-    // {
-    //   title: 'Name',
-    //   dataIndex: 'name',
-    //   render(name, { config }) {
-    //     return (
-    //       <Tag bordered={config.bordered} color={config.color}>
-    //         {name}
-    //       </Tag>
-    //     );
-    //   },
-    //   sorter: true,
-    //   sortDirections: ['descend', 'ascend'],
-    //   sortOrder: filters.order_by === 'name' ? filters.dir : null,
-    // },
-    // {
-    //   title: 'Type',
-    //   dataIndex: 'type',
-    // },
+    {
+      title: 'Filename',
+      dataIndex: 'filename',
+      sorter: true,
+      sortDirections: ['descend', 'ascend'],
+      sortOrder: filters.order_by === 'filename' ? filters.dir : null,
+    },
+    {
+      title: 'Thumbnail',
+      dataIndex: 'path',
+      render(path) {
+        return (
+          <Image
+            src={path}
+            width="80px"
+            height="80px"
+            style={{ objectFit: 'contain' }}
+          />
+        );
+      },
+    },
+    {
+      title: 'Labels',
+      dataIndex: 'labels',
+      render(labels: ILabel[]) {
+        return (
+          <Space wrap>
+            {labels.map((item, i) => (
+              <Tag
+                key={`${item.name}${i}`}
+                color={item.config.color}
+                bordered={item.config.bordered}
+              >
+                {item.name}
+              </Tag>
+            ))}
+          </Space>
+        );
+      },
+    },
     {
       title: 'Created',
       dataIndex: 'createdAt',

@@ -1,10 +1,11 @@
 import { useStore } from '@nanostores/react';
 import type { FetcherStore } from '@nanostores/query';
-import { Flex, Spin } from 'antd';
+import { Flex, Space, Spin } from 'antd';
 
 import type { IImage } from '@/types/image';
 
 import { ImageForm } from '../ImageForm';
+import { LinkLabelForm } from '../LinkLabelForm';
 
 interface IProps {
   $image: FetcherStore<IImage>;
@@ -22,10 +23,14 @@ export function UpdateImageDrawerContent({ $image }: IProps) {
   }
 
   return (
-    <ImageForm
-      name={`image-update-${data.id}`}
-      action="update"
-      initialValues={data}
-    />
+    <Space direction="vertical" size="large">
+      <ImageForm initialValues={data} />
+
+      <LinkLabelForm
+        type="image"
+        entityId={data.id}
+        initialLabels={data.labels}
+      />
+    </Space>
   );
 }

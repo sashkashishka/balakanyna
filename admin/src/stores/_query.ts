@@ -3,19 +3,20 @@ import { nanoquery } from '@nanostores/query';
 const buildApiRoute = (keys: (string | number | boolean)[]) =>
   `/api/admin/${keys.join('')}`;
 
-export const [createFetcherStore, createMutatorStore] = nanoquery({
-  async fetcher(...keys: (string | number | boolean)[]) {
-    const response = await fetch(buildApiRoute(keys));
+export const [createFetcherStore, createMutatorStore, { invalidateKeys }] =
+  nanoquery({
+    async fetcher(...keys: (string | number | boolean)[]) {
+      const response = await fetch(buildApiRoute(keys));
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      return data;
-    }
+      if (response.ok) {
+        return data;
+      }
 
-    throw new FetchError(response.status, data);
-  },
-});
+      throw new FetchError(response.status, data);
+    },
+  });
 
 export class FetchError extends Error {
   constructor(
