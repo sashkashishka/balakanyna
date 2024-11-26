@@ -110,13 +110,34 @@ describe('[api] image list', async () => {
     const prefix = 'foo';
     const offset = 0;
     const limit = images.length;
+    let dbImageLabels = [];
 
     const { request, baseUrl } = await getTestServer({
       t,
       config: { media: { prefix } },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        await seedImages(db, images);
+        const dbImages = await seedImages(db, images);
+        const dbLabels = await seedLabels(db, labels);
+
+        dbImageLabels = await seedImageLabels(db, [
+          {
+            labelId: dbLabels[0].id,
+            imageId: dbImages[0].id,
+          },
+          {
+            labelId: dbLabels[1].id,
+            imageId: dbImages[0].id,
+          },
+          {
+            labelId: dbLabels[1].id,
+            imageId: dbImages[1].id,
+          },
+          {
+            imageId: dbImages[2].id,
+            labelId: dbLabels[2].id,
+          },
+        ]);
       },
     });
 
@@ -145,6 +166,23 @@ describe('[api] image list', async () => {
         new Date(items[i - 1].createdAt) <= new Date(items[i].createdAt),
       );
       assert.ok(items[i].path.startsWith('/foo/'), 'should add prefix to url');
+
+      assert.ok(Array.isArray(items[i].labels));
+
+      for (let j = 0; j < items[i].labels.length; j++) {
+        assert.ok(
+          dbImageLabels.some(
+            ({ labelId }) => labelId === items[i].labels[j].id,
+          ),
+          'label id is from junction table',
+        );
+        assert.ok(items[i].labels[j].name);
+        assert.ok(items[i].labels[j].type);
+        assert.ok(items[i].labels[j].config);
+        assert.ok(items[i].labels[j].createdAt);
+        assert.ok(items[i].labels[j].updatedAt);
+        assert.equal(Object.keys(items[i].labels[j]).length, 6);
+      }
     }
   });
 
