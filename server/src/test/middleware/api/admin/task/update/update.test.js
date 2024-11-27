@@ -9,7 +9,7 @@ import * as taskUpdate from '../../../../../../middleware/api/admin/task/update/
 import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
 
 import { admin } from '../../fixtures/admin.js';
-import { imageSliderTask } from '../../fixtures/task.js';
+import { imageSliderTask, tasks } from '../../fixtures/task.js';
 
 describe('[api] task update', async () => {
   test('should return 401 if unauthorized', async (t) => {
@@ -105,7 +105,7 @@ describe('[api] task update', async () => {
     });
   });
 
-  test('should return 400 if config already exists', async (t) => {
+  test('should return 200 if update the same task', async (t) => {
     let dbTasks = [];
 
     const { request } = await getTestServer({
@@ -116,15 +116,63 @@ describe('[api] task update', async () => {
       },
     });
 
+    const payload = {
+      id: dbTasks[0].id,
+      name: 'Task New',
+      type: dbTasks[0].type,
+      config: dbTasks[0].config,
+    };
+
+    const resp = await request(taskUpdate.route, {
+      method: taskUpdate.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+      body: payload,
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(body.id, dbTasks[0].id);
+    assert.equal(body.name, payload.name);
+    assert.equal(body.type, payload.type);
+    assert.deepEqual(body.config, payload.config);
+    assert.equal(isNaN(new Date(body.createdAt)), false);
+    assert.equal(isNaN(new Date(body.updatedAt)), false);
+    assert.equal(Object.keys(body).length, 6);
+
+    assert.notEqual(
+      new Date(body.updatedAt).getTime(),
+      new Date(dbTasks[0].updatedAt).getTime(),
+      'should update updatetAt field',
+    );
+    assert.equal(
+      new Date(body.createdAt).getTime(),
+      new Date(dbTasks[0].createdAt).getTime(),
+    );
+  });
+
+  test('should return 400 if config already exists', async (t) => {
+    let dbTasks = [];
+
+    const { request } = await getTestServer({
+      t,
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbTasks = await seedTasks(db, tasks);
+      },
+    });
+
     const resp = await request(taskUpdate.route, {
       method: taskUpdate.method,
       headers: {
         cookie: await getAuthCookie(request, admin),
       },
       body: {
-        ...imageSliderTask,
         id: dbTasks[0].id,
         name: 'Task New',
+        type: dbTasks[0].type,
+        config: dbTasks[1].config,
       },
     });
     const body = await resp.json();
@@ -132,7 +180,7 @@ describe('[api] task update', async () => {
     assert.equal(resp.status, 400);
     assert.deepEqual(body, {
       error: 'DUPLICATE_TASK',
-      message: `${dbTasks[0].id}`,
+      message: `${dbTasks[1].id}`,
     });
   });
 
@@ -143,7 +191,7 @@ describe('[api] task update', async () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [imageSliderTask]);
+        dbTasks = await seedTasks(db, tasks);
       },
     });
 
@@ -153,21 +201,21 @@ describe('[api] task update', async () => {
         cookie: await getAuthCookie(request, admin),
       },
       body: {
-        ...imageSliderTask,
         id: dbTasks[0].id,
+        type: dbTasks[0].type,
         name: 'Task New',
         config: {
           slides: [
             {
               image: {
-                hashsum: 'aaa',
-                filename: 'foo.jpeg',
-                path: 'aaa.jpeg',
-                id: 1,
+                id: 2,
+                path: 'bbb.jpeg',
+                hashsum: 'bbb',
+                filename: 'boo.jpeg',
               },
             },
           ],
-          title: 'Hello',
+          title: 'Hello2',
         },
       },
     });
@@ -176,7 +224,7 @@ describe('[api] task update', async () => {
     assert.equal(resp.status, 400);
     assert.deepEqual(body, {
       error: 'DUPLICATE_TASK',
-      message: `${dbTasks[0].id}`,
+      message: `${dbTasks[1].id}`,
     });
   });
 
@@ -223,6 +271,7 @@ describe('[api] task update', async () => {
       '{"slides":[{"image":{"filename":"foo.jpeg","hashsum":"bbb","id":1,"path":"bbb.jpeg"}}],"title":"Hello"}',
     );
   });
+
   test('should return 200 and update task', async (t) => {
     let dbTasks = [];
 

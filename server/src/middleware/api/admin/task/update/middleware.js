@@ -1,4 +1,4 @@
-import { and, count, eq } from 'drizzle-orm';
+import { and, count, eq, not } from 'drizzle-orm';
 
 import { Composer } from '../../../../../core/composer.js';
 import {
@@ -68,7 +68,12 @@ async function checkDuplicateConfigurationMiddleware(ctx, next) {
   const [result] = await ctx.db
     .select({ id: taskTable.id })
     .from(taskTable)
-    .where(eq(taskTable.config, sortJsonKeys(body.config)))
+    .where(
+      and(
+        eq(taskTable.config, sortJsonKeys(body.config)),
+        not(eq(taskTable.id, body.id)),
+      ),
+    )
     .limit(1);
 
   if (result?.id) {
