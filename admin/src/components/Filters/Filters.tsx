@@ -69,6 +69,34 @@ export function Filters<T extends Record<string, any>>({
           );
         }
 
+        case 'task-type-selector': {
+          return (
+            <Space
+              key={`${filter.type}${i}`}
+              direction="vertical"
+              style={{ width: '100%' }}
+            >
+              {filter.label}
+              <Select
+                disabled={filter.disabled}
+                style={{ width: '100%' }}
+                value={tmpFilters[filter.name]}
+                options={[
+                  { label: 'semaphoreText', value: 'semaphoreText' },
+                  { label: 'imageSlider', value: 'imageSlider' },
+                ]}
+                allowClear
+                onChange={(v) => {
+                  setTmpFilters({
+                    ...tmpFilters,
+                    [filter.name]: v,
+                  });
+                }}
+              />
+            </Space>
+          );
+        }
+
         case 'label-selector': {
           return (
             <Space
