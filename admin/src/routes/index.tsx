@@ -12,6 +12,7 @@ import { UserViewPage } from './User/View';
 import { ProgramListPage } from './Program/List';
 import { LabelListPage } from './Label/List';
 import { ImageListPage } from './Image/List';
+import { TaskListPage } from './Task/List';
 
 export function Router() {
   const router = useStore($router);
@@ -69,6 +70,10 @@ export function PrivateRouter() {
 
     case ROUTE_ALIAS.IMAGE_LIST: {
       return <ImageListPage />;
+    }
+
+    case ROUTE_ALIAS.TASK_LIST: {
+      return <TaskListPage />;
     }
 
     default:

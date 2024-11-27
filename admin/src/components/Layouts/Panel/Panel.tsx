@@ -5,6 +5,7 @@ import {
   FileImageOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  SmileOutlined,
   TagOutlined,
   UserOutlined,
 } from '@ant-design/icons';
@@ -15,6 +16,7 @@ import {
   openImageList,
   openLabelList,
   openProgramList,
+  openTaskList,
   openUserList,
   ROUTE_ALIAS,
 } from '@/stores/router';
@@ -108,6 +110,14 @@ export function PanelLayout({ children }: IProps) {
                 label: 'Program list',
                 onClick() {
                   openProgramList();
+                },
+              },
+              {
+                key: ROUTE_ALIAS.TASK_LIST,
+                icon: <SmileOutlined />,
+                label: 'Task list',
+                onClick() {
+                  openTaskList();
                 },
               },
               {

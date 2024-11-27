@@ -48,3 +48,4 @@ class SafeStorage {
 }
 
 export const safeSS = new SafeStorage(window.sessionStorage);
+export const safeLS = new SafeStorage(window.localStorage);

@@ -20,6 +20,8 @@ export const ROUTE_ALIAS = {
   LABEL_LIST: 'label-list',
 
   IMAGE_LIST: 'image-list',
+
+  TASK_LIST: 'task-list',
 };
 
 export const $router = createRouter({
@@ -37,6 +39,8 @@ export const $router = createRouter({
   [ROUTE_ALIAS.LABEL_LIST]: '/label/list',
 
   [ROUTE_ALIAS.IMAGE_LIST]: '/image/list',
+
+  [ROUTE_ALIAS.TASK_LIST]: '/task/list',
 });
 
 export const ROUTE_TITLE = {
@@ -52,6 +56,8 @@ export const ROUTE_TITLE = {
   [ROUTE_ALIAS.LABEL_LIST]: 'Label list',
 
   [ROUTE_ALIAS.IMAGE_LIST]: 'Image list',
+
+  [ROUTE_ALIAS.TASK_LIST]: 'Task list',
 };
 
 export const ROUTES = {
@@ -102,4 +108,7 @@ export function openLabelList() {
 }
 export function openImageList() {
   openPage($router, ROUTE_ALIAS.IMAGE_LIST);
+}
+export function openTaskList() {
+  openPage($router, ROUTE_ALIAS.TASK_LIST);
 }

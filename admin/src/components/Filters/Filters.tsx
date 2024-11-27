@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react';
 import { DateRange } from '../DateRange';
 import { UserSearchInput } from '../UserSearchInput';
 import { LabelSearchInput } from '../LabelSearchInput';
+import { taskTypeOptions } from '../TaskForm/constants';
 
 interface IProps<T> {
   values: T;
@@ -81,10 +82,7 @@ export function Filters<T extends Record<string, any>>({
                 disabled={filter.disabled}
                 style={{ width: '100%' }}
                 value={tmpFilters[filter.name]}
-                options={[
-                  { label: 'semaphoreText', value: 'semaphoreText' },
-                  { label: 'imageSlider', value: 'imageSlider' },
-                ]}
+                options={taskTypeOptions}
                 allowClear
                 onChange={(v) => {
                   setTmpFilters({
