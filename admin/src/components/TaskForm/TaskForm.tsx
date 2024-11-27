@@ -11,6 +11,7 @@ export interface ITaskFormProps {
   action: 'update' | 'create';
   initialValues?: Partial<TTask>;
   onSuccess?(p: TTask): void;
+  onDuplicate?(id: number): void;
 }
 
 export function TaskForm({
@@ -18,6 +19,7 @@ export function TaskForm({
   action,
   initialValues,
   onSuccess,
+  onDuplicate,
 }: ITaskFormProps) {
   const { mutate: createTask } = useStore($createTask);
   const { mutate: updateTask } = useStore($updateTask);
@@ -43,7 +45,15 @@ export function TaskForm({
       }
 
       if ('error' in respData && typeof respData.message === 'string') {
-        notification.error({ message: respData.message });
+        let message = respData.message;
+
+        if (respData.error === 'DUPLICATE_TASK') {
+          message =
+            'Duplicate task. Check out the table and see the existing one with the same config';
+          onDuplicate?.(Number(respData.message));
+        }
+
+        notification.error({ message });
         return false;
       }
 

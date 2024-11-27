@@ -35,6 +35,7 @@ export function ProgramTable({
   $activeFilterCount,
   setPageSize,
   setListFilter,
+  resetListFilter,
   filtersConfig = defaultFiltersConfig,
 }: IProps) {
   const { data, loading } = useStore($programs);
@@ -113,6 +114,7 @@ export function ProgramTable({
       <Filters
         values={filters}
         onChange={setListFilter}
+        resetFilter={resetListFilter}
         activeCount={activeFilterCount}
         config={filtersConfig}
         pagination={{ name: 'page' }}

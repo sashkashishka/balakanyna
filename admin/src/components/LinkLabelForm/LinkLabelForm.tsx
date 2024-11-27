@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState, type ReactNode } from 'react';
 import { useStore } from '@nanostores/react';
-import { notification, Select, Spin, Tag } from 'antd';
+import { notification, Select, Space, Spin, Tag } from 'antd';
 
 import type { ILabel } from '@/types/label';
 import {
@@ -140,26 +140,29 @@ export function LinkLabelForm({ type, entityId, initialLabels }: IProps) {
   );
 
   return (
-    <Select
-      style={{ width: '100%' }}
-      mode="multiple"
-      disabled={linkLoading || unlinkLoading}
-      loading={linkLoading || unlinkLoading}
-      labelInValue
-      filterOption={false}
-      onSearch={handleSearch}
-      notFoundContent={
-        linkLoading || unlinkLoading ? <Spin size="small" /> : null
-      }
-      value={values}
-      placeholder="Alice"
-      onSelect={(item) => {
-        onLink(item);
-      }}
-      onDeselect={(item) => {
-        onUnlink(item);
-      }}
-      options={options}
-    />
+    <Space direction="vertical" style={{ width: '100%' }}>
+      Link label
+      <Select
+        style={{ width: '100%' }}
+        mode="multiple"
+        disabled={linkLoading || unlinkLoading}
+        loading={linkLoading || unlinkLoading}
+        labelInValue
+        filterOption={false}
+        onSearch={handleSearch}
+        notFoundContent={
+          linkLoading || unlinkLoading ? <Spin size="small" /> : null
+        }
+        value={values}
+        placeholder="Label"
+        onSelect={(item) => {
+          onLink(item);
+        }}
+        onDeselect={(item) => {
+          onUnlink(item);
+        }}
+        options={options}
+      />
+    </Space>
   );
 }

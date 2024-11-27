@@ -2,6 +2,7 @@ import {
   getCreatedAtFilter,
   getLabelSelectorFilter,
   getSearchStringFilter,
+  getSelectFilter,
   getTaskTypeSelectorFilter,
   getUserSelectorFilter,
 } from '../Filters/constants';
@@ -28,7 +29,17 @@ export const taskType = getTaskTypeSelectorFilter({
   maxCount: 50,
 });
 
+export const ids = getSelectFilter({
+  label: 'Task ids',
+  name: 'ids',
+  options: [],
+  disabled: true,
+});
+
+// TODO: add program search filter
+
 export const filtersConfig: Array<TFilters> = [
+  ids,
   name,
   label,
   userSearch,

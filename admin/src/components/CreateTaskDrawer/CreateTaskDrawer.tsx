@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { Button, Drawer, Select, Space } from 'antd';
 
 import { TaskForm } from '../TaskForm';
-import { type TTaskType, type TTask } from '@/types/task';
+import { type TTaskType } from '@/types/task';
 import { taskTypeOptions } from '../TaskForm/constants';
+import type { ITaskFormProps } from '../TaskForm/TaskForm';
 
-interface IProps {
-  onSuccess?(p: TTask): void;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface IProps extends Pick<ITaskFormProps, 'onDuplicate' | 'onSuccess'> {}
 
-export function CreateTaskDrawer({ onSuccess }: IProps) {
+export function CreateTaskDrawer({ onSuccess, onDuplicate }: IProps) {
   const [taskType, setTaskType] = useState<TTaskType>();
   const [open, setOpen] = useState(false);
 
@@ -37,9 +37,12 @@ export function CreateTaskDrawer({ onSuccess }: IProps) {
 
           {taskType && (
             <TaskForm
-              name="task-create"
               action="create"
               taskType={taskType}
+              onDuplicate={(id) => {
+                setOpen(false);
+                onDuplicate?.(id);
+              }}
               onSuccess={(p) => {
                 setOpen(false);
                 onSuccess?.(p);

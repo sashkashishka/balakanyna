@@ -35,6 +35,7 @@ export function TaskTable({
   $activeFilterCount,
   setPageSize,
   setListFilter,
+  resetListFilter,
   filtersConfig = defaultFiltersConfig,
 }: IProps) {
   const { data, loading } = useStore($tasks);
@@ -116,6 +117,7 @@ export function TaskTable({
       <Filters
         values={filters}
         onChange={setListFilter}
+        resetFilter={resetListFilter}
         activeCount={activeFilterCount}
         config={filtersConfig}
         pagination={{ name: 'page' }}
@@ -152,4 +154,3 @@ export function TaskTable({
     </>
   );
 }
-

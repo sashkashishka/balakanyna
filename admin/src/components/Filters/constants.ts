@@ -1,4 +1,3 @@
-import type { ILabel } from '@/types/label';
 import type {
   IDateRangeFilter,
   ILabelSelectorFilter,

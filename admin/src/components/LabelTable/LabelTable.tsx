@@ -32,6 +32,7 @@ export function LabelTable({
   $activeFilterCount,
   setPageSize,
   setListFilter,
+  resetListFilter,
 }: IProps) {
   const { data, loading } = useStore($labels);
   const filters = useStore($filters);
@@ -94,6 +95,7 @@ export function LabelTable({
       <Filters
         values={filters}
         onChange={setListFilter}
+        resetFilter={resetListFilter}
         activeCount={activeFilterCount}
         config={filtersConfig}
         pagination={{ name: 'page' }}

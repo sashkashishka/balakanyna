@@ -26,7 +26,11 @@ export function TaskListPage() {
     <Space direction="vertical" style={{ width: '100%' }}>
       <Flex justify="space-between">
         <Paragraph strong>Task list</Paragraph>
-        <CreateTaskDrawer />
+        <CreateTaskDrawer
+          onDuplicate={(id) => {
+            setListFilter('ids', [id]);
+          }}
+        />
       </Flex>
 
       <TaskTable
@@ -42,4 +46,3 @@ export function TaskListPage() {
     </Space>
   );
 }
-

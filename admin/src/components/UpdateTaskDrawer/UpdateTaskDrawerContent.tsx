@@ -1,10 +1,11 @@
 import { useStore } from '@nanostores/react';
 import type { FetcherStore } from '@nanostores/query';
-import { Flex, Spin } from 'antd';
+import { Flex, Space, Spin } from 'antd';
 
 import type { TTask } from '@/types/task';
 
 import { TaskForm } from '../TaskForm';
+import { LinkLabelForm } from '../LinkLabelForm';
 
 interface IProps {
   $task: FetcherStore<TTask>;
@@ -22,11 +23,14 @@ export function UpdateTaskDrawerContent({ $task }: IProps) {
   }
 
   return (
-    <TaskForm
-      name={`task-update-${data.id}`}
-      taskType={data.type}
-      action="update"
-      initialValues={data}
-    />
+    <Space direction="vertical">
+      <LinkLabelForm
+        type="task"
+        entityId={data.id}
+        initialLabels={data.labels}
+      />
+
+      <TaskForm taskType={data.type} action="update" initialValues={data} />
+    </Space>
   );
 }

@@ -35,6 +35,7 @@ export function ImageTable({
   $activeFilterCount,
   setPageSize,
   setListFilter,
+  resetListFilter,
   filtersConfig = defaultFiltersConfig,
 }: IProps) {
   const { data, loading } = useStore($images);
@@ -120,6 +121,7 @@ export function ImageTable({
       <Filters
         values={filters}
         onChange={setListFilter}
+        resetFilter={resetListFilter}
         activeCount={activeFilterCount}
         config={filtersConfig}
         pagination={{ name: 'page' }}

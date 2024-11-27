@@ -32,6 +32,7 @@ export function UserTable({
   $activeFilterCount,
   setPageSize,
   setListFilter,
+  resetListFilter,
 }: IProps) {
   const { data, loading } = useStore($users);
   const filters = useStore($filters);
@@ -95,6 +96,7 @@ export function UserTable({
         onChange={setListFilter}
         activeCount={activeFilterCount}
         config={filtersConfig}
+        resetFilter={resetListFilter}
         pagination={{ name: 'page' }}
       />
 

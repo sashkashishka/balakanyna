@@ -7,10 +7,12 @@ import { DateRange } from '../DateRange';
 import { UserSearchInput } from '../UserSearchInput';
 import { LabelSearchInput } from '../LabelSearchInput';
 import { taskTypeOptions } from '../TaskForm/constants';
+import { SyncFiltersOnMount } from './SyncFilterOnMount';
 
 interface IProps<T> {
   values: T;
   onChange(key: keyof T, values: unknown): void;
+  resetFilter(): void;
   config: Array<TFilters>;
   activeCount: number;
   pagination: {
@@ -22,6 +24,7 @@ interface IProps<T> {
 export function Filters<T extends Record<string, any>>({
   values,
   onChange,
+  resetFilter,
   config,
   activeCount,
   pagination,
@@ -39,6 +42,12 @@ export function Filters<T extends Record<string, any>>({
       onChange(key, tmpFilters[key]);
     });
     onChange(pagination.name, 1);
+    setShowDrawer(false);
+  };
+
+  const onFilterReset = () => {
+    resetFilter();
+    setTmpFilters({} as T);
     setShowDrawer(false);
   };
 
@@ -246,9 +255,13 @@ export function Filters<T extends Record<string, any>>({
               Submit
             </Button>
             <Button onClick={onDrawerClose}>Cancel</Button>
+            <Button onClick={onFilterReset} type="dashed">
+              Reset
+            </Button>
           </Space>
         }
       >
+        <SyncFiltersOnMount values={values} setTmpFilters={setTmpFilters} />
         <Space direction="vertical" size="large">
           {content}
         </Space>

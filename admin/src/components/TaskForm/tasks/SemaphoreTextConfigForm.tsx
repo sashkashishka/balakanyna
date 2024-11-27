@@ -54,9 +54,11 @@ export function SemaphoreTextConfigForm({
           <Input />
         </Form.Item>
 
-        <Form.Item<TSemaphoreTextTask> name="type" hidden>
-          <Input />
-        </Form.Item>
+        <Col span={24}>
+          <Form.Item<TSemaphoreTextTask> label="Task type" name="type">
+            <Input disabled />
+          </Form.Item>
+        </Col>
 
         <Col span={24}>
           <Form.Item<TSemaphoreTextTask>
