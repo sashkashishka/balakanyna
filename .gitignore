@@ -25,3 +25,5 @@ dist-ssr
 *.sln
 *.sw?
 .tool-versions
+
+server/static/

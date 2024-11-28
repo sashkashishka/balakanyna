@@ -20,6 +20,10 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      '/media': {
+        target: 'http://localhost:4030',
+        changeOrigin: true,
+      },
       '/api': {
         target: 'http://localhost:4030',
         changeOrigin: true,
