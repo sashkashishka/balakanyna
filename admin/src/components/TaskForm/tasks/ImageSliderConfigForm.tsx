@@ -3,8 +3,8 @@ import { Row, Col, Form, Input, Button } from 'antd';
 import type { TTask } from '@/types/task';
 import type { ITaskFormProps } from '../TaskForm';
 import { safeLS } from '@/utils/storage';
-import { SortableFormList } from '@/components/SortableFormList';
-import { ImageField } from '../components/ImageField';
+import { SortableFormList } from '@/components/FormFields/SortableFormList';
+import { ImageField } from '@/components/FormFields/ImageField';
 
 type TImageSliderTask = Extract<TTask, { type: 'imageSlider' }>;
 

@@ -3,7 +3,7 @@ import { Row, Col, Form, Input, Button, InputNumber, ColorPicker } from 'antd';
 import type { TTask } from '@/types/task';
 import type { ITaskFormProps } from '../TaskForm';
 import { safeLS } from '@/utils/storage';
-import { SortableFormList } from '@/components/SortableFormList';
+import { SortableFormList } from '@/components/FormFields/SortableFormList';
 
 type TSemaphoreTextTask = Extract<TTask, { type: 'semaphoreText' }>;
 

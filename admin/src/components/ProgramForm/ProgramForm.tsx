@@ -4,8 +4,10 @@ import { Button, Col, DatePicker, Form, Input, notification, Row } from 'antd';
 
 import type { IProgram } from '@/types/program';
 import { $createProgram, $updateProgram } from '@/stores/program';
+import { SortableFormList } from '@/components/FormFields/SortableFormList';
 
 import { UserSearchInput } from '../UserSearchInput';
+import { TaskField } from '../FormFields/TaskField';
 
 export interface IProgramFormInitialValues
   extends Omit<IProgram, 'startDatetime' | 'expirationDatetime' | 'userId'> {
@@ -129,11 +131,18 @@ export function ProgramForm({
           </Form.Item>
         </Col>
 
-        {/* TODO:
-         * add here field to add tasks with preview
-         * either create from scratch
-         * or add existing one
-         */}
+        {isUpdate && (
+          <Col span={24}>
+            <SortableFormList
+              name={['tasks']}
+              item={{}}
+              label="Tasks"
+              addButtonLabel="Add task"
+            >
+              <TaskField />
+            </SortableFormList>
+          </Col>
+        )}
 
         <Col span={24}>
           <Form.Item style={{ marginBottom: 0 }}>
