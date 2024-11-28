@@ -7,6 +7,8 @@ interface ITask {
   id: number;
   name: number;
   labels: ILabel[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  error?: Record<string, any>;
 }
 
 interface ISemaphoreTextTask extends ITask {

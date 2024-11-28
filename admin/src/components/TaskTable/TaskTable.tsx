@@ -1,5 +1,5 @@
 import { Table, Space, Button, Tag } from 'antd';
-import type { TableProps } from 'antd';
+import { type TableProps, theme } from 'antd';
 import type { FetcherStore } from '@nanostores/query';
 import type { ReadableAtom, WritableAtom } from 'nanostores';
 import { useStore } from '@nanostores/react';
@@ -44,6 +44,10 @@ export function TaskTable({
   const filters = useStore($filters);
   const pageSize = useStore($pageSize);
   const activeFilterCount = useStore($activeFilterCount);
+
+  const {
+    token: { colorErrorBg },
+  } = theme.useToken();
 
   const totalPages = data?.total || 0;
 
@@ -152,6 +156,13 @@ export function TaskTable({
             );
             setListFilter('dir', sorter.order! || defaultFilters.dir);
           }
+        }}
+        onRow={(record) => {
+          return {
+            style: {
+              background: record.error ? colorErrorBg : undefined,
+            },
+          };
         }}
       />
     </>
