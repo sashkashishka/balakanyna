@@ -1,4 +1,5 @@
 import type { ILabel } from './label';
+import type { IImageEntry } from './image';
 
 export type TTaskType = 'semaphoreText' | 'imageSlider';
 
@@ -22,12 +23,7 @@ interface IImageSliderTask extends ITask {
   config: {
     title: string;
     slides: {
-      image: {
-        id: number;
-        hashsum: string;
-        filename: string;
-        path: string;
-      };
+      image: IImageEntry;
     }[];
   };
 }
