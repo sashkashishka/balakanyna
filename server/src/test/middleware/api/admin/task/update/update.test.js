@@ -9,7 +9,11 @@ import * as taskUpdate from '../../../../../../middleware/api/admin/task/update/
 import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
 
 import { admin } from '../../fixtures/admin.js';
-import { imageSliderTask, tasks } from '../../fixtures/task.js';
+import {
+  imageSliderTask,
+  semaphoreTextTask,
+  tasks,
+} from '../../fixtures/task.js';
 
 describe('[api] task update', async () => {
   test('should return 401 if unauthorized', async (t) => {
@@ -112,7 +116,7 @@ describe('[api] task update', async () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [imageSliderTask]);
+        dbTasks = await seedTasks(db, [semaphoreTextTask]);
       },
     });
 
@@ -235,7 +239,7 @@ describe('[api] task update', async () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [imageSliderTask]);
+        dbTasks = await seedTasks(db, [semaphoreTextTask]);
       },
     });
 
@@ -245,21 +249,13 @@ describe('[api] task update', async () => {
         cookie: await getAuthCookie(request, admin),
       },
       body: {
-        ...imageSliderTask,
         id: dbTasks[0].id,
+        type: 'semaphoreText',
         name: 'Task New',
         config: {
-          slides: [
-            {
-              image: {
-                hashsum: 'bbb',
-                filename: 'foo.jpeg',
-                path: 'bbb.jpeg',
-                id: 1,
-              },
-            },
-          ],
-          title: 'Hello',
+          colors: ['yellow'],
+          text: ['c'],
+          delayRange: [3, 4],
         },
       },
     });
@@ -268,7 +264,7 @@ describe('[api] task update', async () => {
     assert.equal(resp.status, 200);
     assert.equal(
       JSON.stringify(body.config),
-      '{"slides":[{"image":{"filename":"foo.jpeg","hashsum":"bbb","id":1,"path":"bbb.jpeg"}}],"title":"Hello"}',
+      '{"colors":["yellow"],"delayRange":[3,4],"text":["c"]}',
     );
   });
 
@@ -279,27 +275,19 @@ describe('[api] task update', async () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [imageSliderTask]);
+        dbTasks = await seedTasks(db, [semaphoreTextTask]);
       },
     });
 
     const payload = {
-      ...imageSliderTask,
-      id: dbTasks[0].id,
-      name: 'BrandNewName',
-      config: {
-        title: 'BrandNewTitle',
-        slides: [
-          {
-            image: {
-              id: 2,
-              hashsum: 'bbb',
-              filename: 'baz.png',
-              path: 'bbb.png',
-            },
-          },
-        ],
-      },
+        id: dbTasks[0].id,
+        type: 'semaphoreText',
+        name: 'Brand new Task',
+        config: {
+          colors: ['yellow'],
+          text: ['c'],
+          delayRange: [3, 4],
+        },
     };
 
     const resp = await request(taskUpdate.route, {

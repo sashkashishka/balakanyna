@@ -200,7 +200,7 @@ describe('[api] unlink task program', async () => {
         ]);
         dbTasks = await seedTasks(db, [imageSliderTask]);
         await seedProgramTask(db, [
-          { taskId: dbTasks[0].id, programId: dbPrograms[0].id },
+          { taskId: dbTasks[0].id, programId: dbPrograms[0].id, taskOrder: 1 },
         ]);
       },
     });

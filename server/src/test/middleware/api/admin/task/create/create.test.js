@@ -8,7 +8,7 @@ import * as taskCreate from '../../../../../../middleware/api/admin/task/create/
 
 import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
-import { imageSliderTask } from '../../fixtures/task.js';
+import { imageSliderTask, semaphoreTextTask } from '../../fixtures/task.js';
 
 describe('[api] task create', async () => {
   test('should return 401 if unauthorized', async (t) => {
@@ -167,20 +167,12 @@ describe('[api] task create', async () => {
         cookie: await getAuthCookie(request, admin),
       },
       body: {
-        ...imageSliderTask,
+        type: 'semaphoreText',
         name: 'Task New',
         config: {
-          slides: [
-            {
-              image: {
-                hashsum: 'aaa',
-                filename: 'foo.jpeg',
-                path: 'aaa.jpeg',
-                id: 1,
-              },
-            },
-          ],
-          title: 'Hello',
+          colors: ['yellow'],
+          delayRange: [3, 4],
+          text: ['c'],
         },
       },
     });
@@ -189,7 +181,7 @@ describe('[api] task create', async () => {
     assert.equal(resp.status, 200);
     assert.equal(
       JSON.stringify(body.config),
-      '{"slides":[{"image":{"filename":"foo.jpeg","hashsum":"aaa","id":1,"path":"aaa.jpeg"}}],"title":"Hello"}',
+      '{"colors":["yellow"],"delayRange":[3,4],"text":["c"]}',
     );
   });
 });
