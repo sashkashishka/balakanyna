@@ -1,17 +1,9 @@
-import {
-  Row,
-  Col,
-  Form,
-  Input,
-  Button,
-  InputNumber,
-  ColorPicker,
-} from 'antd';
+import { Row, Col, Form, Input, Button, InputNumber, ColorPicker } from 'antd';
 
 import type { TTask } from '@/types/task';
 import type { ITaskFormProps } from '../TaskForm';
 import { safeLS } from '@/utils/storage';
-import { SortableList } from '../components/SortableList';
+import { SortableFormList } from '@/components/SortableFormList';
 
 type TSemaphoreTextTask = Extract<TTask, { type: 'semaphoreText' }>;
 
@@ -95,7 +87,7 @@ export function SemaphoreTextConfigForm({
         </Col>
 
         <Col span={12}>
-          <SortableList
+          <SortableFormList
             name={['config', 'colors']}
             label="Colors"
             addButtonLabel="Add color"
@@ -105,11 +97,11 @@ export function SemaphoreTextConfigForm({
             }}
           >
             <ColorPicker />
-          </SortableList>
+          </SortableFormList>
         </Col>
 
         <Col span={12}>
-          <SortableList
+          <SortableFormList
             name={['config', 'text']}
             label="Text"
             addButtonLabel="Add text"
@@ -118,7 +110,7 @@ export function SemaphoreTextConfigForm({
             }}
           >
             <Input />
-          </SortableList>
+          </SortableFormList>
         </Col>
 
         <Col span={24}>

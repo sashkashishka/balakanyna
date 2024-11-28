@@ -12,7 +12,7 @@ import {
 } from '@dnd-kit/core';
 import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 
-import { atLeastOneEntry } from '../../validators';
+import { atLeastOneEntry } from './validators';
 import { SortableItem } from './SortableItem';
 
 interface IProps {
@@ -23,7 +23,7 @@ interface IProps {
   children: ReactNode;
 }
 
-export function SortableList({
+export function SortableFormList({
   name,
   item,
   label,

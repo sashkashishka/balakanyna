@@ -3,8 +3,8 @@ import { Row, Col, Form, Input, Button } from 'antd';
 import type { TTask } from '@/types/task';
 import type { ITaskFormProps } from '../TaskForm';
 import { safeLS } from '@/utils/storage';
+import { SortableFormList } from '@/components/SortableFormList';
 import { ImageField } from '../components/ImageField';
-import { SortableList } from '../components/SortableList';
 
 type TImageSliderTask = Extract<TTask, { type: 'imageSlider' }>;
 
@@ -64,7 +64,7 @@ export function ImageSliderConfigForm({
         </Col>
 
         <Col span={24}>
-          <SortableList
+          <SortableFormList
             name={['config', 'slides']}
             item={{
               name: 'image',
@@ -74,7 +74,7 @@ export function ImageSliderConfigForm({
             addButtonLabel="Add slide"
           >
             <ImageField />
-          </SortableList>
+          </SortableFormList>
         </Col>
 
         <Col span={24}>
