@@ -1,7 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Button, Drawer, Flex, Spin } from 'antd';
-import { useStore } from '@nanostores/react';
-import type { FetcherStore } from '@nanostores/query';
+import { Button, Drawer } from 'antd';
 import dayjs from 'dayjs';
 
 import type { IUser } from '@/types/user';
@@ -31,6 +29,7 @@ export function UpdateUserDrawer({ user }: IProps) {
         title="Update user"
         open={open}
         onClose={() => setOpen(false)}
+        destroyOnClose
       >
         <UserForm
           name="user-update"

@@ -25,6 +25,7 @@ export function UpdateLabelDrawer({ labelId, children }: IProps) {
         title="Update label"
         open={open}
         onClose={() => setOpen(false)}
+        destroyOnClose
       >
         <UpdateLabelDrawerContent $label={$label} />
       </Drawer>

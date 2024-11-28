@@ -32,11 +32,9 @@ export function TaskSelectDrawer({ onSelect, filters }: IProps) {
         icon={<PlusOutlined />}
         type="dashed"
         onClick={() => setOpen(true)}
-        style={{
-          height: '60px',
-          width: '60px',
-        }}
-      />
+      >
+        Add task
+      </Button>
 
       <Drawer
         size="large"

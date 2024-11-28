@@ -29,6 +29,7 @@ export function UpdateImageDrawer({ imageId, children }: IProps) {
           invalidateImageLabel();
           setOpen(false);
         }}
+        destroyOnClose
       >
         <UpdateImageDrawerContent $image={$image} />
       </Drawer>

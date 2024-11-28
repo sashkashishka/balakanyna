@@ -25,6 +25,7 @@ export function UpdateProgramDrawer({ programId, children }: IProps) {
         title="Update program"
         open={open}
         onClose={() => setOpen(false)}
+        destroyOnClose
       >
         <UpdateProgramDrawerContent $program={$program} />
       </Drawer>

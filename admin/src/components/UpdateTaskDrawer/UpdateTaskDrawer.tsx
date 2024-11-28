@@ -25,6 +25,7 @@ export function UpdateTaskDrawer({ taskId, children }: IProps) {
         title="Update task"
         open={open}
         onClose={() => setOpen(false)}
+        destroyOnClose
       >
         <UpdateTaskDrawerContent $task={$task} />
       </Drawer>
