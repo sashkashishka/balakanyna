@@ -22,6 +22,7 @@ interface IProps {
   setPageSize(v: number): void;
   setListFilter(k: string, v: unknown): void;
   resetListFilter(): void;
+  rowSelection?: TableProps<ILabel>['rowSelection'];
 }
 
 export function LabelTable({
@@ -33,6 +34,7 @@ export function LabelTable({
   setPageSize,
   setListFilter,
   resetListFilter,
+  rowSelection,
 }: IProps) {
   const { data, loading } = useStore($labels);
   const filters = useStore($filters);
@@ -105,6 +107,7 @@ export function LabelTable({
         rowKey="id"
         loading={loading}
         columns={columns}
+        rowSelection={rowSelection}
         dataSource={data?.items || []}
         pagination={{
           current: filters.page,

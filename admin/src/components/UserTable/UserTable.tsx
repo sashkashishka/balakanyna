@@ -22,6 +22,7 @@ interface IProps {
   setPageSize(v: number): void;
   setListFilter(k: string, v: unknown): void;
   resetListFilter(): void;
+  rowSelection?: TableProps<IUser>['rowSelection'];
 }
 
 export function UserTable({
@@ -33,6 +34,7 @@ export function UserTable({
   setPageSize,
   setListFilter,
   resetListFilter,
+  rowSelection,
 }: IProps) {
   const { data, loading } = useStore($users);
   const filters = useStore($filters);
@@ -104,6 +106,7 @@ export function UserTable({
         rowKey="id"
         loading={loading}
         columns={columns}
+        rowSelection={rowSelection}
         dataSource={data?.items || []}
         pagination={{
           current: filters.page,

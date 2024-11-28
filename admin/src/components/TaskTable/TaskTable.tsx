@@ -25,6 +25,7 @@ interface IProps {
   setPageSize(v: number): void;
   setListFilter(k: string, v: unknown): void;
   resetListFilter(): void;
+  rowSelection?: TableProps<TTask>['rowSelection'];
 }
 
 export function TaskTable({
@@ -37,6 +38,7 @@ export function TaskTable({
   setListFilter,
   resetListFilter,
   filtersConfig = defaultFiltersConfig,
+  rowSelection,
 }: IProps) {
   const { data, loading } = useStore($tasks);
   const filters = useStore($filters);
@@ -127,6 +129,7 @@ export function TaskTable({
         rowKey="id"
         loading={loading}
         columns={columns}
+        rowSelection={rowSelection}
         dataSource={data?.items || []}
         pagination={{
           current: filters.page,

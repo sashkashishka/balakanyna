@@ -25,6 +25,7 @@ interface IProps {
   setPageSize(v: number): void;
   setListFilter(k: string, v: unknown): void;
   resetListFilter(): void;
+  rowSelection?: TableProps<IProgram>['rowSelection'];
 }
 
 export function ProgramTable({
@@ -37,6 +38,7 @@ export function ProgramTable({
   setListFilter,
   resetListFilter,
   filtersConfig = defaultFiltersConfig,
+  rowSelection,
 }: IProps) {
   const { data, loading } = useStore($programs);
   const filters = useStore($filters);
@@ -124,6 +126,7 @@ export function ProgramTable({
         rowKey="id"
         loading={loading}
         columns={columns}
+        rowSelection={rowSelection}
         dataSource={data?.items || []}
         pagination={{
           current: filters.page,

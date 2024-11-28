@@ -25,6 +25,7 @@ interface IProps {
   setListFilter(k: string, v: unknown): void;
   resetListFilter(): void;
   filtersConfig?: Array<TFilters>;
+  rowSelection?: TableProps<IImage>['rowSelection'];
 }
 
 export function ImageTable({
@@ -37,6 +38,7 @@ export function ImageTable({
   setListFilter,
   resetListFilter,
   filtersConfig = defaultFiltersConfig,
+  rowSelection,
 }: IProps) {
   const { data, loading } = useStore($images);
   const filters = useStore($filters);
@@ -132,6 +134,7 @@ export function ImageTable({
         loading={loading}
         columns={columns}
         dataSource={data?.items || []}
+        rowSelection={rowSelection}
         pagination={{
           current: filters.page,
           onShowSizeChange(_curr, size) {
