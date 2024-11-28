@@ -5,14 +5,13 @@ import {
   Input,
   Button,
   InputNumber,
-  Space,
   ColorPicker,
 } from 'antd';
 
 import type { TTask } from '@/types/task';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ITaskFormProps } from '../TaskForm';
 import { safeLS } from '@/utils/storage';
+import { SortableList } from '../components/SortableList';
 
 type TSemaphoreTextTask = Extract<TTask, { type: 'semaphoreText' }>;
 
@@ -28,6 +27,7 @@ export function SemaphoreTextConfigForm({
 }: IProps) {
   const formName = 'semaphore-text-config-form';
   const LS_KEY = `${action}:${formName}`;
+
   return (
     <Form
       name={formName}
@@ -95,70 +95,30 @@ export function SemaphoreTextConfigForm({
         </Col>
 
         <Col span={12}>
-          <Form.List name={['config', 'colors']}>
-            {(fields, { add, remove }) => (
-              <Space direction="vertical" style={{ width: '100%' }}>
-                Colors
-                {fields.map(({ key, name }) => (
-                  <Space key={key} align="baseline">
-                    <Form.Item
-                      name={[name]}
-                      rules={[
-                        { required: true, message: 'Please input color' },
-                      ]}
-                      normalize={(color) => color.toHexString()}
-                    >
-                      <ColorPicker />
-                    </Form.Item>
-                    <MinusCircleOutlined onClick={() => remove(name)} />
-                  </Space>
-                ))}
-                <Form.Item>
-                  <Button
-                    type="dashed"
-                    onClick={() => add()}
-                    block
-                    icon={<PlusOutlined />}
-                  >
-                    Add color
-                  </Button>
-                </Form.Item>
-              </Space>
-            )}
-          </Form.List>
+          <SortableList
+            name={['config', 'colors']}
+            label="Colors"
+            addButtonLabel="Add color"
+            item={{
+              rules: [{ required: true, message: 'Please input color' }],
+              normalize: (color) => color.toHexString(),
+            }}
+          >
+            <ColorPicker />
+          </SortableList>
         </Col>
 
         <Col span={12}>
-          <Form.List name={['config', 'text']}>
-            {(fields, { add, remove }) => (
-              <Space direction="vertical" style={{ width: '100%' }}>
-                Text
-                {fields.map(({ key, name }) => (
-                  <Space key={key} align="baseline">
-                    <Form.Item
-                      name={[name]}
-                      rules={[
-                        { required: true, message: 'Please enter some text' },
-                      ]}
-                    >
-                      <Input />
-                    </Form.Item>
-                    <MinusCircleOutlined onClick={() => remove(name)} />
-                  </Space>
-                ))}
-                <Form.Item>
-                  <Button
-                    type="dashed"
-                    onClick={() => add()}
-                    block
-                    icon={<PlusOutlined />}
-                  >
-                    Add text
-                  </Button>
-                </Form.Item>
-              </Space>
-            )}
-          </Form.List>
+          <SortableList
+            name={['config', 'text']}
+            label="Text"
+            addButtonLabel="Add text"
+            item={{
+              rules: [{ required: true, message: 'Please enter some text' }],
+            }}
+          >
+            <Input />
+          </SortableList>
         </Col>
 
         <Col span={24}>
