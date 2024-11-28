@@ -5,6 +5,7 @@ import { type TTaskType, type TTask } from '@/types/task';
 import { $createTask, $updateTask } from '@/stores/task';
 
 import { SemaphoreTextConfigForm } from './tasks/SemaphoreTextConfigForm';
+import { ImageSliderConfigForm } from './tasks/ImageSliderConfigForm';
 
 export interface ITaskFormProps {
   taskType: TTaskType;
@@ -69,7 +70,15 @@ export function TaskForm({
 
   switch (taskType) {
     case 'imageSlider': {
-      return null;
+      return (
+        <ImageSliderConfigForm
+          action={action}
+          onFinish={onFinish}
+          initialValues={
+            initialValues as Partial<Extract<TTask, { type: 'imageSlider' }>>
+          }
+        />
+      );
     }
 
     case 'semaphoreText': {
