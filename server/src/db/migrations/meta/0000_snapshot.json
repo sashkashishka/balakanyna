@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "c60d35d1-4c0a-44ad-8413-d95ebfaf5092",
+  "id": "f54d271d-e3fb-4e71-af4c-476645936b57",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "admin": {
@@ -332,6 +332,13 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
+          "autoincrement": false
+        },
+        "task_order": {
+          "name": "task_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
           "autoincrement": false
         },
         "createdAt": {

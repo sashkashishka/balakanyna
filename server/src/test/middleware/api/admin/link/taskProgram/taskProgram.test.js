@@ -99,6 +99,7 @@ describe('[api] link task program', async () => {
     const payload = {
       programId: 1,
       taskId: 2,
+      taskOrder: 1,
     };
 
     const resp = await request(linkTaskProgram.route, {
@@ -134,6 +135,7 @@ describe('[api] link task program', async () => {
     const payload = {
       programId: dbPrograms[0].id,
       taskId: 2,
+      taskOrder: 1,
     };
 
     const resp = await request(linkTaskProgram.route, {
@@ -166,7 +168,7 @@ describe('[api] link task program', async () => {
         ]);
         dbTasks = await seedTasks(db, [imageSliderTask]);
         await seedProgramTask(db, [
-          { taskId: dbTasks[0].id, programId: dbPrograms[0].id },
+          { taskId: dbTasks[0].id, programId: dbPrograms[0].id, taskOrder: 0 },
         ]);
       },
     });
@@ -174,6 +176,7 @@ describe('[api] link task program', async () => {
     const payload = {
       programId: dbPrograms[0].id,
       taskId: dbTasks[0].id,
+      taskOrder: 1,
     };
 
     const resp = await request(linkTaskProgram.route, {
@@ -211,6 +214,7 @@ describe('[api] link task program', async () => {
     const payload = {
       programId: dbPrograms[0].id,
       taskId: dbTasks[0].id,
+      taskOrder: 1,
     };
 
     const resp = await request(linkTaskProgram.route, {
@@ -226,8 +230,9 @@ describe('[api] link task program', async () => {
     assert.equal(typeof body.id, 'number');
     assert.equal(body.taskId, payload.taskId);
     assert.equal(body.programId, payload.programId);
+    assert.equal(body.taskOrder, payload.taskOrder);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 5);
+    assert.equal(Object.keys(body).length, 6);
   });
 });

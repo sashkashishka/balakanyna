@@ -189,22 +189,27 @@ describe('[api] program get', async () => {
           {
             taskId: dbTasks[0].id,
             programId: dbPrograms[0].id,
+            taskOrder: 2,
           },
           {
             taskId: dbTasks[1].id,
             programId: dbPrograms[0].id,
+            taskOrder: 0,
           },
           {
             taskId: dbTasks[2].id,
             programId: dbPrograms[0].id,
+            taskOrder: 1,
           },
           {
             taskId: dbTasks[2].id,
             programId: dbPrograms[1].id,
+            taskOrder: 0,
           },
           {
             taskId: dbTasks[2].id,
             programId: dbPrograms[2].id,
+            taskOrder: 0,
           },
         ]);
       },
@@ -229,14 +234,23 @@ describe('[api] program get', async () => {
     assert.ok(Array.isArray(body.tasks));
     assert.equal(body.tasks.length, 3);
 
-    for (let i = 0; i < body.tasks.length; i++) {
-      assert.equal(body.tasks[i].id, dbProgramTasks[i].taskId);
-      assert.ok(body.tasks[i].name);
-      assert.ok(body.tasks[i].type);
-      assert.ok(body.tasks[i].config);
-      assert.ok(body.tasks[i].createdAt);
-      assert.ok(body.tasks[i].updatedAt);
-      assert.equal(Object.keys(body.tasks[i]).length, 6);
+    for (let i = 1; i < body.tasks.length; i++) {
+      const task = body.tasks[i - 1];
+
+      assert.ok(
+        task.order < body.tasks[i].order,
+        'should be in ascending order',
+      );
+      assert.notEqual(
+        dbProgramTasks.findIndex((t) => t.taskId === task.id),
+        -1,
+      );
+      assert.ok(task.name);
+      assert.ok(task.type);
+      assert.ok(task.config);
+      assert.ok(task.createdAt);
+      assert.ok(task.updatedAt);
+      assert.equal(Object.keys(task).length, 7);
     }
 
     assert.equal(isNaN(new Date(body.startDatetime)), false);

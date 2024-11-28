@@ -3,12 +3,10 @@ import { Composer } from '../../../../../core/composer.js';
 
 import { createValidateSearchParamsMiddleware } from '../../../../auxiliary/validate/middleware.js';
 import { ERR_INVALID_PAYLOAD } from '../../../../../core/errors.js';
-import {
-  programTable,
-} from '../../../../../db/schema.js';
+import { programTable } from '../../../../../db/schema.js';
 
 import paginationSchema from '../../../../../schema/pagination.json' with { type: 'json' };
-import schema from './schema.json' with { type: 'json' };
+import { programListSearchParamsSchema } from './schema.js';
 
 const direction = {
   asc,
@@ -114,7 +112,7 @@ export const route = '/api/admin/program/list';
 export const middleware = Composer.compose([
   createValidateSearchParamsMiddleware(
     {
-      allOf: [paginationSchema, schema],
+      allOf: [paginationSchema, programListSearchParamsSchema],
     },
     ERR_INVALID_PAYLOAD,
   ),

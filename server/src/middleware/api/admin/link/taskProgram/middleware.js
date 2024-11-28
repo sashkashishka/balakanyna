@@ -13,7 +13,7 @@ import {
   programTaskTable,
 } from '../../../../../db/schema.js';
 
-import schema from './schema.json' with { type: 'json' };
+import { linkTaskProgramBodySchema } from './schema.js';
 
 const ERR_MISSING_ENTITY = createError(
   'MISSING_ENTITY',
@@ -87,17 +87,18 @@ async function checkDuplicateRowMiddleware(ctx, next) {
  * @argument {import('../../../../../core/context.js').Context} ctx
  */
 async function linkTaskProgramMiddleware(ctx) {
-  const { programId, taskId } = ctx.body;
+  const { programId, taskId, taskOrder } = ctx.body;
 
   const [result] = await ctx.db
     .insert(programTaskTable)
-    .values({ taskId, programId })
+    .values({ taskId, programId, taskOrder })
     .returning();
 
   ctx.json({
     id: result.id,
     programId: result.programId,
     taskId: result.taskId,
+    taskOrder: result.taskOrder,
     createdAt: result.createdAt,
     updatedAt: result.updatedAt,
   });
@@ -107,7 +108,7 @@ export const method = 'post';
 export const route = '/api/admin/link/task/program';
 
 export const middleware = Composer.compose([
-  createValidateBodyMiddleware(schema, ERR_INVALID_PAYLOAD),
+  createValidateBodyMiddleware(linkTaskProgramBodySchema, ERR_INVALID_PAYLOAD),
   checkIfProgramExistsMiddleware,
   checkIfTaskExistsMiddleware,
   checkDuplicateRowMiddleware,

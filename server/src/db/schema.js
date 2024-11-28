@@ -63,6 +63,7 @@ export const programTaskTable = sqliteTable('program_task', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   programId: integer('program_id').references(() => programTable.id),
   taskId: integer('task_id').references(() => taskTable.id),
+  taskOrder: integer('task_order').notNull(),
   ...timestamps
 });
 
