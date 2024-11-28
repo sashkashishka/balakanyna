@@ -1,5 +1,5 @@
-import type { Dayjs } from 'dayjs';
 import { useStore } from '@nanostores/react';
+import dayjs from 'dayjs';
 import { Button, Col, DatePicker, Form, Input, notification, Row } from 'antd';
 
 import type { IProgram } from '@/types/program';
@@ -9,17 +9,10 @@ import { SortableFormList } from '@/components/FormFields/SortableFormList';
 import { UserSearchInput } from '../UserSearchInput';
 import { TaskField } from '../FormFields/TaskField';
 
-export interface IProgramFormInitialValues
-  extends Omit<IProgram, 'startDatetime' | 'expirationDatetime' | 'userId'> {
-  userId: number[];
-  expirationDatetime: Dayjs;
-  startDatetime: Dayjs;
-}
-
 interface IProps {
   name: string;
   action: 'update' | 'create';
-  initialValues?: Partial<IProgramFormInitialValues>;
+  initialValues?: Partial<IProgram>;
   onSuccess?(p: IProgram): void;
 }
 
@@ -114,6 +107,10 @@ export function ProgramForm({
             rules={[
               { required: true, message: 'Please pick a start datetime' },
             ]}
+            getValueProps={(value) => ({
+              value: value && dayjs(value),
+            })}
+            normalize={(value) => value && `${dayjs(value).toISOString()}`}
           >
             <DatePicker />
           </Form.Item>
@@ -126,6 +123,10 @@ export function ProgramForm({
             rules={[
               { required: true, message: 'Please pick an expiration datetime' },
             ]}
+            getValueProps={(value) => ({
+              value: value && dayjs(value),
+            })}
+            normalize={(value) => value && `${dayjs(value).toISOString()}`}
           >
             <DatePicker />
           </Form.Item>

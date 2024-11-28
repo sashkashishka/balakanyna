@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Button, Drawer } from 'antd';
 
-import { ProgramForm, type IProgramFormInitialValues } from '../ProgramForm';
 import type { IProgram } from '@/types/program';
+import { ProgramForm } from '../ProgramForm';
 
 interface IProps {
-  initialValues?: Partial<IProgramFormInitialValues>;
+  initialValues?: Partial<IProgram>;
   onSuccess?(p: IProgram): void;
 }
 

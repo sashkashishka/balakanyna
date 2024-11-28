@@ -12,7 +12,7 @@ const DEBOUNCE_DELAY = 200;
 
 interface IProps {
   maxCount?: number;
-  value?: number[];
+  value?: number[] | number;
   onChange?(ids: number[]): void;
   disabled?: boolean;
 }
@@ -24,7 +24,7 @@ export function UserSearchInput({
   onChange,
 }: IProps) {
   const [{ $tmpValue, setTmpValue }] = useState(
-    makeTmpValueStore(value!, onChange!),
+    makeTmpValueStore(Array.isArray(value!) ? value! : [value!], onChange!),
   );
 
   const tmpValue = useStore($tmpValue);
