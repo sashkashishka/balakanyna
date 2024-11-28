@@ -12,6 +12,7 @@ import { taskTable } from '../../../../../db/schema.js';
 import schema from './schema.json' with { type: 'json' };
 import { verifyTaskConfigSchemaMiddleware } from '../schema/index.js';
 import { sortJsonKeys } from '../../../../../utils/json.js';
+import { addImagePrefixInTaskConfig } from '../schema/utils.js';
 
 const ERR_DIFFERENT_TASK_TYPE = createError(
   'DIFFERENT_TASK_TYPE',
@@ -103,7 +104,11 @@ async function updateTaskMiddleware(ctx) {
     id: result.id,
     name: result.name,
     type: result.type,
-    config: result.config,
+    config: addImagePrefixInTaskConfig(
+      result.type,
+      result.config,
+      ctx.config.media.prefix,
+    ),
     createdAt: result.createdAt,
     updatedAt: result.updatedAt,
   });

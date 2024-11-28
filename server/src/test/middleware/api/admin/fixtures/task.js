@@ -16,6 +16,18 @@ export const imageSliderTask = {
   },
 };
 
+export const semaphoreTextTask = {
+  name: 'Task 7',
+  type: 'semaphoreText',
+  config: {
+    colors: ['yellow'],
+    delayRange: [3, 4],
+    text: ['c'],
+  },
+  createdAt: '2024-03-16T00:00:00.000Z',
+  updatedAt: '2024-03-16T00:00:00.000Z',
+};
+
 export const tasks = [
   {
     name: 'Task 1',

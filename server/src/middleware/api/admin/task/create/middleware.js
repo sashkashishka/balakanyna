@@ -12,6 +12,7 @@ import { verifyTaskConfigSchemaMiddleware } from '../schema/index.js';
 
 import schema from './schema.json' with { type: 'json' };
 import { sortJsonKeys } from '../../../../../utils/json.js';
+import { addImagePrefixInTaskConfig } from '../schema/utils.js';
 
 const ERR_DUPLICATE_TASK = createError('DUPLICATE_TASK', '%s', 400);
 
@@ -53,7 +54,11 @@ async function createTaskMiddleware(ctx) {
     id: result.id,
     name: result.name,
     type: result.type,
-    config: result.config,
+    config: addImagePrefixInTaskConfig(
+      result.type,
+      result.config,
+      ctx.config.media.prefix,
+    ),
     createdAt: result.createdAt,
     updatedAt: result.updatedAt,
   });

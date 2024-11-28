@@ -24,6 +24,7 @@ import { getTaskConfigValidator } from '../schema/index.js';
 
 import paginationSchema from '../../../../../schema/pagination.json' with { type: 'json' };
 import schema from './schema.json' with { type: 'json' };
+import { addImagePrefixInTaskConfig } from '../schema/utils.js';
 
 const direction = {
   asc,
@@ -188,7 +189,15 @@ async function taskListMiddleware(ctx) {
     items: [...itemsMap.values()].map((task) => {
       const validate = getTaskConfigValidator(ctx.ajv, task.type);
       validate(task.config);
-      return { ...task, errors: validate.errors };
+      return {
+        ...task,
+        config: addImagePrefixInTaskConfig(
+          task.type,
+          task.config,
+          ctx.config.media.prefix,
+        ),
+        errors: validate.errors,
+      };
     }),
     total: total.count,
   });

@@ -18,7 +18,11 @@ import {
 } from '../../../../../../db/seeders.js';
 
 import { admin } from '../../fixtures/admin.js';
-import { imageSliderTask, tasks } from '../../fixtures/task.js';
+import {
+  imageSliderTask,
+  semaphoreTextTask,
+  tasks,
+} from '../../fixtures/task.js';
 import { labels } from '../../fixtures/label.js';
 import { getProgram } from '../../fixtures/program.js';
 import { user, users } from '../../fixtures/user.js';
@@ -238,10 +242,8 @@ describe('[api] task list', async () => {
 
       for (let j = 0; j < items[i].labels.length; j++) {
         assert.ok(
-          dbTaskLabels.some(
-            ({ labelId }) => labelId === items[i].labels[j].id,
-          ),
-          'label id is from junction table'
+          dbTaskLabels.some(({ labelId }) => labelId === items[i].labels[j].id),
+          'label id is from junction table',
         );
         assert.ok(items[i].labels[j].name);
         assert.ok(items[i].labels[j].type);
@@ -1286,7 +1288,7 @@ describe('[api] task list', async () => {
         await seedTasks(db, [
           tasks[0],
           {
-            ...imageSliderTask,
+            ...semaphoreTextTask,
             config: {
               foo: 1,
             },
@@ -1321,5 +1323,57 @@ describe('[api] task list', async () => {
     // should be error as configuration is invalid
     assert.notEqual(items[1].errors, null);
     assert.ok(items[1].errors instanceof Object);
+  });
+
+  test('should return tasks with image prefix if task includes ones', async (t) => {
+    const prefix = 'foo';
+    const offset = 0;
+    const limit = tasks.length;
+
+    const { request, baseUrl } = await getTestServer({
+      t,
+      config: { media: { prefix } },
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        await seedTasks(db, [semaphoreTextTask, imageSliderTask]);
+      },
+    });
+
+    const url = getEndpoint(baseUrl, {
+      offset,
+      limit,
+      order_by: 'createdAt',
+      dir: 'asc',
+    });
+
+    const resp = await request(url, {
+      method: taskList.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+    });
+    const body = await resp.json();
+    const { items, total } = body;
+
+    assert.equal(resp.status, 200);
+    assert.equal(items.length, 2);
+    assert.equal(total, 2);
+
+    for (let i = 0; i < items.length; i++) {
+      const task = items[i];
+
+      if (task.type !== 'imageSlider') continue;
+
+      assert.ok(Array.isArray(task.config.slides));
+
+      for (let j = 0; j < task.config.slides.length; j++) {
+        const slide = task.config.slides[j];
+
+        assert.ok(
+          slide.image.path.startsWith('/foo/'),
+          'should add prefix to url',
+        );
+      }
+    }
   });
 });

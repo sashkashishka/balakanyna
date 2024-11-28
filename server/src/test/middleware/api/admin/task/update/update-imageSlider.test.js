@@ -133,10 +133,12 @@ describe('[api] task update slider', () => {
   });
 
   test('should return 200 and update task', async (t) => {
+    const prefix = 'foo';
     let dbTasks = [];
 
     const { request } = await getTestServer({
       t,
+      config: { media: { prefix } },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         dbTasks = await seedTasks(db, [imageSliderTask]);
@@ -172,10 +174,27 @@ describe('[api] task update slider', () => {
     const body = await resp.json();
 
     assert.equal(resp.status, 200);
-    assert.equal(body.id, dbTasks[0].id);
+    assert.equal(body.id, payload.id);
     assert.equal(body.name, payload.name);
     assert.equal(body.type, payload.type);
-    assert.deepEqual(body.config, payload.config);
+    assert.ok(Array.isArray(body.config.slides));
+    assert.equal(body.config.title, payload.config.title);
+
+    for (let i = 0; i < body.config.slides.length; i++) {
+      const slide = body.config.slides[i];
+
+      assert.equal(slide.image.id, payload.config.slides[i].image.id);
+      assert.equal(
+        slide.image.filename,
+        payload.config.slides[i].image.filename,
+      );
+      assert.equal(slide.image.hashsum, payload.config.slides[i].image.hashsum);
+      assert.ok(
+        slide.image.path.startsWith('/foo/'),
+        'should add prefix to url',
+      );
+    }
+
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
     assert.equal(Object.keys(body).length, 6);

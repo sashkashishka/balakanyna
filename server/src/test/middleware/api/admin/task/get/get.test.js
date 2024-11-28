@@ -15,7 +15,7 @@ import {
 } from '../../../../../../db/seeders.js';
 
 import { admin } from '../../fixtures/admin.js';
-import { imageSliderTask } from '../../fixtures/task.js';
+import { imageSliderTask, semaphoreTextTask } from '../../fixtures/task.js';
 import { labels } from '../../fixtures/label.js';
 
 function getEndpoint(baseUrl, { id }) {
@@ -126,7 +126,7 @@ describe('[api] task get', async () => {
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         const dbLabels = await seedLabels(db, labels);
-        dbTasks = await seedTasks(db, [imageSliderTask]);
+        dbTasks = await seedTasks(db, [semaphoreTextTask]);
 
         dbTaskLabels = await seedTaskLabels(db, [
           {
@@ -157,9 +157,9 @@ describe('[api] task get', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbTasks[0].id);
-    assert.equal(body.name, imageSliderTask.name);
-    assert.equal(body.type, imageSliderTask.type);
-    assert.deepEqual(body.config, imageSliderTask.config);
+    assert.equal(body.name, semaphoreTextTask.name);
+    assert.equal(body.type, semaphoreTextTask.type);
+    assert.deepEqual(body.config, semaphoreTextTask.config);
     assert.equal(body.errors, null);
     assert.ok(Array.isArray(body.labels));
     assert.equal(body.labels.length, 3);
@@ -186,7 +186,7 @@ describe('[api] task get', async () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [imageSliderTask]);
+        dbTasks = await seedTasks(db, [semaphoreTextTask]);
       },
     });
 
@@ -202,9 +202,9 @@ describe('[api] task get', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbTasks[0].id);
-    assert.equal(body.name, imageSliderTask.name);
-    assert.equal(body.type, imageSliderTask.type);
-    assert.deepEqual(body.config, imageSliderTask.config);
+    assert.equal(body.name, semaphoreTextTask.name);
+    assert.equal(body.type, semaphoreTextTask.type);
+    assert.deepEqual(body.config, semaphoreTextTask.config);
     assert.equal(body.errors, null);
     assert.ok(Array.isArray(body.labels));
     assert.equal(body.labels.length, 0);
@@ -217,7 +217,7 @@ describe('[api] task get', async () => {
     let dbTasks = [];
 
     const invalidConfigTask = {
-      ...imageSliderTask,
+      ...semaphoreTextTask,
       config: {
         foo: 1,
       },
@@ -248,6 +248,62 @@ describe('[api] task get', async () => {
     assert.deepEqual(body.config, invalidConfigTask.config);
     assert.notEqual(body.errors, null);
     assert.ok(body.errors instanceof Object);
+    assert.ok(Array.isArray(body.labels));
+    assert.equal(body.labels.length, 0);
+    assert.equal(isNaN(new Date(body.createdAt)), false);
+    assert.equal(isNaN(new Date(body.updatedAt)), false);
+    assert.equal(Object.keys(body).length, 8);
+  });
+
+  test('should return 200 and add image prefix if task config includes images', async (t) => {
+    const prefix = 'foo';
+    let dbTasks = [];
+
+    const { request, baseUrl } = await getTestServer({
+      t,
+      config: { media: { prefix } },
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbTasks = await seedTasks(db, [imageSliderTask]);
+      },
+    });
+
+    const endpoint = getEndpoint(baseUrl, { id: dbTasks[0].id });
+
+    const resp = await request(endpoint, {
+      method: taskGet.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(body.id, dbTasks[0].id);
+    assert.equal(body.name, imageSliderTask.name);
+    assert.equal(body.type, imageSliderTask.type);
+    assert.ok(Array.isArray(body.config.slides));
+    assert.equal(body.config.title, imageSliderTask.config.title);
+
+    for (let i = 0; i < body.config.slides.length; i++) {
+      const slide = body.config.slides[i];
+
+      assert.equal(slide.image.id, imageSliderTask.config.slides[i].image.id);
+      assert.equal(
+        slide.image.filename,
+        imageSliderTask.config.slides[i].image.filename,
+      );
+      assert.equal(
+        slide.image.hashsum,
+        imageSliderTask.config.slides[i].image.hashsum,
+      );
+      assert.ok(
+        slide.image.path.startsWith('/foo/'),
+        'should add prefix to url',
+      );
+    }
+
+    assert.equal(body.errors, null);
     assert.ok(Array.isArray(body.labels));
     assert.equal(body.labels.length, 0);
     assert.equal(isNaN(new Date(body.createdAt)), false);

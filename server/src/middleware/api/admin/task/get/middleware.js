@@ -14,6 +14,7 @@ import {
 import { getTaskConfigValidator } from '../schema/index.js';
 
 import schema from './schema.json' with { type: 'json' };
+import { addImagePrefixInTaskConfig } from '../schema/utils.js';
 
 /**
  * @argument {import('../../../../../core/context.js').Context} ctx
@@ -60,6 +61,11 @@ async function getTaskMiddleware(ctx) {
 
   ctx.json({
     ...task,
+    config: addImagePrefixInTaskConfig(
+      task.type,
+      task.config,
+      ctx.config.media.prefix,
+    ),
     labels,
     errors: validate.errors,
   });
