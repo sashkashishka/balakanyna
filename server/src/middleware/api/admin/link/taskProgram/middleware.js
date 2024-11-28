@@ -62,37 +62,20 @@ async function checkIfTaskExistsMiddleware(ctx, next) {
 /**
  * @argument {import('../../../../../core/context.js').Context} ctx
  */
-async function checkDuplicateRowMiddleware(ctx, next) {
-  const { programId, taskId } = ctx.body;
-
-  const [result] = await ctx.db
-    .select({ count: count(programTaskTable.id) })
-    .from(programTaskTable)
-    .where(
-      and(
-        eq(programTaskTable.taskId, taskId),
-        eq(programTaskTable.programId, programId),
-      ),
-    )
-    .limit(1);
-
-  if (result?.count) {
-    throw new ERR_DUPLICATE_MANY_TO_MANY_RELATION();
-  }
-
-  return next();
-}
-
-/**
- * @argument {import('../../../../../core/context.js').Context} ctx
- */
 async function linkTaskProgramMiddleware(ctx) {
   const { programId, taskId, taskOrder } = ctx.body;
 
-  const [result] = await ctx.db
-    .insert(programTaskTable)
-    .values({ taskId, programId, taskOrder })
+  let [result] = await ctx.db
+    .update(programTaskTable)
+    .set({ taskId, programId, taskOrder })
     .returning();
+
+  if (!result) {
+    [result] = await ctx.db
+      .insert(programTaskTable)
+      .values({ taskId, programId, taskOrder })
+      .returning();
+  }
 
   ctx.json({
     id: result.id,
@@ -111,6 +94,5 @@ export const middleware = Composer.compose([
   createValidateBodyMiddleware(linkTaskProgramBodySchema, ERR_INVALID_PAYLOAD),
   checkIfProgramExistsMiddleware,
   checkIfTaskExistsMiddleware,
-  checkDuplicateRowMiddleware,
   linkTaskProgramMiddleware,
 ]);

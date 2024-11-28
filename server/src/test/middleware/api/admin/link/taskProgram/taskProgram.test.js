@@ -6,6 +6,7 @@ import { getAuthCookie } from '../../../../../helpers/utils.js';
 
 import * as linkTaskProgram from '../../../../../../middleware/api/admin/link/taskProgram/middleware.js';
 
+import { programTaskTable } from '../../../../../../db/schema.js';
 import {
   seedAdmins,
   seedUsers,
@@ -154,21 +155,23 @@ describe('[api] link task program', async () => {
     });
   });
 
-  test('should return 400 if such record already exist', async (t) => {
+  test('should return 200 if such record already exist and update taskOrder', async (t) => {
     let dbPrograms = [];
     let dbTasks = [];
 
-    const { request } = await getTestServer({
+    const { request, db } = await getTestServer({
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         const dbUsers = await seedUsers(db, [user]);
         dbPrograms = await seedPrograms(db, [
           getProgram({ userId: dbUsers[0].id }),
+          getProgram({ userId: dbUsers[0].id }),
         ]);
         dbTasks = await seedTasks(db, [imageSliderTask]);
         await seedProgramTask(db, [
           { taskId: dbTasks[0].id, programId: dbPrograms[0].id, taskOrder: 0 },
+          { taskId: dbTasks[0].id, programId: dbPrograms[1].id, taskOrder: 0 },
         ]);
       },
     });
@@ -187,12 +190,18 @@ describe('[api] link task program', async () => {
       body: payload,
     });
     const body = await resp.json();
+    const programTaskList = await db.select().from(programTaskTable)
 
-    assert.equal(resp.status, 400);
-    assert.deepEqual(body, {
-      error: 'DUPLICATE_MANY_TO_MANY_RELATION',
-      message: 'Duplicate many to many relation',
-    });
+    assert.equal(programTaskList.length, 2);
+
+    assert.equal(resp.status, 200);
+    assert.equal(typeof body.id, 'number');
+    assert.equal(body.taskId, payload.taskId);
+    assert.equal(body.programId, payload.programId);
+    assert.equal(body.taskOrder, payload.taskOrder);
+    assert.equal(isNaN(new Date(body.createdAt)), false);
+    assert.equal(isNaN(new Date(body.updatedAt)), false);
+    assert.equal(Object.keys(body).length, 6);
   });
 
   test('should return 200', async (t) => {

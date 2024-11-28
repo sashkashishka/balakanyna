@@ -38,6 +38,9 @@ export async function getTestServer({
 
   const ajv = deps.ajv || getAjv();
 
+  /**
+   * @type {import('../../db/index.js').IDb}
+   */
   let db = deps.db;
   let dbDir = '';
 
@@ -106,6 +109,7 @@ export async function getTestServer({
   t.after(stop);
 
   return {
+    db,
     server,
     request,
     loggerTransport,
