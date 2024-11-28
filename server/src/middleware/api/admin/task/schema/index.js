@@ -1,6 +1,6 @@
 import { createError } from '../../../../../core/errors.js';
-import imageSliderSchema from './imageSlider.json' with { type: 'json' };
-import semaphoreTextSchema from './semaphoreText.json' with { type: 'json' };
+import { imageSliderSchema } from './imageSlider.js';
+import { semaphoreTextSchema } from './semaphoreText.js';
 
 export const typeToSchema = {
   imageSlider: imageSliderSchema,
