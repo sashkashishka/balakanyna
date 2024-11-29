@@ -1,4 +1,4 @@
-import { count, eq } from 'drizzle-orm';
+import { count, eq, inArray } from 'drizzle-orm';
 
 import { Composer } from '../../../../../core/composer.js';
 import {
@@ -7,13 +7,24 @@ import {
   ERR_NOT_FOUND,
 } from '../../../../../core/errors.js';
 import { createValidateBodyMiddleware } from '../../../../auxiliary/validate/middleware.js';
-import { programTable } from '../../../../../db/schema.js';
+import {
+  programTable,
+  programTaskTable,
+  taskTable,
+} from '../../../../../db/schema.js';
 
-import schema from './schema.json' with { type: 'json' };
+import { programUpdateBodySchema } from './schema.js';
+import { getUniqueTasks } from './utils.js';
 
 const ERR_DATES_COMPLIANCE = createError(
   'DATES_COMPLIANCE',
   'Dates compliance',
+  400,
+);
+
+const ERR_TASK_DOES_NOT_EXIST = createError(
+  'TASK_DOES_NOT_EXIST',
+  'Task does not exist',
   400,
 );
 
@@ -31,6 +42,27 @@ async function checkIfProgramExistsMiddleware(ctx, next) {
 
   if (result?.count === 0) {
     throw new ERR_NOT_FOUND();
+  }
+
+  return next();
+}
+
+/**
+ * @argument {import('../../../../../core/context.js').Context} ctx
+ */
+async function checkIfTasksExistMiddleware(ctx, next) {
+  const body = ctx.body;
+
+  const map = getUniqueTasks(body.tasks);
+  const ids = [...map.values()].map(({ taskId }) => taskId);
+
+  const [result] = await ctx.db
+    .select({ count: count(taskTable.id) })
+    .from(taskTable)
+    .where(inArray(taskTable.id, ids));
+
+  if (result?.count !== ids.length) {
+    throw new ERR_TASK_DOES_NOT_EXIST();
   }
 
   return next();
@@ -58,16 +90,42 @@ function verifyStartAndExpirationDatetimeComplianceMiddleware(ctx, next) {
 async function updateProgramMiddleware(ctx) {
   const body = ctx.body;
 
-  const [result] = await ctx.db
-    .update(programTable)
-    .set({
-      name: body.name,
-      startDatetime: body.startDatetime,
-      expirationDatetime: body.expirationDatetime,
-      updatedAt: new Date().toISOString(),
-    })
-    .where(eq(programTable.id, body.id))
-    .returning();
+  const result = await ctx.db.transaction(
+    async function updateProgramTransaction(tx) {
+      try {
+        const [program] = await tx
+          .update(programTable)
+          .set({
+            name: body.name,
+            startDatetime: body.startDatetime,
+            expirationDatetime: body.expirationDatetime,
+            tasks: body.tasks,
+            updatedAt: new Date().toISOString(),
+          })
+          .where(eq(programTable.id, body.id))
+          .returning();
+
+        await tx
+          .delete(programTaskTable)
+          .where(eq(programTaskTable.programId, body.id));
+
+        const map = getUniqueTasks(body.tasks);
+        const values = [...map.values()].map(({ taskId }) => ({
+          taskId,
+          programId: body.id,
+        }));
+
+        if (values.length) {
+          await tx.insert(programTaskTable).values(values);
+        }
+
+        return program;
+      } catch (e) {
+        ctx.logger.error('[updateProgramTransaction]', e);
+        tx.rollback();
+      }
+    },
+  );
 
   ctx.json({
     id: result.id,
@@ -75,6 +133,7 @@ async function updateProgramMiddleware(ctx) {
     startDatetime: result.startDatetime,
     expirationDatetime: result.expirationDatetime,
     userId: result.userId,
+    tasks: result.tasks,
     createdAt: result.createdAt,
     updatedAt: result.updatedAt,
   });
@@ -84,8 +143,9 @@ export const method = 'patch';
 export const route = '/api/admin/program/update';
 
 export const middleware = Composer.compose([
-  createValidateBodyMiddleware(schema, ERR_INVALID_PAYLOAD),
+  createValidateBodyMiddleware(programUpdateBodySchema, ERR_INVALID_PAYLOAD),
   checkIfProgramExistsMiddleware,
+  checkIfTasksExistMiddleware,
   verifyStartAndExpirationDatetimeComplianceMiddleware,
   updateProgramMiddleware,
 ]);

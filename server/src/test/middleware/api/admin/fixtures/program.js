@@ -1,9 +1,11 @@
 export function getProgram({ userId }) {
+  const startDatetime = new Date();
+
   return {
     userId,
-    name: 'Program ${userId}',
-    startDatetime: new Date().toISOString(),
-    expirationDatetime: new Date().toISOString(),
+    name: `Program ${userId}`,
+    startDatetime: startDatetime.toISOString(),
+    expirationDatetime: new Date(startDatetime.getTime() + 100000).toISOString(),
   };
 }
 
@@ -50,4 +52,4 @@ export const programs = [
     createdAt: '2023-02-28T00:00:00',
     updatedAt: '2023-02-28T00:00:00',
   },
-]
+];
