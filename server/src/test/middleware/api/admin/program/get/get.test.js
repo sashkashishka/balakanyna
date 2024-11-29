@@ -183,12 +183,6 @@ describe('[api] program get', async () => {
               { taskId: dbTasks[1].id },
             ],
           }),
-          getProgram({
-            userId: dbUsers[0].id,
-          }),
-          getProgram({
-            userId: dbUsers[0].id,
-          }),
         ]);
 
         dbProgramTasks = await seedProgramTask(db, [
@@ -203,14 +197,6 @@ describe('[api] program get', async () => {
           {
             taskId: dbTasks[2].id,
             programId: dbPrograms[0].id,
-          },
-          {
-            taskId: dbTasks[2].id,
-            programId: dbPrograms[1].id,
-          },
-          {
-            taskId: dbTasks[2].id,
-            programId: dbPrograms[2].id,
           },
         ]);
       },
@@ -234,6 +220,100 @@ describe('[api] program get', async () => {
     assert.equal(body.expirationDatetime, dbPrograms[0].expirationDatetime);
     assert.ok(Array.isArray(body.tasks));
     assert.equal(body.tasks.length, 3);
+
+    for (let i = 0; i < body.tasks.length; i++) {
+      const task = body.tasks[i];
+
+      assert.equal(
+        task.id,
+        dbPrograms[0].tasks[i].taskId,
+        'should be in the order that was saved',
+      );
+      assert.notEqual(
+        dbProgramTasks.findIndex((t) => t.taskId === task.id),
+        -1,
+      );
+      assert.ok(task.name);
+      assert.ok(task.type);
+      assert.ok(task.config);
+      assert.ok(task.createdAt);
+      assert.ok(task.updatedAt);
+      assert.equal(Object.keys(task).length, 6);
+    }
+
+    assert.equal(isNaN(new Date(body.startDatetime)), false);
+    assert.equal(isNaN(new Date(body.expirationDatetime)), false);
+    assert.equal(isNaN(new Date(body.createdAt)), false);
+    assert.equal(isNaN(new Date(body.updatedAt)), false);
+    assert.equal(Object.keys(body).length, 8);
+  });
+
+  test('should return 200 and list with repetetive tasks', async (t) => {
+    let dbUsers = [];
+    let dbPrograms = [];
+    let dbTasks = [];
+    let dbProgramTasks = [];
+
+    const { request, baseUrl } = await getTestServer({
+      t,
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbUsers = await seedUsers(db, [user]);
+        dbTasks = await seedTasks(db, tasks);
+
+        dbPrograms = await seedPrograms(db, [
+          getProgram({
+            userId: dbUsers[0].id,
+            tasks: [
+              { taskId: dbTasks[2].id },
+              { taskId: dbTasks[0].id },
+              { taskId: dbTasks[1].id },
+              { taskId: dbTasks[2].id },
+            ],
+          }),
+        ]);
+
+        dbProgramTasks = await seedProgramTask(db, [
+          {
+            taskId: dbTasks[0].id,
+            programId: dbPrograms[0].id,
+          },
+          {
+            taskId: dbTasks[1].id,
+            programId: dbPrograms[0].id,
+          },
+          {
+            taskId: dbTasks[2].id,
+            programId: dbPrograms[0].id,
+          },
+        ]);
+      },
+    });
+
+    const endpoint = getEndpoint(baseUrl, { id: dbPrograms[0].id });
+
+    const resp = await request(endpoint, {
+      method: programGet.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(typeof body.id, 'number');
+    assert.equal(body.name, dbPrograms[0].name);
+    assert.equal(body.userId, dbPrograms[0].userId);
+    assert.equal(body.startDatetime, dbPrograms[0].startDatetime);
+    assert.equal(body.expirationDatetime, dbPrograms[0].expirationDatetime);
+    assert.ok(Array.isArray(body.tasks));
+    assert.equal(body.tasks.length, 4);
+
+    assert.equal(
+      body.tasks.filter((t) => t.id === dbTasks[2].id).length,
+      2,
+      'should return repetetive tasks',
+    );
 
     for (let i = 0; i < body.tasks.length; i++) {
       const task = body.tasks[i];
