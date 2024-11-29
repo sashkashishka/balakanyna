@@ -26,6 +26,7 @@ export function populateImage(task) {
     }
 
     default:
+      delete task.images;
       return task;
   }
 }

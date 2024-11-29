@@ -19,12 +19,15 @@ import {
   programTaskTable,
   programTable,
   labelTable,
+  taskImageTable,
+  imageTable,
 } from '../../../../../db/schema.js';
 import { getTaskConfigValidator } from '../schema/index.js';
 
 import paginationSchema from '../../../../../schema/pagination.json' with { type: 'json' };
-import schema from './schema.json' with { type: 'json' };
+import { taskListSearchParamsSchema } from './schema.js';
 import { addImagePrefixInTaskConfig } from '../schema/utils.js';
+import { createTransformTask } from '../pipes/task.js';
 
 const direction = {
   asc,
@@ -151,10 +154,18 @@ async function taskListMiddleware(ctx) {
         updatedAt: labelTable.updatedAt,
         createdAt: labelTable.createdAt,
       },
+      image: {
+        id: imageTable.id,
+        filename: imageTable.filename,
+        hashsum: imageTable.hashsum,
+        path: imageTable.path,
+      },
     })
     .from(tasksSq)
     .leftJoin(taskLabelTable, eq(tasksSq.id, taskLabelTable.taskId))
-    .leftJoin(labelTable, eq(taskLabelTable.labelId, labelTable.id));
+    .leftJoin(labelTable, eq(taskLabelTable.labelId, labelTable.id))
+    .leftJoin(taskImageTable, eq(tasksSq.id, taskImageTable.taskId))
+    .leftJoin(imageTable, eq(taskImageTable.imageId, imageTable.id));
 
   const countQuery = ctx.db
     .select({ count: count(taskTable.id) })
@@ -163,42 +174,10 @@ async function taskListMiddleware(ctx) {
 
   const [items, [total]] = await Promise.all([query, countQuery]);
 
-  const itemsMap = items.reduce((acc, curr) => {
-    const { id } = curr;
-
-    if (!acc.has(id)) {
-      acc.set(id, {
-        id,
-        name: curr.name,
-        type: curr.type,
-        config: curr.config,
-        createdAt: curr.createdAt,
-        updatedAt: curr.updatedAt,
-        labels: [],
-      });
-    }
-
-    if (curr.label) {
-      acc.get(id).labels.push(curr.label);
-    }
-
-    return acc;
-  }, new Map());
+  const transformTask = createTransformTask(ctx);
 
   ctx.json({
-    items: [...itemsMap.values()].map((task) => {
-      const validate = getTaskConfigValidator(ctx.ajv, task.type);
-      validate(task.config);
-      return {
-        ...task,
-        config: addImagePrefixInTaskConfig(
-          task.type,
-          task.config,
-          ctx.config.media.prefix,
-        ),
-        errors: validate.errors,
-      };
-    }),
+    items: transformTask(items),
     total: total.count,
   });
 }
@@ -209,7 +188,7 @@ export const route = '/api/admin/task/list';
 export const middleware = Composer.compose([
   createValidateSearchParamsMiddleware(
     {
-      allOf: [paginationSchema, schema],
+      allOf: [paginationSchema, taskListSearchParamsSchema],
     },
     ERR_INVALID_PAYLOAD,
   ),
