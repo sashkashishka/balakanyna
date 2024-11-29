@@ -9,7 +9,7 @@
     "lib": [
       "ES2023"
     ],
-    "module": "ESNext",
+    "module": "Preserve",
     /* Bundler mode */
     "moduleResolution": "bundler",
     "isolatedModules": true,

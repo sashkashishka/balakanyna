@@ -13,6 +13,7 @@
         "./src/*"
       ],
     },
+    "module": "Preserve",
     /* Bundler mode */
     "moduleResolution": "bundler",
     "isolatedModules": true,

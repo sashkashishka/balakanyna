@@ -1,6 +1,7 @@
 import { Flex, Image, Space, Typography, theme } from 'antd';
 
 import logoBlue from '@/images/logo-blue.png';
+import { RenderTask } from '@/solidjs';
 
 const { Title } = Typography;
 
@@ -8,6 +9,7 @@ export function HomePage() {
   const {
     token: { borderRadius },
   } = theme.useToken();
+
   return (
     <Flex
       align="center"
@@ -22,6 +24,8 @@ export function HomePage() {
           height="300px"
           style={{ borderRadius: borderRadius }}
         />
+
+        <RenderTask type="imageSlider"/>
 
         <Title level={3}>Welcome to your space, Nika!</Title>
       </Space>

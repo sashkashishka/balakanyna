@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useState } from 'react';
 import { Button, Drawer, Space, Image } from 'antd';
 
 import type { IImageListFilters } from '@/stores/image';
