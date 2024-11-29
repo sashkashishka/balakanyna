@@ -6,9 +6,16 @@ import { getAuthCookie } from '../../../../../helpers/utils.js';
 
 import * as taskUpdate from '../../../../../../middleware/api/admin/task/update/middleware.js';
 
-import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
+import {
+  seedAdmins,
+  seedImages,
+  seedTaskImages,
+  seedTasks,
+} from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
 import { imageSliderTask } from '../../fixtures/task.js';
+import { images } from '../../fixtures/image.js';
+import { taskImageTable } from '../../../../../../db/schema.js';
 
 describe('[api] task update slider', () => {
   test('should retun 400 if config is invalid', async (t) => {
@@ -135,13 +142,26 @@ describe('[api] task update slider', () => {
   test('should return 200 and update task', async (t) => {
     const prefix = 'foo';
     let dbTasks = [];
+    let dbImages = [];
 
-    const { request } = await getTestServer({
+    const { request, db } = await getTestServer({
       t,
       config: { media: { prefix } },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [imageSliderTask]);
+        dbImages = await seedImages(db, images);
+        dbTasks = await seedTasks(db, [
+          {
+            ...imageSliderTask,
+            config: {
+              ...imageSliderTask.config,
+              slides: [
+                { image: { id: dbImages[0].id } },
+                { image: { id: dbImages[1].id } },
+              ],
+            },
+          },
+        ]);
       },
     });
 
@@ -154,10 +174,7 @@ describe('[api] task update slider', () => {
         slides: [
           {
             image: {
-              id: 2,
-              hashsum: 'bbb',
-              filename: 'baz.png',
-              path: 'bbb.png',
+              id: dbImages[2].id,
             },
           },
         ],
@@ -172,31 +189,117 @@ describe('[api] task update slider', () => {
       body: payload,
     });
     const body = await resp.json();
+    const junctionIds = await db.select().from(taskImageTable);
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, payload.id);
     assert.equal(body.name, payload.name);
     assert.equal(body.type, payload.type);
     assert.ok(Array.isArray(body.config.slides));
+    assert.equal(body.config.slides.length, 1);
+    assert.equal(junctionIds.length, 1);
     assert.equal(body.config.title, payload.config.title);
 
     for (let i = 0; i < body.config.slides.length; i++) {
+      const imgIndex = 2 + i;
       const slide = body.config.slides[i];
+      const img = dbImages[imgIndex];
 
-      assert.equal(slide.image.id, payload.config.slides[i].image.id);
-      assert.equal(
-        slide.image.filename,
-        payload.config.slides[i].image.filename,
-      );
-      assert.equal(slide.image.hashsum, payload.config.slides[i].image.hashsum);
-      assert.ok(
-        slide.image.path.startsWith('/foo/'),
-        'should add prefix to url',
-      );
+      assert.equal(slide.image.id, img.id);
     }
 
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
     assert.equal(Object.keys(body).length, 6);
+  });
+
+  test('should return 200 if provide repetetive images in config', async (t) => {
+    let dbTasks = [];
+    let dbImages = [];
+
+    const { request, db } = await getTestServer({
+      t,
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbImages = await seedImages(db, images);
+        dbTasks = await seedTasks(db, [
+          {
+            ...imageSliderTask,
+            config: {
+              ...imageSliderTask.config,
+              slides: [
+                { image: { id: dbImages[0].id } },
+                { image: { id: dbImages[1].id } },
+              ],
+            },
+          },
+        ]);
+
+        await seedTaskImages(db, [
+          { taskId: dbTasks[0].id, imageId: dbImages[0].id },
+          { taskId: dbTasks[0].id, imageId: dbImages[1].id },
+        ]);
+      },
+    });
+
+    const payload = {
+      id: dbTasks[0].id,
+      type: dbTasks[0].type,
+      name: 'New Task',
+      config: {
+        title: 'new title',
+        slides: [
+          { image: { id: dbImages[2].id } },
+          { image: { id: dbImages[2].id } },
+          { image: { id: dbImages[2].id } },
+        ],
+      },
+    };
+
+    const resp = await request(taskUpdate.route, {
+      method: taskUpdate.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+      body: payload,
+    });
+    const body = await resp.json();
+    const junctionIds = await db.select().from(taskImageTable);
+
+    assert.equal(resp.status, 200);
+    assert.equal(body.id, payload.id);
+    assert.equal(body.name, payload.name);
+    assert.equal(body.name, payload.name);
+    assert.ok(Array.isArray(body.config.slides));
+    assert.ok(body.config.slides.length, 3);
+    assert.equal(body.config.title, payload.config.title);
+    assert.equal(
+      junctionIds.length,
+      1,
+      'should remove all previous ids from the table',
+    );
+
+    for (let i = 0; i < body.config.slides.length; i++) {
+      const imgIndex = 2;
+      const slide = body.config.slides[i];
+      const img = dbImages[imgIndex];
+
+      assert.equal(slide.image.id, img.id);
+      assert.equal(slide.image.id, junctionIds[0].imageId);
+    }
+
+    assert.equal(isNaN(new Date(body.createdAt)), false);
+    assert.equal(isNaN(new Date(body.updatedAt)), false);
+    assert.equal(Object.keys(body).length, 6);
+
+    assert.notEqual(
+      new Date(body.updatedAt).getTime(),
+      new Date(dbTasks[0].updatedAt).getTime(),
+      'should update updatetAt field',
+    );
+    assert.equal(
+      new Date(body.createdAt).getTime(),
+      new Date(dbTasks[0].createdAt).getTime(),
+    );
   });
 });

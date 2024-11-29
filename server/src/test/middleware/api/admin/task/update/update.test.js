@@ -209,17 +209,14 @@ describe('[api] task update', async () => {
         type: dbTasks[0].type,
         name: 'Task New',
         config: {
+          title: 'Hello2',
           slides: [
             {
               image: {
                 id: 2,
-                path: 'bbb.jpeg',
-                hashsum: 'bbb',
-                filename: 'boo.jpeg',
               },
             },
           ],
-          title: 'Hello2',
         },
       },
     });
@@ -280,14 +277,14 @@ describe('[api] task update', async () => {
     });
 
     const payload = {
-        id: dbTasks[0].id,
-        type: 'semaphoreText',
-        name: 'Brand new Task',
-        config: {
-          colors: ['yellow'],
-          text: ['c'],
-          delayRange: [3, 4],
-        },
+      id: dbTasks[0].id,
+      type: 'semaphoreText',
+      name: 'Brand new Task',
+      config: {
+        colors: ['yellow'],
+        text: ['c'],
+        delayRange: [3, 4],
+      },
     };
 
     const resp = await request(taskUpdate.route, {

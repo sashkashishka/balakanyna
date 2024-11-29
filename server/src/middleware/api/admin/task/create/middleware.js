@@ -10,7 +10,7 @@ import { taskImageTable, taskTable } from '../../../../../db/schema.js';
 import { sortJsonKeys } from '../../../../../utils/json.js';
 
 import { verifyTaskConfigSchemaMiddleware } from '../schema/index.js';
-import { getImageIds } from '../pipes/image.js';
+import { getUniqueImageIds } from '../pipes/image.js';
 
 import { taskCreateBodySchema } from './schema.js';
 
@@ -53,12 +53,12 @@ async function createTaskMiddleware(ctx) {
           })
           .returning();
 
-        const imageIds = getImageIds(result);
+        const imageIds = getUniqueImageIds(result);
 
         if (imageIds.length) {
           await tx
             .delete(taskImageTable)
-            .where(inArray(taskImageTable.taskId, imageIds));
+            .where(eq(taskImageTable.taskId, body.id));
 
           const values = imageIds.map((imageId) => ({
             imageId,
