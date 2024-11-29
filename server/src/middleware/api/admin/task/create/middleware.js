@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 
 import { Composer } from '../../../../../core/composer.js';
 import {
@@ -6,13 +6,14 @@ import {
   ERR_INVALID_PAYLOAD,
 } from '../../../../../core/errors.js';
 import { createValidateBodyMiddleware } from '../../../../auxiliary/validate/middleware.js';
-import { taskTable } from '../../../../../db/schema.js';
+import { taskImageTable, taskTable } from '../../../../../db/schema.js';
+import { sortJsonKeys } from '../../../../../utils/json.js';
+import { pipe } from '../../../../../utils/pipe.js';
 
 import { verifyTaskConfigSchemaMiddleware } from '../schema/index.js';
+import { getImageIds, addImagePrefixInTaskConfig } from '../pipes/image.js';
 
-import schema from './schema.json' with { type: 'json' };
-import { sortJsonKeys } from '../../../../../utils/json.js';
-import { addImagePrefixInTaskConfig } from '../schema/utils.js';
+import { taskCreateBodySchema } from './schema.js';
 
 const ERR_DUPLICATE_TASK = createError('DUPLICATE_TASK', '%s', 400);
 
@@ -41,26 +42,48 @@ async function checkDuplicateConfigurationMiddleware(ctx, next) {
 async function createTaskMiddleware(ctx) {
   const body = ctx.body;
 
-  const [result] = await ctx.db
-    .insert(taskTable)
-    .values({
-      name: body.name,
-      type: body.type,
-      config: sortJsonKeys(body.config),
-    })
-    .returning();
+  const task = await ctx.db.transaction(
+    async function createTaskTransaction(tx) {
+      try {
+        const [result] = await tx
+          .insert(taskTable)
+          .values({
+            name: body.name,
+            type: body.type,
+            config: sortJsonKeys(body.config),
+          })
+          .returning();
+
+        const imageIds = getImageIds(result);
+
+        if (imageIds.length) {
+          await tx
+            .delete(taskImageTable)
+            .where(inArray(taskImageTable.taskId, imageIds));
+
+          const values = imageIds.map((imageId) => ({
+            imageId,
+            taskId: body.id,
+          }));
+
+          await tx.insert(taskImageTable).values(values);
+        }
+
+        return result;
+      } catch (e) {
+        ctx.logger.error('[createTaskTransaction]', e);
+        tx.rollback();
+      }
+    },
+  );
 
   ctx.json({
-    id: result.id,
-    name: result.name,
-    type: result.type,
-    config: addImagePrefixInTaskConfig(
-      result.type,
-      result.config,
-      ctx.config.media.prefix,
-    ),
-    createdAt: result.createdAt,
-    updatedAt: result.updatedAt,
+    id: task.id,
+    name: task.name,
+    type: task.type,
+    config: task.config,
+    createdAt: task.createdAt,
+    updatedAt: task.updatedAt,
   });
 }
 
@@ -68,7 +91,7 @@ export const method = 'post';
 export const route = '/api/admin/task/create';
 
 export const middleware = Composer.compose([
-  createValidateBodyMiddleware(schema, ERR_INVALID_PAYLOAD),
+  createValidateBodyMiddleware(taskCreateBodySchema, ERR_INVALID_PAYLOAD),
   verifyTaskConfigSchemaMiddleware,
   checkDuplicateConfigurationMiddleware,
   createTaskMiddleware,

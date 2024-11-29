@@ -8,7 +8,7 @@ import * as taskCreate from '../../../../../../middleware/api/admin/task/create/
 
 import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
-import { imageSliderTask, semaphoreTextTask } from '../../fixtures/task.js';
+import { imageSliderTask } from '../../fixtures/task.js';
 
 describe('[api] task create', async () => {
   test('should return 401 if unauthorized', async (t) => {
@@ -133,9 +133,6 @@ describe('[api] task create', async () => {
           slides: [
             {
               image: {
-                hashsum: 'aaa',
-                filename: 'foo.jpeg',
-                path: 'aaa.jpeg',
                 id: 1,
               },
             },

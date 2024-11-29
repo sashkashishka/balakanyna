@@ -5,10 +5,7 @@ export const imageSliderTask = {
     slides: [
       {
         image: {
-          filename: 'foo.jpeg',
-          hashsum: 'aaa',
           id: 1,
-          path: 'aaa.jpeg',
         },
       },
     ],
@@ -36,10 +33,7 @@ export const tasks = [
       slides: [
         {
           image: {
-            filename: 'foo.jpeg',
-            hashsum: 'aaa',
             id: 1,
-            path: 'aaa.jpeg',
           },
         },
       ],
@@ -55,10 +49,7 @@ export const tasks = [
       slides: [
         {
           image: {
-            filename: 'boo.jpeg',
-            hashsum: 'bbb',
             id: 2,
-            path: 'bbb.jpeg',
           },
         },
       ],
@@ -74,10 +65,7 @@ export const tasks = [
       slides: [
         {
           image: {
-            filename: 'boom.jpeg',
-            hashsum: 'ccc',
             id: 3,
-            path: 'ccc.jpeg',
           },
         },
       ],
@@ -93,10 +81,7 @@ export const tasks = [
       slides: [
         {
           image: {
-            filename: 'boom.jpeg',
-            hashsum: 'ddd',
             id: 4,
-            path: 'ddd.jpeg',
           },
         },
       ],

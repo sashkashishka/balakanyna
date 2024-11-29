@@ -4,16 +4,7 @@ export const imageSchema = {
     id: {
       type: 'integer',
     },
-    hashsum: {
-      type: 'string',
-    },
-    filename: {
-      type: 'string',
-    },
-    path: {
-      type: 'string',
-    },
   },
-  required: ['id', 'hashsum', 'filename', 'path'],
+  required: ['id'],
   additionalProperties: false,
 };
