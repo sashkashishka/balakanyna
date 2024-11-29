@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { Flex, Space, Spin, Tabs, Typography } from 'antd';
 
@@ -6,7 +7,7 @@ import { makeUserStore } from '@/stores/user';
 import { UpdateUserDrawer } from '@/components/UpdateUserDrawer';
 import { UserInfo } from './Info';
 import { UserPrograms } from './Programs';
-import { useMemo, useState } from 'react';
+import { UserTasks } from './Tasks';
 
 const { Paragraph } = Typography;
 
@@ -35,7 +36,7 @@ export function UserViewPage() {
       {
         key: ROUTE_ALIAS.USER_VIEW_TASKS,
         label: 'Tasks',
-        children: 'user task',
+        children: <UserTasks />,
       },
     ],
     [user],
