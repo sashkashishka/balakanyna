@@ -9,8 +9,10 @@ import * as taskDelete from '../../../../../../middleware/api/admin/task/delete/
 
 import {
   seedAdmins,
+  seedImages,
   seedPrograms,
   seedProgramTask,
+  seedTaskImages,
   seedTasks,
   seedUsers,
 } from '../../../../../../db/seeders.js';
@@ -19,6 +21,8 @@ import { admin } from '../../fixtures/admin.js';
 import { imageSliderTask } from '../../fixtures/task.js';
 import { user } from '../../fixtures/user.js';
 import { getProgram } from '../../fixtures/program.js';
+import { images } from '../../fixtures/image.js';
+import { taskImageTable } from '../../../../../../db/schema.js';
 
 function getEndpoint(baseUrl, { id }) {
   const url = getUrl(taskDelete.route, baseUrl);
@@ -178,5 +182,40 @@ describe('[api] task delete', async () => {
     assert.deepEqual(body, {
       ok: true,
     });
+  });
+
+  test('should return 200 and delete image relation too', async (t) => {
+    let dbTasks = [];
+
+    const { request, baseUrl, db } = await getTestServer({
+      t,
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbTasks = await seedTasks(db, [imageSliderTask]);
+        const dbImages = await seedImages(db, images);
+
+        await seedTaskImages(db, [
+          { taskId: dbTasks[0].id, imageId: dbImages[0].id },
+          { taskId: dbTasks[0].id, imageId: dbImages[1].id },
+        ]);
+      },
+    });
+
+    const endpoint = getEndpoint(baseUrl, { id: dbTasks[0].id });
+
+    const resp = await request(endpoint, {
+      method: taskDelete.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+    });
+    const body = await resp.json();
+    const junctionIds = await db.select().from(taskImageTable);
+
+    assert.equal(resp.status, 200);
+    assert.deepEqual(body, {
+      ok: true,
+    });
+    assert.equal(junctionIds.length, 0, 'should delete all image relations');
   });
 });

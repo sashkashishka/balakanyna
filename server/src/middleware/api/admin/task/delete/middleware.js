@@ -7,9 +7,13 @@ import {
   ERR_NOT_FOUND,
 } from '../../../../../core/errors.js';
 import { createValidateSearchParamsMiddleware } from '../../../../auxiliary/validate/middleware.js';
-import { programTaskTable, taskTable } from '../../../../../db/schema.js';
+import {
+  programTaskTable,
+  taskImageTable,
+  taskTable,
+} from '../../../../../db/schema.js';
 
-import schema from './schema.json' with { type: 'json' };
+import { taskDeleteSearchParamsSchema } from './schema.js';
 
 /**
  * @TODO: candidate to moving in a common space to share with the update
@@ -55,7 +59,17 @@ async function checkIfCanDeleteTaskMiddleware(ctx, next) {
 async function deleteTaskMiddleware(ctx) {
   const searchParams = ctx.searchParams;
 
-  await ctx.db.delete(taskTable).where(eq(taskTable.id, searchParams.id));
+  await ctx.db.transaction(async function deleteTaskTransaction(tx) {
+    try {
+      await tx
+        .delete(taskImageTable)
+        .where(eq(taskImageTable.taskId, searchParams.id));
+      await tx.delete(taskTable).where(eq(taskTable.id, searchParams.id));
+    } catch (e) {
+      ctx.logger.error('[deleteTaskTransaction]', e);
+      tx.rollback();
+    }
+  });
 
   ctx.json({
     ok: true,
@@ -66,7 +80,10 @@ export const method = 'delete';
 export const route = '/api/admin/task/delete';
 
 export const middleware = Composer.compose([
-  createValidateSearchParamsMiddleware(schema, ERR_INVALID_PAYLOAD),
+  createValidateSearchParamsMiddleware(
+    taskDeleteSearchParamsSchema,
+    ERR_INVALID_PAYLOAD,
+  ),
   checkIfTaskExistsMiddleware,
   checkIfCanDeleteTaskMiddleware,
   deleteTaskMiddleware,
