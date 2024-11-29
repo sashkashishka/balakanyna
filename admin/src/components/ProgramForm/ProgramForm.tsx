@@ -34,7 +34,7 @@ export function ProgramForm({
 
       const body: IProgramBody = {
         ...data,
-        tasks: data.tasks.map((t) => ({ taskId: t.id })),
+        tasks: isUpdate ? data.tasks.map((t) => ({ taskId: t.id })) : undefined,
       };
 
       if (Array.isArray(body.userId)) {

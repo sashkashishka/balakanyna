@@ -1487,4 +1487,79 @@ describe('[api] task list', async () => {
       }
     }
   });
+
+  test('should not duplicate labels', async (t) => {
+    const prefix = 'foo';
+    const offset = 0;
+    const limit = tasks.length;
+
+    const { request, baseUrl } = await getTestServer({
+      t,
+      config: { media: { prefix } },
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        const dbLabels = await seedLabels(db, labels);
+        const dbImages = await seedImages(db, images);
+        const dbTasks = await seedTasks(db, [
+          {
+            ...imageSliderTask,
+            config: {
+              slides: [{ image: { id: dbImages[2].id } }],
+              title: 'Hello 1',
+            },
+          },
+          {
+            ...imageSliderTask,
+            config: {
+              slides: [
+                { image: { id: dbImages[0].id } },
+                { image: { id: dbImages[1].id } },
+              ],
+              title: 'Hello',
+            },
+          },
+        ]);
+
+        await seedTaskImages(db, [
+          {imageId: dbImages[2].id, taskId: dbTasks[0].id },
+          {imageId: dbImages[0].id, taskId: dbTasks[1].id },
+          {imageId: dbImages[1].id, taskId: dbTasks[1].id },
+        ])
+        await seedTaskLabels(db, [
+          { labelId: dbLabels[0].id, taskId: dbTasks[1].id },
+        ]);
+      },
+    });
+
+    const url = getEndpoint(baseUrl, {
+      offset,
+      limit,
+      order_by: 'createdAt',
+      dir: 'asc',
+    });
+
+    const resp = await request(url, {
+      method: taskList.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+    });
+    const body = await resp.json();
+    const { items, total } = body;
+
+    assert.equal(resp.status, 200);
+    assert.equal(items.length, 2);
+    assert.equal(total, 2);
+
+    for (let i = 1; i < items.length; i++) {
+      const task = items[i];
+
+      assert.ok(Array.isArray(task.labels));
+
+      for (let j = 1; j < task.labels.length; j++) {
+        const label = task.labels[j - 1];
+        assert.notEqual(label.id, task.labels[j].id);
+      }
+    }
+  });
 });

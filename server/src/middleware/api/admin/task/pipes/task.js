@@ -2,11 +2,18 @@ import { pipe } from '../../../../../utils/pipe.js';
 import { createValidateFullConfig } from './config.js';
 import { addImagePrefixInTaskConfig, populateImage } from './image.js';
 
+function castLabelMapToArray(task) {
+  task.labels = [...task.labels.values()];
+
+  return task;
+}
+
 /**
  * @argument {import('../../../../../core/context.js').Context} ctx
  */
 export function createTransformTask(ctx) {
   const misc = pipe(
+    castLabelMapToArray,
     populateImage,
     addImagePrefixInTaskConfig(ctx.config.media.prefix),
     createValidateFullConfig(ctx),
@@ -24,13 +31,13 @@ export function createTransformTask(ctx) {
           config: curr.config,
           createdAt: curr.createdAt,
           updatedAt: curr.updatedAt,
-          labels: [],
+          labels: new Map(),
           images: [],
         });
       }
 
       if (curr.label) {
-        acc.get(id).labels.push(curr.label);
+        acc.get(id).labels.set(curr.label.id, curr.label);
       }
 
       if (curr.image) {

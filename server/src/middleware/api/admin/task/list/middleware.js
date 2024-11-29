@@ -22,12 +22,10 @@ import {
   taskImageTable,
   imageTable,
 } from '../../../../../db/schema.js';
-import { getTaskConfigValidator } from '../schema/index.js';
+import { createTransformTask } from '../pipes/task.js';
 
 import paginationSchema from '../../../../../schema/pagination.json' with { type: 'json' };
 import { taskListSearchParamsSchema } from './schema.js';
-import { addImagePrefixInTaskConfig } from '../schema/utils.js';
-import { createTransformTask } from '../pipes/task.js';
 
 const direction = {
   asc,
