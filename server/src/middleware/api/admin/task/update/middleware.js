@@ -1,4 +1,4 @@
-import { and, count, eq, inArray, not } from 'drizzle-orm';
+import { and, count, eq, inArray, not, sql } from 'drizzle-orm';
 
 import { Composer } from '../../../../../core/composer.js';
 import {
@@ -99,7 +99,7 @@ async function updateTaskMiddleware(ctx) {
           .set({
             name: body.name,
             config: sortJsonKeys(body.config),
-            updatedAt: new Date().toISOString(),
+            updatedAt: sql`(datetime())`,
           })
           .where(eq(taskTable.id, body.id))
           .returning();

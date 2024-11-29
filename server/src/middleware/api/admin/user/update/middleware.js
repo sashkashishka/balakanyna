@@ -1,4 +1,4 @@
-import { count, eq } from 'drizzle-orm';
+import { count, eq, sql } from 'drizzle-orm';
 
 import { Composer } from '../../../../../core/composer.js';
 import {
@@ -47,7 +47,7 @@ async function updateUserMiddleware(ctx) {
     surname: body.surname,
     grade: body.grade,
     birthdate: body.birthdate,
-    updatedAt: new Date().toISOString(),
+    updatedAt: sql`(datetime())`,
   };
 
   if (body.notes) {

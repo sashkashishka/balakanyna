@@ -2,7 +2,7 @@ import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { getTestServer } from '../../../../../helpers/getTestServer.js';
-import { getAuthCookie } from '../../../../../helpers/utils.js';
+import { getAuthCookie, sleep } from '../../../../../helpers/utils.js';
 
 import * as programUpdate from '../../../../../../middleware/api/admin/program/update/middleware.js';
 
@@ -172,6 +172,8 @@ describe('[api] program update', async () => {
       },
     });
 
+    await sleep(1000);
+
     const startDatetime = new Date();
     const payload = {
       id: dbPrograms[0].id,
@@ -224,6 +226,11 @@ describe('[api] program update', async () => {
     assert.equal(isNaN(new Date(body.updatedAt)), false);
     assert.equal(Object.keys(body).length, 8);
 
+    assert.doesNotMatch(
+      body.updatedAt,
+      /T/,
+      'use sqlite datetime to update column',
+    );
     assert.notEqual(
       new Date(body.updatedAt).getTime(),
       new Date(dbPrograms[0].updatedAt).getTime(),
@@ -252,6 +259,8 @@ describe('[api] program update', async () => {
         ]);
       },
     });
+
+    await sleep(1000);
 
     const payload = {
       id: dbPrograms[0].id,
@@ -305,6 +314,11 @@ describe('[api] program update', async () => {
     assert.equal(isNaN(new Date(body.updatedAt)), false);
     assert.equal(Object.keys(body).length, 8);
 
+    assert.doesNotMatch(
+      body.updatedAt,
+      /T/,
+      'use sqlite datetime to update column',
+    );
     assert.notEqual(
       new Date(body.updatedAt).getTime(),
       new Date(dbPrograms[0].updatedAt).getTime(),
@@ -314,6 +328,8 @@ describe('[api] program update', async () => {
       new Date(body.createdAt).getTime(),
       new Date(dbPrograms[0].createdAt).getTime(),
     );
+
+    await sleep(1000);
 
     // remove one task
     const payload2 = {
@@ -373,6 +389,11 @@ describe('[api] program update', async () => {
     assert.equal(isNaN(new Date(body2.updatedAt)), false);
     assert.equal(Object.keys(body2).length, 8);
 
+    assert.doesNotMatch(
+      body.updatedAt,
+      /T/,
+      'use sqlite datetime to update column',
+    );
     assert.notEqual(
       new Date(body2.updatedAt).getTime(),
       new Date(body.updatedAt).getTime(),
@@ -439,6 +460,8 @@ describe('[api] program update', async () => {
       },
     });
 
+    await sleep(1000);
+
     const startDatetime = new Date();
 
     const payload = {
@@ -471,6 +494,11 @@ describe('[api] program update', async () => {
     assert.equal(isNaN(new Date(body.updatedAt)), false);
     assert.equal(Object.keys(body).length, 8);
 
+    assert.doesNotMatch(
+      body.updatedAt,
+      /T/,
+      'use sqlite datetime to update column',
+    );
     assert.notEqual(
       new Date(body.updatedAt).getTime(),
       new Date(dbPrograms[0].updatedAt).getTime(),

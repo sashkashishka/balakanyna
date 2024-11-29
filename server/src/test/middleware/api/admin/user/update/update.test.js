@@ -2,7 +2,7 @@ import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { getTestServer } from '../../../../../helpers/getTestServer.js';
-import { getAuthCookie } from '../../../../../helpers/utils.js';
+import { getAuthCookie, sleep } from '../../../../../helpers/utils.js';
 
 import * as userUpdate from '../../../../../../middleware/api/admin/user/update/middleware.js';
 
@@ -118,6 +118,8 @@ describe('[api] user update', async () => {
       },
     });
 
+    await sleep(1000);
+
     const payload = {
       id: dbUsers[0].id,
       name: 'Bob',
@@ -153,6 +155,11 @@ describe('[api] user update', async () => {
     assert.equal(isNaN(new Date(body.updatedAt)), false);
     assert.equal(Object.keys(body).length, 11);
 
+    assert.doesNotMatch(
+      body.updatedAt,
+      /T/,
+      'use sqlite datetime to update column',
+    );
     assert.notEqual(
       new Date(body.updatedAt).getTime(),
       new Date(dbUsers[0].updatedAt).getTime(),
@@ -179,6 +186,8 @@ describe('[api] user update', async () => {
         dbUsers = await seedUsers(db, [customUser]);
       },
     });
+
+    await sleep(1000);
 
     const payload = {
       id: dbUsers[0].id,
@@ -223,6 +232,11 @@ describe('[api] user update', async () => {
     assert.equal(isNaN(new Date(body.updatedAt)), false);
     assert.equal(Object.keys(body).length, 11);
 
+    assert.doesNotMatch(
+      body.updatedAt,
+      /T/,
+      'use sqlite datetime to update column',
+    );
     assert.notEqual(
       new Date(body.updatedAt).getTime(),
       new Date(dbUsers[0].updatedAt).getTime(),

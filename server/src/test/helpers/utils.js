@@ -8,3 +8,11 @@ export async function getAuthCookie(request, admin) {
 
   return resp.headers.get('set-cookie');
 }
+
+export function sleep(timeout) {
+  const { promise, resolve } = Promise.withResolvers();
+
+  setTimeout(resolve, timeout);
+
+  return promise;
+}

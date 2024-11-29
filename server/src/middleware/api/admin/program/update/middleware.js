@@ -1,4 +1,4 @@
-import { count, eq, inArray } from 'drizzle-orm';
+import { count, eq, inArray, sql } from 'drizzle-orm';
 
 import { Composer } from '../../../../../core/composer.js';
 import {
@@ -100,7 +100,7 @@ async function updateProgramMiddleware(ctx) {
             startDatetime: body.startDatetime,
             expirationDatetime: body.expirationDatetime,
             tasks: body.tasks,
-            updatedAt: new Date().toISOString(),
+            updatedAt: sql`(datetime())`,
           })
           .where(eq(programTable.id, body.id))
           .returning();

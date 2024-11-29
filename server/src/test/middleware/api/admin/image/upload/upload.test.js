@@ -5,7 +5,7 @@ import fsp from 'node:fs/promises';
 import path from 'node:path';
 
 import { getTestServer } from '../../../../../helpers/getTestServer.js';
-import { getAuthCookie } from '../../../../../helpers/utils.js';
+import { getAuthCookie, sleep } from '../../../../../helpers/utils.js';
 
 import * as imageUpload from '../../../../../../middleware/api/admin/image/upload/middleware.js';
 
@@ -457,8 +457,6 @@ describe('[api] image upload', async () => {
   });
 
   test('should return 200 if try to upload duplicate image', async (t) => {
-    t.mock.timers.enable({ apis: ['Date'], now: new Date() });
-
     const { request } = await getTestServer({
       t,
       config: {
@@ -509,7 +507,7 @@ describe('[api] image upload', async () => {
     assert.equal(files.length, 1, 'should save any file');
     assert.equal(files[0], hashedFilename);
 
-    t.mock.timers.tick(2000);
+    await sleep(1000);
 
     // try to upload the same file second time
     const resp2 = await request(imageUpload.route, {
@@ -533,6 +531,12 @@ describe('[api] image upload', async () => {
     assert.equal(image2.hashsum, image.hashsum);
     assert.equal(image2.path, image.path);
     assert.equal(image2.createdAt, image.createdAt);
+
+    assert.doesNotMatch(
+      image2.updatedAt,
+      /T/,
+      'use sqlite datetime to update column',
+    );
     assert.notEqual(
       image2.updatedAt,
       image.updatedAt,

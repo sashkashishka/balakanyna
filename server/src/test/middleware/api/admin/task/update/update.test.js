@@ -305,6 +305,12 @@ describe('[api] task update', async () => {
     assert.equal(isNaN(new Date(body.updatedAt)), false);
     assert.equal(Object.keys(body).length, 6);
 
+    assert.doesNotMatch(
+      body.updatedAt,
+      /T/,
+      'use sqlite datetime to update column',
+    );
+
     assert.notEqual(
       new Date(body.updatedAt).getTime(),
       new Date(dbTasks[0].updatedAt).getTime(),

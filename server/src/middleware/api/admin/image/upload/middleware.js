@@ -4,7 +4,7 @@ import fsp from 'node:fs/promises';
 import crypto from 'node:crypto';
 
 import { Busboy } from '@fastify/busboy';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import * as mimeTypes from 'mime-types';
 
 import { Composer } from '../../../../../core/composer.js';
@@ -124,7 +124,7 @@ async function uploadImageMiddelware(ctx) {
           const result = await ctx.db
             .update(imageTable)
             .set({
-              updatedAt: new Date().toISOString(),
+              updatedAt: sql`(datetime())`,
             })
             .where(eq(imageTable.id, record.id))
             .returning();
