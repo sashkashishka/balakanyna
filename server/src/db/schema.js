@@ -80,3 +80,10 @@ export const labelImageTable = sqliteTable('label_image', {
   labelId: integer('label_id').references(() => labelTable.id),
   ...timestamps,
 });
+
+export const taskImageTable = sqliteTable('task_image', {
+  id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
+  imageId: integer('image_id').references(() => imageTable.id),
+  taskId: integer('task_id').references(() => taskTable.id),
+  ...timestamps,
+});

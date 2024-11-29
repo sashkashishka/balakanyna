@@ -6,6 +6,7 @@ import {
   labelTable,
   programTable,
   programTaskTable,
+  taskImageTable,
   taskLabelTable,
   taskTable,
   userTable,
@@ -89,4 +90,12 @@ export function seedTaskLabels(db, taskLabels) {
  */
 export function seedImageLabels(db, labelImages) {
   return db.insert(labelImageTable).values(labelImages).returning();
+}
+
+/**
+ * @argument {import('./index.js').IDb} db
+ * @argument {Array<unknown>} taskImages
+ */
+export function seedTaskImages(db, taskImages) {
+  return db.insert(taskImageTable).values(taskImages).returning();
 }
