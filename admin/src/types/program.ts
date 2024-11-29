@@ -15,5 +15,5 @@ export interface IProgramFull extends IProgram {
 }
 
 export interface IProgramBody extends IProgram {
-  tasks: Array<{ taskId: number }>;
+  tasks?: Array<{ taskId: number }>;
 }

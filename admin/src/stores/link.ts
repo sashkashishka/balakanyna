@@ -2,12 +2,10 @@ import { createMutatorStore, invalidateKeys } from './_query';
 import type {
   ILinkImageLabel,
   ILinkTaskLabel,
-  ILinkTaskProgram,
 } from '@/types/link';
 import { TASK_KEYS } from './task';
 import { LABEL_KEYS } from './label';
 import { IMAGE_KEYS } from './image';
-import { PROGRAM_KEYS } from './program';
 
 // mutators
 export const $linkTaskLabel = createMutatorStore<ILinkTaskLabel>(

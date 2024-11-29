@@ -5,6 +5,7 @@ import { $admin, $isLoggedIn } from '@/stores/auth';
 import { AuthLayout } from '@/components/Layouts/Auth';
 import { PanelLayout } from '@/components/Layouts/Panel';
 
+import { HomePage } from './Home';
 import { LoginPage } from './Login/Login';
 import { RegistrationPage } from './Registration/Registration';
 import { UserListPage } from './User/List';
@@ -46,8 +47,7 @@ export function PrivateRouter() {
 
   switch (router?.route) {
     case ROUTE_ALIAS.HOME: {
-      // TODO make a greeting window with welcoming to visit sidebar and pick desired entity
-      return 'home';
+      return <HomePage />;
     }
 
     case ROUTE_ALIAS.USER_LIST: {
