@@ -135,9 +135,11 @@ describe('[api] program create', async () => {
     assert.equal(body.userId, program.userId);
     assert.equal(body.startDatetime, program.startDatetime);
     assert.equal(body.expirationDatetime, program.expirationDatetime);
+    assert.ok(Array.isArray(body.tasks));
+    assert.equal(body.tasks.length, 0);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 7);
+    assert.equal(Object.keys(body).length, 8);
 
     // create duplicate
     const resp2 = await request(programCreate.route, {
@@ -156,8 +158,10 @@ describe('[api] program create', async () => {
     assert.equal(body2.userId, program.userId);
     assert.equal(body2.startDatetime, program.startDatetime);
     assert.equal(body2.expirationDatetime, program.expirationDatetime);
+    assert.ok(Array.isArray(body.tasks));
+    assert.equal(body.tasks.length, 0);
     assert.equal(isNaN(new Date(body2.createdAt)), false);
     assert.equal(isNaN(new Date(body2.updatedAt)), false);
-    assert.equal(Object.keys(body2).length, 7);
+    assert.equal(Object.keys(body2).length, 8);
   });
 });

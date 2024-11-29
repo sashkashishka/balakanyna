@@ -8,7 +8,7 @@ import {
 import { createValidateBodyMiddleware } from '../../../../auxiliary/validate/middleware.js';
 import { programTable, userTable } from '../../../../../db/schema.js';
 
-import schema from './schema.json' with { type: 'json' };
+import { programCreateBodySchema } from './schema.js';
 
 const ERR_USER_DOES_NOT_EXIST = createError(
   'USER_DOES_NOT_EXIST',
@@ -57,6 +57,7 @@ async function createProgramMiddleware(ctx) {
     userId: result.userId,
     startDatetime: result.startDatetime,
     expirationDatetime: result.expirationDatetime,
+    tasks: [],
     createdAt: result.createdAt,
     updatedAt: result.updatedAt,
   });
@@ -66,7 +67,7 @@ export const method = 'post';
 export const route = '/api/admin/program/create';
 
 export const middleware = Composer.compose([
-  createValidateBodyMiddleware(schema, ERR_INVALID_PAYLOAD),
+  createValidateBodyMiddleware(programCreateBodySchema, ERR_INVALID_PAYLOAD),
   checkIfUserExistsMiddleware,
   createProgramMiddleware,
 ]);
