@@ -60,6 +60,7 @@ export function TaskTable({
           <UpdateTaskDrawer
             taskId={id}
             children={<Button type="link">{id}</Button>}
+            onClose={() => $tasks.revalidate()}
           />
         );
       },

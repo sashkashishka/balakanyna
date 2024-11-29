@@ -16,7 +16,7 @@ export const name = getSearchStringFilter({
 
 export const label = getLabelSelectorFilter({
   label: 'Labels',
-  name: 'label',
+  name: 'labels',
   maxCount: 50,
   labelType: 'task',
 });
@@ -37,6 +37,7 @@ export const ids = getSelectFilter({
 });
 
 // TODO: add program search filter
+// ask Nika how to search by program??
 
 export const filtersConfig: Array<TFilters> = [
   ids,

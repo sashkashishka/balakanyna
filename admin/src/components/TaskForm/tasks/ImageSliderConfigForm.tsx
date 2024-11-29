@@ -13,6 +13,15 @@ interface IProps extends Pick<ITaskFormProps, 'action'> {
   onFinish(v: unknown): Promise<boolean>;
 }
 
+function prepareBody(body: TImageSliderTask) {
+  // @ts-expect-error TODO should provide proper typing
+  body.config.slides = body.config.slides.map(({ image }) => ({
+    image: { id: image.id },
+  }));
+
+  return body;
+}
+
 export function ImageSliderConfigForm({
   initialValues,
   onFinish,
@@ -30,7 +39,7 @@ export function ImageSliderConfigForm({
         type: 'imageSlider',
       }}
       onFinish={async (values) => {
-        const result = await onFinish(values);
+        const result = await onFinish(prepareBody(values));
 
         if (result) {
           safeLS.removeItem(LS_KEY);
@@ -60,6 +69,16 @@ export function ImageSliderConfigForm({
             rules={[{ required: true, message: 'Please input task name!' }]}
           >
             <Input type="text" placeholder="e.g. Alice task 1" />
+          </Form.Item>
+        </Col>
+
+        <Col span={24}>
+          <Form.Item<TImageSliderTask>
+            label="Slider title"
+            name={['config', 'title']}
+            rules={[{ required: true, message: 'Please input slider title' }]}
+          >
+            <Input type="text" placeholder="e.g. Slider for ..." />
           </Form.Item>
         </Col>
 

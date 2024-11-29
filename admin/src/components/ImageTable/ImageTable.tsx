@@ -56,6 +56,7 @@ export function ImageTable({
           <UpdateImageDrawer
             imageId={id}
             children={<Button type="link">{id}</Button>}
+            onClose={() => $images.revalidate()}
           />
         );
       },

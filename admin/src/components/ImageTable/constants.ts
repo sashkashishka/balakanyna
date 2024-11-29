@@ -13,7 +13,7 @@ export const filename = getSearchStringFilter({
 
 export const label = getLabelSelectorFilter({
   label: 'Labels',
-  name: 'label',
+  name: 'labels',
   maxCount: 50,
   labelType: 'image',
 });

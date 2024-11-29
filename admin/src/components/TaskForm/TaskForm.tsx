@@ -31,7 +31,8 @@ export function TaskForm({
     try {
       const mutate = isCreate ? createTask : updateTask;
 
-      const resp = (await mutate(data)) as Response;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const resp = (await mutate(data as any)) as Response;
       const respData = await resp.json();
 
       if (resp.ok) {

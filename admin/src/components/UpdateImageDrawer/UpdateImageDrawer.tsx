@@ -2,16 +2,16 @@ import { useState, type ReactNode } from 'react';
 import { Button, Drawer } from 'antd';
 
 import { makeImageStore } from '@/stores/image';
-import { invalidateImageLabel } from '@/stores/link';
 
 import { UpdateImageDrawerContent } from './UpdateImageDrawerContent';
 
 interface IProps {
   imageId: number;
   children?: ReactNode;
+  onClose?(): void;
 }
 
-export function UpdateImageDrawer({ imageId, children }: IProps) {
+export function UpdateImageDrawer({ imageId, onClose, children }: IProps) {
   const [open, setOpen] = useState(false);
   const [$image] = useState(() => makeImageStore(imageId));
 
@@ -26,7 +26,7 @@ export function UpdateImageDrawer({ imageId, children }: IProps) {
         title="Update image"
         open={open}
         onClose={() => {
-          invalidateImageLabel();
+          onClose?.();
           setOpen(false);
         }}
         destroyOnClose

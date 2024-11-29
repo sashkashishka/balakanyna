@@ -7,10 +7,11 @@ import { UpdateTaskDrawerContent } from './UpdateTaskDrawerContent';
 
 interface IProps {
   taskId: number;
+  onClose?(): void;
   children?: ReactNode;
 }
 
-export function UpdateTaskDrawer({ taskId, children }: IProps) {
+export function UpdateTaskDrawer({ taskId, onClose, children }: IProps) {
   const [open, setOpen] = useState(false);
   const [$task] = useState(() => makeTaskStore(taskId));
 
@@ -24,7 +25,10 @@ export function UpdateTaskDrawer({ taskId, children }: IProps) {
         size="large"
         title="Update task"
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false);
+          onClose?.();
+        }}
         destroyOnClose
       >
         <UpdateTaskDrawerContent $task={$task} />
@@ -32,4 +36,3 @@ export function UpdateTaskDrawer({ taskId, children }: IProps) {
     </>
   );
 }
-

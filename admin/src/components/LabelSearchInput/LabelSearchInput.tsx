@@ -62,7 +62,13 @@ export function LabelSearchInput({
       notFoundContent={loading ? <Spin size="small" /> : null}
       value={value}
       placeholder="Games"
-      onChange={onChange}
+      onChange={(values) => {
+        onChange?.(
+          (values as unknown as { value: number }[])?.map(
+            ({ value }) => Number(value)!,
+          ) || [],
+        );
+      }}
       options={options}
     />
   );
