@@ -40,6 +40,7 @@ CREATE TABLE `program` (
 	`user_id` integer,
 	`startDatetime` text DEFAULT (datetime('now')),
 	`expirationDatetime` text DEFAULT (datetime('now')),
+	`tasks` text DEFAULT (json_array()),
 	`createdAt` text DEFAULT (datetime('now')),
 	`updatedAt` text DEFAULT (datetime('now')),
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
@@ -49,7 +50,6 @@ CREATE TABLE `program_task` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`program_id` integer,
 	`task_id` integer,
-	`task_order` integer NOT NULL,
 	`createdAt` text DEFAULT (datetime('now')),
 	`updatedAt` text DEFAULT (datetime('now')),
 	FOREIGN KEY (`program_id`) REFERENCES `program`(`id`) ON UPDATE no action ON DELETE no action,

@@ -10,7 +10,7 @@ export const adminTable = sqliteTable('admin', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text().notNull(),
   password: text().notNull(),
-  ...timestamps
+  ...timestamps,
 });
 
 export const userTable = sqliteTable('user', {
@@ -23,7 +23,7 @@ export const userTable = sqliteTable('user', {
   phoneNumber: text(),
   email: text(),
   messangers: text(),
-  ...timestamps
+  ...timestamps,
 });
 
 export const programTable = sqliteTable('program', {
@@ -32,7 +32,8 @@ export const programTable = sqliteTable('program', {
   userId: integer('user_id').references(() => userTable.id),
   startDatetime: text().default(sql`(datetime('now'))`),
   expirationDatetime: text().default(sql`(datetime('now'))`),
-  ...timestamps
+  tasks: text({ mode: 'json' }).default(sql`(json_array())`),
+  ...timestamps,
 });
 
 export const taskTable = sqliteTable('task', {
@@ -40,7 +41,7 @@ export const taskTable = sqliteTable('task', {
   name: text().notNull(),
   type: text({ enum: ['imageSlider', 'semaphoreText'] }).notNull(),
   config: text({ mode: 'json' }),
-  ...timestamps
+  ...timestamps,
 });
 
 export const labelTable = sqliteTable('label', {
@@ -48,7 +49,7 @@ export const labelTable = sqliteTable('label', {
   type: text({ enum: ['image', 'task'] }).notNull(),
   name: text().notNull(),
   config: text({ mode: 'json' }).notNull(),
-  ...timestamps
+  ...timestamps,
 });
 
 export const imageTable = sqliteTable('image', {
@@ -56,27 +57,26 @@ export const imageTable = sqliteTable('image', {
   filename: text().notNull(),
   path: text().notNull(),
   hashsum: text().notNull(),
-  ...timestamps
+  ...timestamps,
 });
 
 export const programTaskTable = sqliteTable('program_task', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   programId: integer('program_id').references(() => programTable.id),
   taskId: integer('task_id').references(() => taskTable.id),
-  taskOrder: integer('task_order').notNull(),
-  ...timestamps
+  ...timestamps,
 });
 
 export const taskLabelTable = sqliteTable('task_label', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   labelId: integer('label_id').references(() => labelTable.id),
   taskId: integer('task_id').references(() => taskTable.id),
-  ...timestamps
+  ...timestamps,
 });
 
 export const labelImageTable = sqliteTable('label_image', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   imageId: integer('image_id').references(() => imageTable.id),
   labelId: integer('label_id').references(() => labelTable.id),
-  ...timestamps
+  ...timestamps,
 });

@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "f54d271d-e3fb-4e71-af4c-476645936b57",
+  "id": "0a4f7e44-774a-4f90-9642-44b2e9a3ca46",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "admin": {
@@ -273,6 +273,14 @@
           "autoincrement": false,
           "default": "(datetime('now'))"
         },
+        "tasks": {
+          "name": "tasks",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(json_array())"
+        },
         "createdAt": {
           "name": "createdAt",
           "type": "text",
@@ -332,13 +340,6 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
-        },
-        "task_order": {
-          "name": "task_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
           "autoincrement": false
         },
         "createdAt": {
