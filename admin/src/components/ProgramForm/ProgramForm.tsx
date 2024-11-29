@@ -2,7 +2,7 @@ import { useStore } from '@nanostores/react';
 import dayjs from 'dayjs';
 import { Button, Col, DatePicker, Form, Input, notification, Row } from 'antd';
 
-import type { IProgram } from '@/types/program';
+import type { IProgram, IProgramFull, IProgramBody } from '@/types/program';
 import { $createProgram, $updateProgram } from '@/stores/program';
 import { SortableFormList } from '@/components/FormFields/SortableFormList';
 
@@ -28,11 +28,14 @@ export function ProgramForm({
   const isCreate = action === 'create';
   const isUpdate = action === 'update';
 
-  async function onFinish(data: IProgram) {
+  async function onFinish(data: IProgramFull) {
     try {
       const mutate = isCreate ? createProgram : updateProgram;
 
-      const body = { ...data };
+      const body: IProgramBody = {
+        ...data,
+        tasks: data.tasks.map((t) => ({ taskId: t.id })),
+      };
 
       if (Array.isArray(body.userId)) {
         body.userId = body.userId[0];

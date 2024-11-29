@@ -75,35 +75,3 @@ export function invalidateImageLabel() {
       k.startsWith(IMAGE_KEYS.image),
   );
 }
-
-export const $linkTaskProgram = createMutatorStore<ILinkTaskProgram>(
-  async ({ data, invalidate }) => {
-    const resp = await fetch('/api/admin/link/task/program', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: { 'content-type': 'application/json' },
-    });
-
-    invalidate(
-      (k) => k.startsWith(TASK_KEYS.list) || k.startsWith(PROGRAM_KEYS.list),
-    );
-
-    return resp;
-  },
-);
-
-export const $unlinkTaskProgram = createMutatorStore<ILinkTaskProgram>(
-  async ({ data, invalidate }) => {
-    const resp = await fetch('/api/admin/unlink/task/program', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: { 'content-type': 'application/json' },
-    });
-
-    invalidate(
-      (k) => k.startsWith(TASK_KEYS.list) || k.startsWith(PROGRAM_KEYS.list),
-    );
-
-    return resp;
-  },
-);

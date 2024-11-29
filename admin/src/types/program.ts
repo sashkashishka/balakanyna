@@ -13,3 +13,7 @@ export interface IProgram {
 export interface IProgramFull extends IProgram {
   tasks: TTask[];
 }
+
+export interface IProgramBody extends IProgram {
+  tasks: Array<{ taskId: number }>;
+}
