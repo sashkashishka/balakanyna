@@ -1033,7 +1033,6 @@ describe('[api] task list', async () => {
             programList.map((programId, i) => ({
               taskId: dbTasks[i].id,
               programId,
-              taskOrder: i,
             })),
           );
         },
@@ -1135,7 +1134,6 @@ describe('[api] task list', async () => {
             dbPrograms.map(({ id: programId }, i) => ({
               taskId: dbTasks[i].id,
               programId,
-              taskOrder: i,
             })),
           );
         },
@@ -1201,7 +1199,6 @@ describe('[api] task list', async () => {
             dbPrograms.map(({ id: programId }, i) => ({
               taskId: dbTasks[i].id,
               programId,
-              taskOrder: i,
             })),
           );
         },

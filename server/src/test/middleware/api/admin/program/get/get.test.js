@@ -172,9 +172,16 @@ describe('[api] program get', async () => {
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         dbUsers = await seedUsers(db, [user]);
+        dbTasks = await seedTasks(db, tasks);
+
         dbPrograms = await seedPrograms(db, [
           getProgram({
             userId: dbUsers[0].id,
+            tasks: [
+              { taskId: dbTasks[2].id },
+              { taskId: dbTasks[0].id },
+              { taskId: dbTasks[1].id },
+            ],
           }),
           getProgram({
             userId: dbUsers[0].id,
@@ -183,33 +190,27 @@ describe('[api] program get', async () => {
             userId: dbUsers[0].id,
           }),
         ]);
-        dbTasks = await seedTasks(db, tasks);
 
         dbProgramTasks = await seedProgramTask(db, [
           {
             taskId: dbTasks[0].id,
             programId: dbPrograms[0].id,
-            taskOrder: 2,
           },
           {
             taskId: dbTasks[1].id,
             programId: dbPrograms[0].id,
-            taskOrder: 0,
           },
           {
             taskId: dbTasks[2].id,
             programId: dbPrograms[0].id,
-            taskOrder: 1,
           },
           {
             taskId: dbTasks[2].id,
             programId: dbPrograms[1].id,
-            taskOrder: 0,
           },
           {
             taskId: dbTasks[2].id,
             programId: dbPrograms[2].id,
-            taskOrder: 0,
           },
         ]);
       },
@@ -234,12 +235,13 @@ describe('[api] program get', async () => {
     assert.ok(Array.isArray(body.tasks));
     assert.equal(body.tasks.length, 3);
 
-    for (let i = 1; i < body.tasks.length; i++) {
-      const task = body.tasks[i - 1];
+    for (let i = 0; i < body.tasks.length; i++) {
+      const task = body.tasks[i];
 
-      assert.ok(
-        task.order < body.tasks[i].order,
-        'should be in ascending order',
+      assert.equal(
+        task.id,
+        dbPrograms[0].tasks[i].taskId,
+        'should be in the order that was saved',
       );
       assert.notEqual(
         dbProgramTasks.findIndex((t) => t.taskId === task.id),
@@ -250,7 +252,7 @@ describe('[api] program get', async () => {
       assert.ok(task.config);
       assert.ok(task.createdAt);
       assert.ok(task.updatedAt);
-      assert.equal(Object.keys(task).length, 7);
+      assert.equal(Object.keys(task).length, 6);
     }
 
     assert.equal(isNaN(new Date(body.startDatetime)), false);

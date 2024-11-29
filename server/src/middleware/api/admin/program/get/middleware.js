@@ -27,11 +27,11 @@ async function getProgramMiddleware(ctx) {
       userId: programTable.userId,
       startDatetime: programTable.startDatetime,
       expirationDatetime: programTable.expirationDatetime,
+      tasks: programTable.tasks,
       createdAt: programTable.createdAt,
       updatedAt: programTable.updatedAt,
       task: {
         id: taskTable.id,
-        order: programTaskTable.taskOrder,
         name: taskTable.name,
         type: taskTable.type,
         config: taskTable.config,
@@ -42,15 +42,14 @@ async function getProgramMiddleware(ctx) {
     .from(programTable)
     .where(eq(programTable.id, searchParams.id))
     .leftJoin(programTaskTable, eq(programTable.id, programTaskTable.programId))
-    .leftJoin(taskTable, eq(programTaskTable.taskId, taskTable.id))
-    .orderBy(asc(programTaskTable.taskOrder));
+    .leftJoin(taskTable, eq(programTaskTable.taskId, taskTable.id));
 
   if (!result?.length) {
     throw new ERR_NOT_FOUND();
   }
 
   const program = result[0];
-  const tasks = result.map(({ task }) => task).filter((task) => task.id);
+  const tasks = result.map(({ task }) => task).filter((task) => task?.id);
 
   ctx.json({
     id: program.id,
@@ -58,7 +57,9 @@ async function getProgramMiddleware(ctx) {
     userId: program.userId,
     startDatetime: program.startDatetime,
     expirationDatetime: program.expirationDatetime,
-    tasks,
+    tasks: program.tasks.map(({ taskId }) =>
+      tasks.find((t) => t.id === taskId),
+    ),
     createdAt: program.createdAt,
     updatedAt: program.updatedAt,
   });

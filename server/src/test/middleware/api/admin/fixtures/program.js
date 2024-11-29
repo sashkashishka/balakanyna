@@ -1,4 +1,4 @@
-export function getProgram({ userId }) {
+export function getProgram({ userId, tasks }) {
   const startDatetime = new Date();
 
   return {
@@ -6,6 +6,7 @@ export function getProgram({ userId }) {
     name: `Program ${userId}`,
     startDatetime: startDatetime.toISOString(),
     expirationDatetime: new Date(startDatetime.getTime() + 100000).toISOString(),
+    tasks,
   };
 }
 

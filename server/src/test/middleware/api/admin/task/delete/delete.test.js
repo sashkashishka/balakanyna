@@ -131,7 +131,7 @@ describe('[api] task delete', async () => {
         dbTasks = await seedTasks(db, [imageSliderTask]);
 
         await seedProgramTask(db, [
-          { taskId: dbTasks[0].id, programId: dbPrograms[0].id, taskOrder: 1 },
+          { taskId: dbTasks[0].id, programId: dbPrograms[0].id },
         ]);
       },
     });
