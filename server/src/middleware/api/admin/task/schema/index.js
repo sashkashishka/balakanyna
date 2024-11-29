@@ -1,9 +1,17 @@
 import { createError } from '../../../../../core/errors.js';
-import { imageSliderSchema } from './imageSlider.js';
+import {
+  uploadImageSliderSchema,
+  fullImageSliderSchema,
+} from './imageSlider.js';
 import { semaphoreTextSchema } from './semaphoreText.js';
 
-export const typeToSchema = {
-  imageSlider: imageSliderSchema,
+export const uploadTypeToSchema = {
+  imageSlider: uploadImageSliderSchema,
+  semaphoreText: semaphoreTextSchema,
+};
+
+export const fullTypeToSchema = {
+  imageSlider: fullImageSliderSchema,
   semaphoreText: semaphoreTextSchema,
 };
 
@@ -13,8 +21,10 @@ const ERR_INVALID_TASK_CONFIG = createError(
   400,
 );
 
-export function getTaskConfigValidator(ajv, type) {
-  return ajv.compile(typeToSchema[type]);
+export function getTaskConfigValidator(ajv, type, isUpload = true) {
+  return ajv.compile(
+    isUpload ? uploadTypeToSchema[type] : fullTypeToSchema[type],
+  );
 }
 
 /**

@@ -7,14 +7,15 @@ import {
 } from '../../../../../core/errors.js';
 import { createValidateSearchParamsMiddleware } from '../../../../auxiliary/validate/middleware.js';
 import {
+  imageTable,
   labelTable,
+  taskImageTable,
   taskLabelTable,
   taskTable,
 } from '../../../../../db/schema.js';
-import { getTaskConfigValidator } from '../schema/index.js';
+import { createTransformTask } from '../pipes/task.js';
 
-import schema from './schema.json' with { type: 'json' };
-import { addImagePrefixInTaskConfig } from '../schema/utils.js';
+import { taskGetSearchParamsSchema } from './schema.js';
 
 /**
  * @argument {import('../../../../../core/context.js').Context} ctx
@@ -38,36 +39,37 @@ async function getTaskMiddleware(ctx) {
         updatedAt: labelTable.updatedAt,
         createdAt: labelTable.createdAt,
       },
+      image: {
+        id: imageTable.id,
+        filename: imageTable.filename,
+        hashsum: imageTable.hashsum,
+        path: imageTable.path,
+      },
     })
     .from(taskTable)
     .where(eq(taskTable.id, searchParams.id))
     .leftJoin(taskLabelTable, eq(taskTable.id, taskLabelTable.taskId))
-    .leftJoin(labelTable, eq(taskLabelTable.labelId, labelTable.id));
+    .leftJoin(labelTable, eq(taskLabelTable.labelId, labelTable.id))
+    .leftJoin(taskImageTable, eq(taskTable.id, taskImageTable.taskId))
+    .leftJoin(imageTable, eq(taskImageTable.imageId, imageTable.id));
 
   if (!result?.length) {
     throw new ERR_NOT_FOUND();
   }
 
-  const {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    label,
-    ...task
-  } = result[0];
-  const labels = result.map(({ label }) => label).filter(Boolean);
+  const transformTask = createTransformTask(ctx);
 
-  const validate = getTaskConfigValidator(ctx.ajv, task.type);
-
-  validate(task.config);
+  const [task] = transformTask(result);
 
   ctx.json({
-    ...task,
-    config: addImagePrefixInTaskConfig(
-      task.type,
-      task.config,
-      ctx.config.media.prefix,
-    ),
-    labels,
-    errors: validate.errors,
+    id: task.id,
+    name: task.name,
+    type: task.type,
+    config: task.config,
+    labels: task.labels,
+    errors: task.errors,
+    createdAt: task.createdAt,
+    updatedAt: task.updatedAt,
   });
 }
 
@@ -75,6 +77,9 @@ export const method = 'get';
 export const route = '/api/admin/task/get';
 
 export const middleware = Composer.compose([
-  createValidateSearchParamsMiddleware(schema, ERR_INVALID_PAYLOAD),
+  createValidateSearchParamsMiddleware(
+    taskGetSearchParamsSchema,
+    ERR_INVALID_PAYLOAD,
+  ),
   getTaskMiddleware,
 ]);

@@ -8,10 +8,9 @@ import {
 import { createValidateBodyMiddleware } from '../../../../auxiliary/validate/middleware.js';
 import { taskImageTable, taskTable } from '../../../../../db/schema.js';
 import { sortJsonKeys } from '../../../../../utils/json.js';
-import { pipe } from '../../../../../utils/pipe.js';
 
 import { verifyTaskConfigSchemaMiddleware } from '../schema/index.js';
-import { getImageIds, addImagePrefixInTaskConfig } from '../pipes/image.js';
+import { getImageIds } from '../pipes/image.js';
 
 import { taskCreateBodySchema } from './schema.js';
 

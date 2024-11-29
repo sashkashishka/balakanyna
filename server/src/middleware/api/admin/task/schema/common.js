@@ -1,4 +1,4 @@
-export const imageSchema = {
+export const uploadImageSchema = {
   type: 'object',
   properties: {
     id: {
@@ -6,5 +6,25 @@ export const imageSchema = {
     },
   },
   required: ['id'],
+  additionalProperties: false,
+};
+
+export const fullImageSchema = {
+  type: 'object',
+  properties: {
+    id: {
+      type: 'integer',
+    },
+    path: {
+      type: 'string',
+    },
+    hashsum: {
+      type: 'string',
+    },
+    filename: {
+      type: 'string',
+    },
+  },
+  required: ['id', 'path', 'hashsum', 'filename'],
   additionalProperties: false,
 };

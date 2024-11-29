@@ -11,6 +11,25 @@ export function getImageIds(task) {
   }
 }
 
+export function populateImage(task) {
+  switch (task.type) {
+    case 'imageSlider': {
+      task.config.slides = task.config.slides
+        .map(({ image }) => ({
+          image: task.images.find((fullImg) => fullImg.id === image.id),
+        }))
+        .filter(({ image }) => image);
+
+      delete task.images;
+
+      return task;
+    }
+
+    default:
+      return task;
+  }
+}
+
 export function addImagePrefixInTaskConfig(prefix) {
   return function addPrefix(task) {
     switch (task.type) {
@@ -18,7 +37,7 @@ export function addImagePrefixInTaskConfig(prefix) {
         task.config.slides = task.config.slides.map(({ image }) => ({
           image: {
             ...image,
-            path: addPrefixToPathname(image.path, prefix),
+            path: addPrefixToPathname(image?.path, prefix),
           },
         }));
 

@@ -9,7 +9,9 @@ import * as taskGet from '../../../../../../middleware/api/admin/task/get/middle
 
 import {
   seedAdmins,
+  seedImages,
   seedLabels,
+  seedTaskImages,
   seedTaskLabels,
   seedTasks,
 } from '../../../../../../db/seeders.js';
@@ -17,6 +19,7 @@ import {
 import { admin } from '../../fixtures/admin.js';
 import { imageSliderTask, semaphoreTextTask } from '../../fixtures/task.js';
 import { labels } from '../../fixtures/label.js';
+import { image, images } from '../../fixtures/image.js';
 
 function getEndpoint(baseUrl, { id }) {
   const url = getUrl(taskGet.route, baseUrl);
@@ -179,7 +182,7 @@ describe('[api] task get', async () => {
     assert.equal(Object.keys(body).length, 8);
   });
 
-  test('should return 200 and task with empty err', async (t) => {
+  test('should return 200 and label with empty err', async (t) => {
     let dbTasks = [];
 
     const { request, baseUrl } = await getTestServer({
@@ -255,16 +258,33 @@ describe('[api] task get', async () => {
     assert.equal(Object.keys(body).length, 8);
   });
 
-  test('should return 200 and add image prefix if task config includes images', async (t) => {
+  test('should return 200 and empty image list if image was not found', async (t) => {
     const prefix = 'foo';
     let dbTasks = [];
+    let dbImages = [];
 
     const { request, baseUrl } = await getTestServer({
       t,
       config: { media: { prefix } },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [imageSliderTask]);
+        dbImages = await seedImages(db, [image]);
+        dbTasks = await seedTasks(db, [
+          {
+            ...imageSliderTask,
+            config: {
+              slides: [
+                { image: { id: dbImages[0].id } },
+                { image: { id: 20 } },
+              ],
+              title: 'Hello',
+            },
+          },
+        ]);
+
+        await seedTaskImages(db, [
+          { imageId: dbImages[0].id, taskId: dbImages[0].id },
+        ]);
       },
     });
 
@@ -283,20 +303,80 @@ describe('[api] task get', async () => {
     assert.equal(body.name, imageSliderTask.name);
     assert.equal(body.type, imageSliderTask.type);
     assert.ok(Array.isArray(body.config.slides));
+    assert.equal(body.config.slides.length, 1);
+    assert.equal(body.config.title, imageSliderTask.config.title);
+
+    const slide = body.config.slides[0];
+
+    assert.equal(slide.image.id, dbImages[0].id);
+    assert.equal(slide.image.filename, dbImages[0].filename);
+    assert.equal(slide.image.hashsum, dbImages[0].hashsum);
+    assert.ok(slide.image.path.startsWith('/foo/'), 'should add prefix to url');
+
+    assert.equal(body.errors, null);
+    assert.ok(Array.isArray(body.labels));
+    assert.equal(body.labels.length, 0);
+    assert.equal(isNaN(new Date(body.createdAt)), false);
+    assert.equal(isNaN(new Date(body.updatedAt)), false);
+    assert.equal(Object.keys(body).length, 8);
+  });
+
+  test('should return 200 and add image prefix if task config includes images', async (t) => {
+    const prefix = 'foo';
+    let dbTasks = [];
+    let dbImages = [];
+
+    const { request, baseUrl } = await getTestServer({
+      t,
+      config: { media: { prefix } },
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbImages = await seedImages(db, images);
+        dbTasks = await seedTasks(db, [
+          {
+            ...imageSliderTask,
+            config: {
+              slides: [
+                { image: { id: dbImages[0].id } },
+                { image: { id: dbImages[1].id } },
+              ],
+              title: 'Hello',
+            },
+          },
+        ]);
+
+        await seedTaskImages(db, [
+          { imageId: dbImages[0].id, taskId: dbImages[0].id },
+          { imageId: dbImages[1].id, taskId: dbImages[0].id },
+        ]);
+      },
+    });
+
+    const endpoint = getEndpoint(baseUrl, { id: dbTasks[0].id });
+
+    const resp = await request(endpoint, {
+      method: taskGet.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(body.id, dbTasks[0].id);
+    assert.equal(body.name, imageSliderTask.name);
+    assert.equal(body.type, imageSliderTask.type);
+    assert.ok(Array.isArray(body.config.slides));
+    assert.equal(body.config.slides.length, 2);
+
     assert.equal(body.config.title, imageSliderTask.config.title);
 
     for (let i = 0; i < body.config.slides.length; i++) {
       const slide = body.config.slides[i];
 
-      assert.equal(slide.image.id, imageSliderTask.config.slides[i].image.id);
-      assert.equal(
-        slide.image.filename,
-        imageSliderTask.config.slides[i].image.filename,
-      );
-      assert.equal(
-        slide.image.hashsum,
-        imageSliderTask.config.slides[i].image.hashsum,
-      );
+      assert.equal(slide.image.id, dbImages[i].id);
+      assert.equal(slide.image.filename, dbImages[i].filename);
+      assert.equal(slide.image.hashsum, dbImages[i].hashsum);
       assert.ok(
         slide.image.path.startsWith('/foo/'),
         'should add prefix to url',

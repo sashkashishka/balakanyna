@@ -1,7 +1,7 @@
-import { imageSchema } from './common.js';
+import { fullImageSchema, uploadImageSchema } from './common.js';
 
-export const imageSliderSchema = {
-  title: 'ImageSliderTaskConfig',
+export const uploadImageSliderSchema = {
+  title: 'UploadImageSliderTaskConfig',
   type: 'object',
   properties: {
     title: {
@@ -12,7 +12,30 @@ export const imageSliderSchema = {
       items: {
         type: 'object',
         properties: {
-          image: imageSchema,
+          image: uploadImageSchema,
+        },
+        required: ['image'],
+        additionalProperties: false,
+      },
+    },
+  },
+  required: ['title', 'slides'],
+  additionalProperties: false,
+};
+
+export const fullImageSliderSchema = {
+  title: 'FullImageSliderTaskConfig',
+  type: 'object',
+  properties: {
+    title: {
+      type: 'string',
+    },
+    slides: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          image: fullImageSchema,
         },
         required: ['image'],
         additionalProperties: false,
