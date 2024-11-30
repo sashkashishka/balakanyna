@@ -5,11 +5,8 @@ import { invalidateKeys } from '@/stores/_query';
 import { IMAGE_KEYS } from '@/stores/image';
 import { PlusOutlined } from '@ant-design/icons';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IImageFormInitialValues extends IImage {}
-
 interface IProps {
-  initialValues?: Partial<IImageFormInitialValues>;
+  initialValues?: Partial<IImage>;
   onSuccess?(p: IImage): void;
 }
 

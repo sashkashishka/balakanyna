@@ -35,7 +35,9 @@ export function TaskSelectDrawerContent({ filters, setSelected }: IProps) {
       setListFilter,
       resetListFilter,
     },
-  ] = useState(() => createListFilters(defaultFilters));
+  ] = useState(() =>
+    createListFilters(defaultFilters, { syncSearchParams: false }),
+  );
   const [$tasks] = useState(() => makeTasksStore($filtersSearchParams));
 
   return (
@@ -64,4 +66,3 @@ export function TaskSelectDrawerContent({ filters, setSelected }: IProps) {
     </Space>
   );
 }
-

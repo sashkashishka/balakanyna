@@ -35,7 +35,9 @@ export function ImageSelectDrawerContent({ filters, setSelected }: IProps) {
       setListFilter,
       resetListFilter,
     },
-  ] = useState(() => createListFilters(defaultFilters));
+  ] = useState(() =>
+    createListFilters(defaultFilters, { syncSearchParams: false }),
+  );
   const [$images] = useState(() => makeImagesStore($filtersSearchParams));
 
   return (

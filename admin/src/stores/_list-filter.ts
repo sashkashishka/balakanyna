@@ -9,7 +9,16 @@ export interface IFilters {
   [key: string]: unknown;
 }
 
-export function createListFilters<T extends IFilters>(defaultValue: T) {
+interface IOptions {
+  syncSearchParams?: boolean;
+}
+
+export function createListFilters<T extends IFilters>(
+  defaultValue: T,
+  options?: IOptions = {},
+) {
+  const { syncSearchParams = true } = options;
+
   const $pageSize = atom(20);
   function setPageSize(v: number) {
     $pageSize.set(v);
@@ -84,27 +93,29 @@ export function createListFilters<T extends IFilters>(defaultValue: T) {
     return `?${search}`;
   });
 
-  onSet($filters, ({ newValue }) => {
-    const url = new URL(location.pathname, location.origin);
+  if (syncSearchParams) {
+    onSet($filters, ({ newValue }) => {
+      const url = new URL(location.pathname, location.origin);
 
-    url.search = createFiltersSearchParams(newValue).toString();
+      url.search = createFiltersSearchParams(newValue).toString();
 
-    $router.open(url.toString());
-  });
+      $router.open(url.toString());
+    });
 
-  onMount($filters, () => {
-    const router = $router.get();
+    onMount($filters, () => {
+      const router = $router.get();
 
-    if (!router) return;
+      if (!router) return;
 
-    if (router.search.filters) {
-      const filters = safeParse(window.atob(router.search.filters));
+      if (router.search.filters) {
+        const filters = safeParse(window.atob(router.search.filters));
 
-      if (filters) {
-        $filters.set(filters);
+        if (filters) {
+          $filters.set(filters);
+        }
       }
-    }
-  });
+    });
+  }
 
   function setListFilter<TK extends keyof T>(key: TK, val: T[TK]) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
