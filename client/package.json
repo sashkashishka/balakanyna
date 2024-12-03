@@ -15,7 +15,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "solid-js": "^1.9.1"
+    "solid-js": "^1.9.1",
+    "shared": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.7.6",

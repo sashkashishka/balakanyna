@@ -96,6 +96,9 @@ importers:
 
   client:
     dependencies:
+      shared:
+        specifier: workspace:*
+        version: link:../shared
       solid-js:
         specifier: ^1.9.1
         version: 1.9.2

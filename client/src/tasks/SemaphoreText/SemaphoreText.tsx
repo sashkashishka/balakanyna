@@ -1,9 +1,15 @@
 import { createSignal, onCleanup } from 'solid-js';
+import type { TTask } from 'shared/types/task.ts';
+
 import { random } from '../../utils/random.ts';
 
 import styles from './SemaphoreText.module.css';
 
-export function SemaphoreText({ config }) {
+interface IProps {
+  config: Extract<TTask, { type: 'semaphoreText' }>['config'];
+}
+
+export function SemaphoreText({ config }: IProps) {
   const { colors, delayRange, text } = config;
 
   const [index, setIndex] = createSignal(0);
@@ -22,7 +28,7 @@ export function SemaphoreText({ config }) {
         syllableIndex() === text.length - 1 ? 0 : syllableIndex() + 1,
       );
     },
-    random(...delayRange),
+    random(delayRange[0]!, delayRange[1]!),
   );
 
   onCleanup(() => {
