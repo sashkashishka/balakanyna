@@ -1,1 +1,1 @@
-export { SemaphoreText } from './SemaphoreText/index.tsx';
+export { SemaphoreText } from './SemaphoreText/index.ts';

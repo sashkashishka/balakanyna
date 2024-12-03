@@ -1,4 +1,4 @@
-import { Row, Col, Form, Input, Button } from 'antd';
+import { Row, Col, Form, Input, Button, type FormInstance } from 'antd';
 
 import type { TTask } from 'shared/types/task';
 import type { ITaskFormProps } from '../TaskForm';
@@ -9,6 +9,8 @@ import { ImageField } from '@/components/FormFields/ImageField';
 type TImageSliderTask = Extract<TTask, { type: 'imageSlider' }>;
 
 interface IProps extends Pick<ITaskFormProps, 'action'> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form: FormInstance<any>;
   initialValues?: Partial<TImageSliderTask>;
   onFinish(v: unknown): Promise<boolean>;
 }
@@ -23,6 +25,7 @@ function prepareBody(body: TImageSliderTask) {
 }
 
 export function ImageSliderConfigForm({
+  form,
   initialValues,
   onFinish,
   action,
@@ -32,6 +35,7 @@ export function ImageSliderConfigForm({
 
   return (
     <Form
+      form={form}
       name={formName}
       initialValues={{
         ...initialValues,

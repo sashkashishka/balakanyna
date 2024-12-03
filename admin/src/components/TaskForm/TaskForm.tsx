@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useStore } from '@nanostores/react';
 import { Col, Flex, Form, notification, Row } from 'antd';
 
@@ -6,8 +7,8 @@ import { $createTask, $updateTask } from '@/stores/task';
 
 import { SemaphoreTextConfigForm } from './tasks/SemaphoreTextConfigForm';
 import { ImageSliderConfigForm } from './tasks/ImageSliderConfigForm';
-import { useMemo, useState } from 'react';
 import { TaskPreview } from '../TaskPreview';
+import { CONFIG_VALIDATOR_MAP } from './utils';
 
 export interface ITaskFormProps {
   taskType: TTaskType;
@@ -24,6 +25,9 @@ export function TaskForm({
   onSuccess,
   onDuplicate,
 }: ITaskFormProps) {
+  const [form] = Form.useForm();
+  const values = Form.useWatch([], form);
+
   const { mutate: createTask } = useStore($createTask);
   const { mutate: updateTask } = useStore($updateTask);
 
@@ -69,34 +73,51 @@ export function TaskForm({
     }
   }
 
-  // TODO add preview to the form
+  const taskForm = useMemo(() => {
+    switch (taskType) {
+      case 'imageSlider': {
+        return (
+          <ImageSliderConfigForm
+            form={form}
+            action={action}
+            onFinish={onFinish}
+            initialValues={
+              initialValues as Partial<Extract<TTask, { type: 'imageSlider' }>>
+            }
+          />
+        );
+      }
 
-  switch (taskType) {
-    case 'imageSlider': {
-      return (
-        <ImageSliderConfigForm
-          action={action}
-          onFinish={onFinish}
-          initialValues={
-            initialValues as Partial<Extract<TTask, { type: 'imageSlider' }>>
-          }
-        />
-      );
+      case 'semaphoreText': {
+        return (
+          <SemaphoreTextConfigForm
+            form={form}
+            action={action}
+            onFinish={onFinish}
+            initialValues={
+              initialValues as Partial<
+                Extract<TTask, { type: 'semaphoreText' }>
+              >
+            }
+          />
+        );
+      }
+
+      default:
+        return null;
     }
+  }, [initialValues, taskType]);
 
-    case 'semaphoreText': {
-      return (
-        <SemaphoreTextConfigForm
-          action={action}
-          onFinish={onFinish}
-          initialValues={
-            initialValues as Partial<Extract<TTask, { type: 'semaphoreText' }>>
-          }
-        />
-      );
-    }
-
-    default:
-      return null;
-  }
+  return (
+    <Row gutter={24}>
+      <Col span={12}>{taskForm}</Col>
+      <Col span={12}>
+        <Flex align="center" justify="center" style={{ height: '100%' }}>
+          {values && CONFIG_VALIDATOR_MAP[taskType](values?.config) && (
+            <TaskPreview type={taskType} config={values?.config} />
+          )}
+        </Flex>
+      </Col>
+    </Row>
+  );
 }

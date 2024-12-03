@@ -47,6 +47,12 @@ importers:
       '@nanostores/router':
         specifier: ^0.16.1
         version: 0.16.1(nanostores@0.11.3)
+      ajv:
+        specifier: ^8.17.1
+        version: 8.17.1
+      ajv-formats:
+        specifier: ^3.0.1
+        version: 3.0.1(ajv@8.17.1)
       antd:
         specifier: ^5.22.1
         version: 5.22.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -130,6 +136,9 @@ importers:
       mime-types:
         specifier: ^2.1.35
         version: 2.1.35
+      shared:
+        specifier: workspace:*
+        version: link:../shared
     devDependencies:
       '@types/better-sqlite3':
         specifier: ^7.6.11

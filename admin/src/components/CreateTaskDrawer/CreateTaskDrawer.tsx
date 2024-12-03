@@ -20,7 +20,7 @@ export function CreateTaskDrawer({ onSuccess, onDuplicate }: IProps) {
       </Button>
 
       <Drawer
-        size="large"
+        width="1024px"
         title="Create new task"
         open={open}
         onClose={() => setOpen(false)}

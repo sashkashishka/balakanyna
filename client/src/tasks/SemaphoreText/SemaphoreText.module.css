@@ -1,0 +1,16 @@
+.container, .circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.circle {
+  width: 300px;
+  height: 300px;
+  color: white;
+  background-color: var(--bg);
+  font-size: 32px;
+  border-radius: 50%;
+  transition: background-color 0.5s ease-in-out;
+}

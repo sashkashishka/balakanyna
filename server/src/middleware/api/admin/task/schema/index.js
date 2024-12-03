@@ -2,8 +2,8 @@ import { createError } from '../../../../../core/errors.js';
 import {
   uploadImageSliderSchema,
   fullImageSliderSchema,
-} from './imageSlider.js';
-import { semaphoreTextSchema } from './semaphoreText.js';
+} from 'shared/schemas/imageSlider.js';
+import { semaphoreTextSchema } from 'shared/schemas/semaphoreText.js';
 
 export const uploadTypeToSchema = {
   imageSlider: uploadImageSliderSchema,

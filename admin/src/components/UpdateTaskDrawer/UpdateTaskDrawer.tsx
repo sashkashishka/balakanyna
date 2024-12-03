@@ -22,7 +22,7 @@ export function UpdateTaskDrawer({ taskId, onClose, children }: IProps) {
       </div>
 
       <Drawer
-        size="large"
+        width="1024px"
         title="Update task"
         open={open}
         onClose={() => {
