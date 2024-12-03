@@ -1,14 +1,14 @@
 import { useEffect, useId } from 'react';
 import { render, createComponent } from 'solid-js/web';
 
-import { SemaphoreText } from 'client';
-import 'client/lib/style.css'
+import { SemaphoreText, ImageSliderPreview } from 'client';
+import 'client/lib/style.css';
 
 import type { TTaskType, TTask } from 'shared/types/task';
 
 const TASK_MAP: Record<TTaskType, () => unknown> = {
   semaphoreText: SemaphoreText,
-  imageSlider: undefined,
+  imageSlider: ImageSliderPreview,
 };
 
 interface IProps {
@@ -25,7 +25,7 @@ export function TaskPreview({ type, config }: IProps) {
     if (Component) {
       const root = document.getElementById(id);
 
-      return render(() => createComponent(SemaphoreText, { config }), root!);
+      return render(() => createComponent(Component, { config }), root!);
     }
 
     return () => void 0;

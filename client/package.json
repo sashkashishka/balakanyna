@@ -15,12 +15,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "shared": "workspace:*",
     "solid-js": "^1.9.1",
-    "shared": "workspace:*"
+    "swiper": "^11.1.15"
   },
   "devDependencies": {
     "@types/node": "^22.7.6",
     "vite": "^5.4.8",
+    "vite-plugin-externalize-deps": "^0.8.0",
     "vite-plugin-solid": "^2.10.2"
   }
 }

@@ -1,10 +1,12 @@
+import { useMemo } from 'react';
 import { Row, Col, Form, Input, Button, type FormInstance } from 'antd';
 
 import type { TTask } from 'shared/types/task';
-import type { ITaskFormProps } from '../TaskForm';
 import { safeLS } from '@/utils/storage';
 import { SortableFormList } from '@/components/FormFields/SortableFormList';
 import { ImageField } from '@/components/FormFields/ImageField';
+import type { IImage } from 'shared/types/image';
+import type { ITaskFormProps } from '../TaskForm';
 
 type TImageSliderTask = Extract<TTask, { type: 'imageSlider' }>;
 
@@ -13,6 +15,15 @@ interface IProps extends Pick<ITaskFormProps, 'action'> {
   form: FormInstance<any>;
   initialValues?: Partial<TImageSliderTask>;
   onFinish(v: unknown): Promise<boolean>;
+}
+
+function normalizeImage(value: IImage) {
+  return {
+    id: value.id,
+    filename: value.filename,
+    hashsum: value.hashsum,
+    path: value.path,
+  };
 }
 
 function prepareBody(body: TImageSliderTask) {
@@ -33,13 +44,28 @@ export function ImageSliderConfigForm({
   const formName = 'image-slider-config-form';
   const LS_KEY = `${action}:${formName}`;
 
+  const normalizedInitialValues = useMemo(() => {
+    return {
+      id: initialValues?.id,
+      name: initialValues?.name,
+      type: initialValues?.type,
+      config: {
+        ...initialValues?.config,
+        slides: initialValues?.config?.slides?.map(({ image }) => ({
+          // @ts-expect-error TODO should provide proper typing
+          image: normalizeImage(image),
+        })),
+      },
+    };
+  }, [initialValues]);
+
   return (
     <Form
       form={form}
       name={formName}
       initialValues={{
-        ...initialValues,
-        ...safeLS.getItem(LS_KEY),
+        ...normalizedInitialValues,
+        ...(action === 'create' && safeLS.getItem(LS_KEY)),
         type: 'imageSlider',
       }}
       onFinish={async (values) => {
@@ -91,6 +117,7 @@ export function ImageSliderConfigForm({
             name={['config', 'slides']}
             item={{
               name: 'image',
+              normalize: normalizeImage,
               rules: [{ required: true, message: 'Please input image' }],
             }}
             label="Slides"

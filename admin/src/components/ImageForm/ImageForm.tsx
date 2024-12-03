@@ -54,7 +54,7 @@ export function ImageForm({ initialValues, onSuccess }: IProps) {
 
         if (file.status === 'error') {
           const { response } = file;
-          console.log(file);
+
           if ('error' in response && typeof response.message === 'string') {
             notification.error({ message: response.message });
           }
