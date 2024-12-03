@@ -1,8 +1,8 @@
 import { type ReadableAtom } from 'nanostores';
-import type { IPaginatorResponse } from '@/types';
+import type { IPaginatorResponse } from 'shared/types';
 import { createFetcherStore, createMutatorStore } from './_query';
 import { type IFilters } from './_list-filter';
-import type { IProgram, IProgramFull } from '@/types/program';
+import type { IProgram, IProgramFull } from 'shared/types/program';
 import { getSearchParam } from '@/utils/network';
 
 export interface IProgramListFilters extends IFilters {

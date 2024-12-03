@@ -1,6 +1,6 @@
 import { Image } from 'antd';
 
-import type { IImageEntry } from '@/types/image';
+import type { IImageEntry } from 'shared/types/image';
 import { ImageSelectDrawer } from '@/components/ImageSelectDrawer';
 
 interface IProps {

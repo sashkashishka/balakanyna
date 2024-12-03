@@ -9,8 +9,8 @@ import {
   notification,
 } from 'antd';
 
+import type { ICredentials } from 'shared/types/auth';
 import { $login } from '@/stores/auth';
-import type { ICredentials } from '@/types/auth';
 import { openHome, ROUTES } from '@/stores/router';
 
 const { Title } = Typography;

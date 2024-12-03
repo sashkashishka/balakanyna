@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Drawer, Space, Image } from 'antd';
 
 import type { IImageListFilters } from '@/stores/image';
-import type { IImage } from '@/types/image';
+import type { IImage } from 'shared/types/image';
 import { ImageSelectDrawerContent } from './ImageSelectDrawerContent';
 import { PlusOutlined } from '@ant-design/icons';
 

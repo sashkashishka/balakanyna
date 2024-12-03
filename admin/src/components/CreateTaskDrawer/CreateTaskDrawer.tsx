@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Drawer, Select, Space } from 'antd';
 
 import { TaskForm } from '../TaskForm';
-import { type TTaskType } from '@/types/task';
+import { type TTaskType } from 'shared/types/task';
 import { taskTypeOptions } from '../TaskForm/constants';
 import type { ITaskFormProps } from '../TaskForm/TaskForm';
 

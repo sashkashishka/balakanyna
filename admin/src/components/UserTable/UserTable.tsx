@@ -2,13 +2,13 @@ import { Table, Space } from 'antd';
 import type { TableProps } from 'antd';
 import { useStore } from '@nanostores/react';
 
-import type { IUser } from '@/types/user';
+import type { IUser } from 'shared/types/user';
 import { type IUserListFilters } from '@/stores/user';
 import { formatDate } from '@/utils/date';
 import { ROUTES } from '@/stores/router';
 import { Filters } from '@/components/Filters';
 import type { FetcherStore } from '@nanostores/query';
-import type { IPaginatorResponse } from '@/types';
+import type { IPaginatorResponse } from 'shared/types';
 import type { ReadableAtom, WritableAtom } from 'nanostores';
 
 import { filtersConfig } from '../ProgramTable/constants';

@@ -2,3 +2,4 @@ packages:
   - admin
   - client
   - server
+  - shared

@@ -1,6 +1,6 @@
 import { Descriptions, type DescriptionsProps } from 'antd';
 
-import type { IUser } from '@/types/user';
+import type { IUser } from 'shared/types/user';
 import { useMemo } from 'react';
 import { formatDate } from '@/utils/date';
 

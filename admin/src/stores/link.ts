@@ -2,7 +2,7 @@ import { createMutatorStore, invalidateKeys } from './_query';
 import type {
   ILinkImageLabel,
   ILinkTaskLabel,
-} from '@/types/link';
+} from 'shared/types/link';
 import { TASK_KEYS } from './task';
 import { LABEL_KEYS } from './label';
 import { IMAGE_KEYS } from './image';

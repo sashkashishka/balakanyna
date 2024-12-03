@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Drawer, Flex, Space } from 'antd';
 
 import type { ITaskListFilters } from '@/stores/task';
-import type { TTask } from '@/types/task';
+import type { TTask } from 'shared/types/task';
 import { TaskSelectDrawerContent } from './TaskSelectDrawerContent';
 import { PlusOutlined } from '@ant-design/icons';
 

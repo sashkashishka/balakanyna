@@ -1,8 +1,8 @@
 import { type ReadableAtom } from 'nanostores';
-import type { IPaginatorResponse } from '@/types';
+import type { IPaginatorResponse } from 'shared/types';
 import { createFetcherStore, createMutatorStore } from './_query';
 import { type IFilters } from './_list-filter';
-import type { IImage } from '@/types/image';
+import type { IImage } from 'shared/types/image';
 import { getSearchParam } from '@/utils/network';
 
 export interface IImageListFilters extends IFilters {

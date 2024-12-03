@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Drawer } from 'antd';
 
-import type { IImage } from '@/types/image';
+import type { IImage } from 'shared/types/image';
 
 import { ImageForm } from '../ImageForm';
 

@@ -2,7 +2,7 @@ import { useStore } from '@nanostores/react';
 import type { FetcherStore } from '@nanostores/query';
 import { Flex, Space, Spin } from 'antd';
 
-import type { TTask } from '@/types/task';
+import type { TTask } from 'shared/types/task';
 
 import { TaskForm } from '../TaskForm';
 import { LinkLabelForm } from '../LinkLabelForm';

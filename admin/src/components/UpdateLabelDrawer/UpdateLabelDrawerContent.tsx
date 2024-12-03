@@ -2,7 +2,7 @@ import { useStore } from '@nanostores/react';
 import type { FetcherStore } from '@nanostores/query';
 import { Flex, Spin } from 'antd';
 
-import type { ILabel } from '@/types/label';
+import type { ILabel } from 'shared/types/label';
 
 import { LabelForm } from '../LabelForm';
 

@@ -65,6 +65,9 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      shared:
+        specifier: workspace:*
+        version: link:../shared
       solid-js:
         specifier: ^1.9.1
         version: 1.9.2
@@ -137,6 +140,8 @@ importers:
       drizzle-kit:
         specifier: ^0.26.2
         version: 0.26.2
+
+  shared: {}
 
 packages:
 

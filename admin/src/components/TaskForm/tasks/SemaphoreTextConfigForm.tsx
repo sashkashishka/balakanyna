@@ -1,6 +1,6 @@
 import { Row, Col, Form, Input, Button, InputNumber, ColorPicker } from 'antd';
 
-import type { TTask } from '@/types/task';
+import type { TTask } from 'shared/types/task';
 import type { ITaskFormProps } from '../TaskForm';
 import { safeLS } from '@/utils/storage';
 import { SortableFormList } from '@/components/FormFields/SortableFormList';

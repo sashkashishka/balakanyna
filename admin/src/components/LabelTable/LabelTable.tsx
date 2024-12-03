@@ -6,8 +6,8 @@ import { useStore } from '@nanostores/react';
 
 import { formatDate } from '@/utils/date';
 import { Filters } from '@/components/Filters';
-import type { ILabel } from '@/types/label';
-import type { IPaginatorResponse } from '@/types';
+import type { ILabel } from 'shared/types/label';
+import type { IPaginatorResponse } from 'shared/types';
 import type { ILabelListFilters } from '@/stores/label';
 import { UpdateLabelDrawer } from '../UpdateLabelDrawer';
 

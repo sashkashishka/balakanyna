@@ -12,7 +12,7 @@ import {
   type SelectProps,
 } from 'antd';
 
-import type { ILabel } from '@/types/label';
+import type { ILabel } from 'shared/types/label';
 import { $createLabel, $updateLabel } from '@/stores/label';
 
 const typeOptions: SelectProps['options'] = [

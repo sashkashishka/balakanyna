@@ -13,7 +13,7 @@ import {
 
 import { $createUser, $updateUser } from '@/stores/user';
 import { redirectUserView } from '@/stores/router';
-import type { IUser } from '@/types/user';
+import type { IUser } from 'shared/types/user';
 
 interface IProps {
   name: string;

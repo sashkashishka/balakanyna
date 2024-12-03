@@ -7,9 +7,9 @@ import { useStore } from '@nanostores/react';
 import { formatDate } from '@/utils/date';
 import { Filters } from '@/components/Filters';
 import type { TFilters } from '@/components/Filters/types';
-import type { TTask } from '@/types/task';
-import type { ILabel } from '@/types/label';
-import type { IPaginatorResponse } from '@/types';
+import type { TTask } from 'shared/types/task';
+import type { ILabel } from 'shared/types/label';
+import type { IPaginatorResponse } from 'shared/types';
 import type { ITaskListFilters } from '@/stores/task';
 import { UpdateTaskDrawer } from '../UpdateTaskDrawer';
 

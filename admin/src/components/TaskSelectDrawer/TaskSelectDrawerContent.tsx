@@ -8,7 +8,7 @@ import {
 import { TaskTable } from '@/components/TaskTable';
 import { createListFilters } from '@/stores/_list-filter';
 import { CreateTaskDrawer } from '@/components/CreateTaskDrawer';
-import type { TTask } from '@/types/task';
+import type { TTask } from 'shared/types/task';
 
 const { Paragraph } = Typography;
 

@@ -8,7 +8,7 @@ import {
 import { ImageTable } from '@/components/ImageTable';
 import { createListFilters } from '@/stores/_list-filter';
 import { CreateImageDrawer } from '@/components/CreateImageDrawer';
-import type { IImage } from '@/types/image';
+import type { IImage } from 'shared/types/image';
 
 const { Paragraph } = Typography;
 

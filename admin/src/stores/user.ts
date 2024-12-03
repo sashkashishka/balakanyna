@@ -1,6 +1,6 @@
 import { type ReadableAtom } from 'nanostores';
-import type { IUser } from '@/types/user';
-import type { IPaginatorResponse } from '@/types';
+import type { IUser } from 'shared/types/user';
+import type { IPaginatorResponse } from 'shared/types';
 import { createFetcherStore, createMutatorStore } from './_query';
 import { type IFilters } from './_list-filter';
 import { getSearchParam } from '@/utils/network';

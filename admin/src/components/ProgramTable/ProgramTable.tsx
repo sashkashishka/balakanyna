@@ -8,8 +8,8 @@ import { formatDate } from '@/utils/date';
 import { ROUTES } from '@/stores/router';
 import { Filters } from '@/components/Filters';
 import type { TFilters } from '@/components/Filters/types';
-import type { IProgram } from '@/types/program';
-import type { IPaginatorResponse } from '@/types';
+import type { IProgram } from 'shared/types/program';
+import type { IPaginatorResponse } from 'shared/types';
 import type { IProgramListFilters } from '@/stores/program';
 import { UpdateProgramDrawer } from '../UpdateProgramDrawer';
 

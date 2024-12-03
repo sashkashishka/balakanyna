@@ -10,7 +10,7 @@ import {
 } from 'antd';
 
 import { $register } from '@/stores/auth';
-import type { ICredentials } from '@/types/auth';
+import type { ICredentials } from 'shared/types/auth';
 import { openLogin, ROUTES } from '@/stores/router';
 
 const { Title } = Typography;

@@ -1,4 +1,4 @@
-import type { TTask } from '@/types/task';
+import type { TTask } from 'shared/types/task';
 import { TaskSelectDrawer } from '@/components/TaskSelectDrawer';
 import { Space } from 'antd';
 

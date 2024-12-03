@@ -2,7 +2,7 @@ import { useStore } from '@nanostores/react';
 import type { FetcherStore } from '@nanostores/query';
 import { Flex, Spin } from 'antd';
 
-import type { IProgramFull } from '@/types/program';
+import type { IProgramFull } from 'shared/types/program';
 
 import { ProgramForm } from '../ProgramForm';
 

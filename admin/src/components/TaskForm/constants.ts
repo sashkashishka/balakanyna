@@ -1,4 +1,4 @@
-import type { TTaskType } from '@/types/task';
+import type { TTaskType } from 'shared/types/task';
 import type { SelectProps } from 'antd';
 
 export const taskTypeOptions: SelectProps<

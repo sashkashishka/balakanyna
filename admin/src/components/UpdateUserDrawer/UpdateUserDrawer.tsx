@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Button, Drawer } from 'antd';
 import dayjs from 'dayjs';
 
-import type { IUser } from '@/types/user';
+import type { IUser } from 'shared/types/user';
 
 import { UserForm } from '../UserForm';
 

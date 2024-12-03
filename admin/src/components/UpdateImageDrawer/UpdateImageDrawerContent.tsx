@@ -2,7 +2,7 @@ import { useStore } from '@nanostores/react';
 import type { FetcherStore } from '@nanostores/query';
 import { Flex, Space, Spin } from 'antd';
 
-import type { IImage } from '@/types/image';
+import type { IImage } from 'shared/types/image';
 
 import { ImageForm } from '../ImageForm';
 import { LinkLabelForm } from '../LinkLabelForm';

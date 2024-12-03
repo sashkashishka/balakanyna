@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Drawer } from 'antd';
 
 import { LabelForm, type ILabelFormInitialValues } from '../LabelForm';
-import type { ILabel } from '@/types/label';
+import type { ILabel } from 'shared/types/label';
 
 interface IProps {
   initialValues?: Partial<ILabelFormInitialValues>;

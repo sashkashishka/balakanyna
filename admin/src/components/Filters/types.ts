@@ -1,4 +1,4 @@
-import type { ILabel } from '@/types/label';
+import type { ILabel } from 'shared/types/label';
 import type { SelectProps } from 'antd';
 import type { ReactNode } from 'react';
 

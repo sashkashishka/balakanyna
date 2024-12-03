@@ -1,6 +1,6 @@
 import { theme, notification, Image, Upload, Flex, Space } from 'antd';
 
-import type { IImage } from '@/types/image';
+import type { IImage } from 'shared/types/image';
 import { invalidateKeys } from '@/stores/_query';
 import { IMAGE_KEYS } from '@/stores/image';
 import { PlusOutlined } from '@ant-design/icons';

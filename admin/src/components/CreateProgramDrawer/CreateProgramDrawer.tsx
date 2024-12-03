@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Drawer } from 'antd';
 
-import type { IProgram } from '@/types/program';
+import type { IProgram } from 'shared/types/program';
 import { ProgramForm } from '../ProgramForm';
 
 interface IProps {

@@ -5,7 +5,7 @@ import { Select, type SelectProps, Spin, Tag } from 'antd';
 import { debounce } from '@/utils/debounce';
 import { defaultLabelListFilters, makeLabelsStore } from '@/stores/label';
 import { createListFilters } from '@/stores/_list-filter';
-import type { ILabel } from '@/types/label';
+import type { ILabel } from 'shared/types/label';
 
 const DEBOUNCE_DELAY = 200;
 

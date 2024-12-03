@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState, type ReactNode } from 'react';
 import { useStore } from '@nanostores/react';
 import { notification, Select, Space, Spin, Tag } from 'antd';
 
-import type { ILabel } from '@/types/label';
+import type { ILabel } from 'shared/types/label';
 import {
   $linkImageLabel,
   $linkTaskLabel,

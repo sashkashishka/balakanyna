@@ -1,11 +1,13 @@
 import { useStore } from '@nanostores/react';
-import { notification } from 'antd';
+import { Col, Flex, Form, notification, Row } from 'antd';
 
-import { type TTaskType, type TTask } from '@/types/task';
+import { type TTaskType, type TTask } from 'shared/types/task';
 import { $createTask, $updateTask } from '@/stores/task';
 
 import { SemaphoreTextConfigForm } from './tasks/SemaphoreTextConfigForm';
 import { ImageSliderConfigForm } from './tasks/ImageSliderConfigForm';
+import { useMemo, useState } from 'react';
+import { TaskPreview } from '../TaskPreview';
 
 export interface ITaskFormProps {
   taskType: TTaskType;

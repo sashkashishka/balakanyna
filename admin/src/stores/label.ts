@@ -1,8 +1,8 @@
 import { type ReadableAtom } from 'nanostores';
-import type { IPaginatorResponse } from '@/types';
+import type { IPaginatorResponse } from 'shared/types';
 import { createFetcherStore, createMutatorStore } from './_query';
 import { type IFilters } from './_list-filter';
-import type { ILabel } from '@/types/label';
+import type { ILabel } from 'shared/types/label';
 import { getSearchParam } from '@/utils/network';
 
 export interface ILabelListFilters extends IFilters {

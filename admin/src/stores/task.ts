@@ -1,8 +1,8 @@
 import { type ReadableAtom } from 'nanostores';
-import type { IPaginatorResponse } from '@/types';
+import type { IPaginatorResponse } from 'shared/types';
 import { createFetcherStore, createMutatorStore } from './_query';
 import { type IFilters } from './_list-filter';
-import type { TTask, TTaskType } from '@/types/task';
+import type { TTask, TTaskType } from 'shared/types/task';
 import { getSearchParam } from '@/utils/network';
 
 export interface ITaskListFilters extends IFilters {
