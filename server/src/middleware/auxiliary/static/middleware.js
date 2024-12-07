@@ -1,19 +1,19 @@
 import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
-import path from 'node:path';
 import mime from 'mime-types';
 
 import { ERR_FILE_STREAM_ERROR, ERR_NOT_FOUND } from '../../../core/errors.js';
+import { getFilePath } from './utils.js';
 
 /**
- * @argument {{ prefix: string; dir: string }} options
+ * @argument {{ prefix: string; dir: string; notFound: 'default' | 'index' }} options
  * @argument {{
  *   fsStat: typeof import('node:fs/promises').stat;
  *   fsCreateReadStream: typeof import('node:fs').createReadStream;
  * }} deps
  */
 export function createStaticMiddleware(options, deps = {}) {
-  const { prefix, dir } = options;
+  const { prefix, dir, notFound = 'default' } = options;
   const { fsStat = stat, fsCreateReadStream = createReadStream } = deps;
 
   /**
@@ -25,18 +25,17 @@ export function createStaticMiddleware(options, deps = {}) {
     if (!file.startsWith(prefix)) return next();
 
     try {
-      const { name } = path.parse(file);
-
-      if (name.startsWith('.')) {
-        throw new ERR_NOT_FOUND();
-      }
-
-      const filePath = path.join(dir, file.replace(prefix, ''));
-
-      await fsStat(filePath);
+      const { filePath, code } = await getFilePath({
+        prefix,
+        file,
+        dir,
+        notFound,
+        fsStat,
+      });
 
       const fileStream = fsCreateReadStream(filePath);
 
+      ctx.res.statusCode = code;
       fileStream.pipe(ctx.res);
 
       const contentType = mime.lookup(filePath) || 'application/octet-stream';
@@ -59,7 +58,7 @@ export function createStaticMiddleware(options, deps = {}) {
       });
     } catch (e) {
       ctx.logger.error(e);
-      throw new ERR_NOT_FOUND();
+      throw e;
     }
   };
 }

@@ -14,6 +14,7 @@ const config = {
     {
       prefix: '/media',
       dir: path.resolve(import.meta.dirname, '../static/media'),
+      notFound: 'default',
     },
   ],
   timeouts: {

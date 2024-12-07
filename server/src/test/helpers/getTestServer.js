@@ -129,6 +129,7 @@ export function getTestConfig() {
       {
         prefix: '/media',
         dir: path.resolve(import.meta.dirname, '../static'),
+        notFound: 'default',
       },
     ],
     search: {

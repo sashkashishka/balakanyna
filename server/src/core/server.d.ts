@@ -15,7 +15,7 @@ export interface IDependencies {
 
 export interface IConfig {
   port: number;
-  static: Array<{ prefix: string; dir: string }>;
+  static: Array<{ prefix: string; dir: string; notFound: 'default' | 'index' }>;
   timeouts: {
     connection: number;
     request: number;
