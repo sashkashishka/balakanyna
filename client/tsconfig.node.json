@@ -4,6 +4,11 @@
     "lib": [
       "ES2023"
     ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+    },
     "module": "Preserve",
     /* Bundler mode */
     "moduleResolution": "bundler",
