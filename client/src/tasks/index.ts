@@ -1,2 +1,2 @@
-export { SemaphoreText } from './SemaphoreText/index.ts';
-export { ImageSlider, ImageSliderPreview } from './ImageSlider/index.ts';
+export { SemaphoreText } from './SemaphoreText/SemaphoreText.tsx';
+export { ImageSlider, ImageSliderPreview } from './ImageSlider/ImageSlider.tsx';

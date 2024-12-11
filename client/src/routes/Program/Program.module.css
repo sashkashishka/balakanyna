@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: var(--body-height);
+  overflow: hidden;
+}
+
+.programContainer {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+  height: inherit;
+}
+
+.taskContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  height: inherit;
+}
+
+@media (min-width: 1024px) {
+  .programContainer {
+    grid-template-columns: 1fr 288px;
+    padding: 16px;
+  }
+
+  .taskContainer {
+    height: calc(var(--body-height) - 32px);
+  }
+}

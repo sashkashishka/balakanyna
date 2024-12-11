@@ -1,1 +1,3 @@
-export { ImageSlider, ImageSliderPreview } from './ImageSlider.tsx';
+import { ImageSlider } from './ImageSlider.tsx';
+
+export default ImageSlider;

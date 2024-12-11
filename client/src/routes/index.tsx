@@ -19,6 +19,14 @@ export function Routes() {
         <Match when={router.alias === ALIASES.HOME}>
           <HomePage />
         </Match>
+
+        <Match
+          when={
+            router.alias === ALIASES.PROGRAM || router.alias === ALIASES.TASK
+          }
+        >
+          <ProgramPage />
+        </Match>
       </Switch>
     </DefaultLayout>
   );
