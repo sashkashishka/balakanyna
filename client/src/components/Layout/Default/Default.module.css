@@ -1,0 +1,20 @@
+:global(:root) {
+  --header-height: 64px;
+  --body-height: calc(100vh - 64px);
+}
+
+.container {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: end;
+  height: var(--header-height);
+  padding: 0 16px;
+  background: #c8e6ff;
+}
