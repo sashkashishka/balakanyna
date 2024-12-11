@@ -37,6 +37,9 @@ import * as programUpdate from './api/admin/program/update/middleware.js';
 import * as programGet from './api/admin/program/get/middleware.js';
 import * as programList from './api/admin/program/list/middleware.js';
 
+import * as clientProgramGet from './api/client/program/get/middleware.js';
+import * as clientTaskGet from './api/client/task/get/middleware.js';
+
 import { receiveJsonBodyMiddleware } from './auxiliary/receiveJsonBody/middleware.js';
 import { createStaticMiddleware } from './auxiliary/static/middleware.js';
 import { limitByIpMiddleware } from './auxiliary/limitByIp/middleware.js';
@@ -202,6 +205,13 @@ export function connectMiddlewares(router, config) {
     verifyTokenMiddleware,
     unlinkLabelImage.middleware,
   );
+
+  // client
+  router[clientProgramGet.method](
+    clientProgramGet.route,
+    clientProgramGet.middleware,
+  );
+  router[clientTaskGet.method](clientTaskGet.route, clientTaskGet.middleware);
 
   if (Array.isArray(config.static)) {
     config.static.forEach((options) => {
