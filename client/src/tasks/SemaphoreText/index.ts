@@ -1,1 +1,3 @@
-export { SemaphoreText } from './SemaphoreText.tsx';
+import { SemaphoreText } from './SemaphoreText.tsx';
+
+export default SemaphoreText;

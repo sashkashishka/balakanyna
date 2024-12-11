@@ -1,0 +1,26 @@
+.link {
+  box-sizing: border-box;
+  margin: 0px;
+  min-width: 0px;
+  display: inline;
+  color: #000;
+  text-decoration: none;
+  box-shadow: rgb(155 164 239 / 50%) 0px -2px 0px 0px inset;
+  transition: color 0.3s, box-shadow 0.3s;
+}
+
+.link:hover {
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: rgb(155, 164, 239) 0px -2px 0px 0px inset;
+}
+
+.link:active {
+  box-shadow: rgb(155, 164, 239) 0px -2px 0px 0px inset;
+}
+
+.link:focus {
+  outline: none;
+  text-decoration: none;
+  box-shadow: rgb(155 164 239 / 50%) 0px -2px 0px 0px inset;
+}

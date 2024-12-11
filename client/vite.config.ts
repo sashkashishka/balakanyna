@@ -12,6 +12,11 @@ export default defineConfig(({ mode }) => {
           except: ['swiper'],
         }),
       ],
+      resolve: {
+        alias: {
+          '@': path.resolve(import.meta.dirname, './src'),
+        },
+      },
       build: {
         outDir: 'lib',
         lib: {
@@ -24,5 +29,27 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [solid()],
+    resolve: {
+      alias: {
+        '@': path.resolve(import.meta.dirname, './src'),
+      },
+    },
+    css: {
+      modules: {
+        scopeBehaviour: 'local',
+      },
+    },
+    server: {
+      proxy: {
+        '/media': {
+          target: 'http://localhost:4030',
+          changeOrigin: true,
+        },
+        '/api': {
+          target: 'http://localhost:4030',
+          changeOrigin: true,
+        },
+      },
+    },
   };
 });

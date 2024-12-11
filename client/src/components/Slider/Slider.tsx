@@ -7,7 +7,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 interface IProps {
-  children?: JSXElement[] | JSXElement;
+  children?: JSXElement;
 }
 
 export function Slide({ children }: IProps) {
@@ -16,21 +16,22 @@ export function Slide({ children }: IProps) {
 
 export function Slider({ children }: IProps) {
   let container: HTMLDivElement;
-
-  const swiper = new Swiper('.swiper', {
-    modules: [Navigation, Pagination],
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-  });
+  let swiper: Swiper;
 
   onMount(() => {
+    swiper = new Swiper('.swiper', {
+      modules: [Navigation, Pagination],
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+
     swiper.init(container);
   });
 
   onCleanup(() => {
-    swiper.destroy(true, true);
+    swiper?.destroy?.(true, true);
   });
 
   return (

@@ -1,0 +1,104 @@
+.container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 288px;
+  background: #fff;
+  z-index: 2;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.containerOpen {
+  transform: translateX(0);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.2);
+  z-index: 1;
+  transform: translateX(100%);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.overlayOpen {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.containerHeader {
+  height: 64px;
+  padding: 16px 8px;
+}
+
+.containerBody {
+  padding: 0 16px;
+  height: calc(100% - 64px);
+  overflow: auto;
+}
+
+.button {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+}
+
+.list {
+  display: grid;
+  gap: 8px;
+}
+
+.listItem {
+  border-radius: 8px;
+  transition: background 0.3s ease-in-out;
+}
+
+.listItem:hover:not(.listItemActive) {
+  cursor: pointer;
+  background: rgba(0,0,0,0.06);
+  border-radius: 8px;
+}
+
+.listItemActive {
+  background: #c9e7ff;
+  pointer-events: none;
+}
+
+.listItemLink,
+.listItemLink:hover,
+.listItemLink:active {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  box-shadow: none !important;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    position: static;
+    transform: translateX(0);
+    background: rgba(0,0,0,0.04);
+    border-radius: 12px;
+  }
+
+  .containerHeader {
+    display: none;
+  }
+
+  .overlay {
+    display: none;
+  }
+
+  .button {
+    display: none;
+  }
+}
