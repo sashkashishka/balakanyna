@@ -24,7 +24,7 @@ export function useSearchParams() {
 
 interface IProps {
   routes: IRoutesConfig;
-  children?: JSXElement[] | JSXElement;
+  children?: JSXElement;
 }
 
 export function Router(props: IProps) {
