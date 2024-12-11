@@ -2,28 +2,33 @@ import type { TTask } from 'shared/types/task.ts';
 import { Slide, Slider } from '../../components/Slider/Slider.tsx';
 
 import styles from './ImageSlider.module.css';
+import { For } from 'solid-js';
 
 interface IProps {
   config: Extract<TTask, { type: 'imageSlider' }>['config'];
 }
 
-export function ImageSlider({ config }: IProps) {
+export function ImageSlider(props: IProps) {
+  const config = () => props.config;
+
   return (
-    <div>
-      <h3 class={styles.title}>{config.title}</h3>
+    <div class={styles.container}>
+      <h3 class={styles.title}>{config().title}</h3>
 
       <Slider>
-        {config.slides.map(({ image }) => (
-          <Slide>
-            <img
-              src={image.path}
-              alt={image.filename}
-              width="100%"
-              height="100%"
-              style={{ 'object-fit': 'contain' }}
-            />
-          </Slide>
-        ))}
+        <For each={config().slides}>
+          {({ image }) => (
+            <Slide>
+              <img
+                src={image.path}
+                alt={image.filename}
+                width="100%"
+                height="100%"
+                style={{ 'object-fit': 'contain' }}
+              />
+            </Slide>
+          )}
+        </For>
       </Slider>
     </div>
   );
