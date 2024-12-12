@@ -1,4 +1,4 @@
-import type { TTask } from './task';
+import type { TTask } from './task.ts';
 
 export interface IProgram {
   id: number;

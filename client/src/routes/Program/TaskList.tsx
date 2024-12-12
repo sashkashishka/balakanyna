@@ -68,7 +68,7 @@ export function TaskList({ tasks }: IProps) {
                   onClick={() => setOpen(false)}
                 >
                   <Link
-                    href={getTaskHref(pid(), task.id)}
+                    href={getTaskHref(pid(), String(task.id))}
                     class={styles.listItemLink}
                   >
                     Завдання {i() + 1}
