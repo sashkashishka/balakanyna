@@ -4,7 +4,7 @@ import { getAjv } from '../../core/ajv.js';
 import { getDb } from '../../db/index.js';
 import { createServer, getRouter } from '../../server.js';
 import { Logger } from '../../utils/logger.js';
-import { clearDb, getTmpDbUrl, setupDb } from './db.js';
+import { clearDbFile, setupDbFile } from './db.js';
 import { mergeDeep } from '../../utils/merge.js';
 
 /**
@@ -42,11 +42,11 @@ export async function getTestServer({
    * @type {import('../../db/index.js').IDb}
    */
   let db = deps.db;
-  let dbDir = '';
+  let dbUrl = '';
 
   if (!db) {
-    dbDir = await setupDb(getTmpDbUrl());
-    db = await getDb(dbDir);
+    dbUrl = await setupDbFile();
+    db = await getDb(dbUrl);
   }
 
   const router = getRouter(config, { logger, ajv, db }, connectMiddleware);
@@ -101,8 +101,8 @@ export async function getTestServer({
   async function stop() {
     await server.destroy();
 
-    if (dbDir) {
-      await clearDb(dbDir);
+    if (dbUrl) {
+      await clearDbFile(dbUrl);
     }
   }
 
