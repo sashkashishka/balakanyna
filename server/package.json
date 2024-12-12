@@ -21,14 +21,14 @@
     "drizzle-kit": "^0.26.2"
   },
   "dependencies": {
-    "@fastify/busboy": "^3.0.0",
-    "ajv": "^8.17.1",
-    "ajv-formats": "^3.0.1",
-    "better-sqlite3": "^11.5.0",
-    "cookie": "^1.0.1",
-    "drizzle-orm": "^0.35.3",
-    "jose": "^5.9.6",
-    "mime-types": "^2.1.35",
+    "@fastify/busboy": "3.0.0",
+    "ajv": "8.17.1",
+    "ajv-formats": "3.0.1",
+    "better-sqlite3": "11.5.0",
+    "cookie": "1.0.1",
+    "drizzle-orm": "0.35.3",
+    "jose": "5.9.6",
+    "mime-types": "2.1.35",
     "shared": "workspace:*"
   }
 }
