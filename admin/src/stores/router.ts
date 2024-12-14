@@ -24,23 +24,29 @@ export const ROUTE_ALIAS = {
   TASK_LIST: 'task-list',
 };
 
+function generateRoute(route: string) {
+  const base = import.meta.env.PROD ? '/admin' : '';
+
+  return new URL(base + route, 'http://a').pathname;
+}
+
 export const $router = createRouter({
-  [ROUTE_ALIAS.HOME]: '/',
-  [ROUTE_ALIAS.REGISTRATION]: '/registration',
-  [ROUTE_ALIAS.LOGIN]: '/login',
+  [ROUTE_ALIAS.HOME]: generateRoute('/'),
+  [ROUTE_ALIAS.REGISTRATION]: generateRoute('/registration'),
+  [ROUTE_ALIAS.LOGIN]: generateRoute('/login'),
 
-  [ROUTE_ALIAS.USER_LIST]: '/user/list',
-  [ROUTE_ALIAS.USER_VIEW]: '/user/view/:uid',
-  [ROUTE_ALIAS.USER_VIEW_PROGRAMS]: '/user/view/:uid/programs',
-  [ROUTE_ALIAS.USER_VIEW_TASKS]: '/user/view/:uid/tasks',
+  [ROUTE_ALIAS.USER_LIST]: generateRoute('/user/list'),
+  [ROUTE_ALIAS.USER_VIEW]: generateRoute('/user/view/:uid'),
+  [ROUTE_ALIAS.USER_VIEW_PROGRAMS]: generateRoute('/user/view/:uid/programs'),
+  [ROUTE_ALIAS.USER_VIEW_TASKS]: generateRoute('/user/view/:uid/tasks'),
 
-  [ROUTE_ALIAS.PROGRAM_LIST]: '/program/list',
+  [ROUTE_ALIAS.PROGRAM_LIST]: generateRoute('/program/list'),
 
-  [ROUTE_ALIAS.LABEL_LIST]: '/label/list',
+  [ROUTE_ALIAS.LABEL_LIST]: generateRoute('/label/list'),
 
-  [ROUTE_ALIAS.IMAGE_LIST]: '/image/list',
+  [ROUTE_ALIAS.IMAGE_LIST]: generateRoute('/image/list'),
 
-  [ROUTE_ALIAS.TASK_LIST]: '/task/list',
+  [ROUTE_ALIAS.TASK_LIST]: generateRoute('/task/list'),
 });
 
 export const ROUTE_TITLE = {
