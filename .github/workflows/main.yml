@@ -1,0 +1,87 @@
+name: Deploy balakanyna
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: 22.9.0
+  NODE_ENV: production
+  BALAKANYNA_IMAGE: balakanyna:${{github.sha}}
+  BALAKANYNA_IMAGE_FILE: balakanyna.tar
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Build docker image
+        run: |
+          docker build -t ${{env.BALAKANYNA_IMAGE} .
+
+      - name: Save docker image
+        run: |
+          docker save -o ./${{env.BALAKANYNA_IMAGE_FILE}} ${{env.BALAKANYNA_IMAGE}}
+          chmod a+r ./${{env.BALAKANYNA_IMAGE_FILE}}
+
+      - name: Copy images dir
+        uses: appleboy/scp-action@v0.1.6
+        with:
+          host: ${{ secrets.HOSTNAME }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: "${{ env.BALAKANYNA_IMAGE_FILE }}"
+          target: ${{ secrets.DOCKER_IMAGES_DIR }}
+
+      - name: Copy deploy dir
+        uses: appleboy/scp-action@v0.1.6
+        with:
+          host: ${{ secrets.HOSTNAME }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: ".deploy/*"
+          target: ${{ secrets.DIR }}
+          strip_components: 1
+
+      - name: Start containers
+        uses: appleboy/ssh-action@v1.0.1
+        env:
+          TAG: ${{ github.sha }}
+          DIR: ${{ secrets.DIR }}
+          DOCKER_IMAGES_DIR: ${{ secrets.DOCKER_IMAGES_DIR }}
+        with:
+          host: ${{ secrets.HOSTNAME }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          envs: TAG,DIR,DOCKER_IMAGES_DIR,BALAKANYNA_IMAGE_FILE
+          script_stop: true
+          script: |
+            bash ${{ secrets.DIR }}/scripts/update-env.sh
+            bash ${{ secrets.DIR }}/scripts/run-containers.sh
+
+      - name: Setup cron jobs
+        uses: appleboy/ssh-action@v1.0.1
+        with:
+          host: ${{ secrets.HOSTNAME }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          script: |
+            bash ${{ secrets.DIR }}/scripts/setup-crontab.sh
+
