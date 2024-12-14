@@ -23,7 +23,7 @@ export async function getTestServer({
   seed = () => void 0,
   deps = {},
 }) {
-  const config = mergeDeep(getTestConfig(), externalConfig);
+  const config = mergeDeep(await getTestConfig(), externalConfig);
 
   const logger =
     deps.logger ||
@@ -32,6 +32,7 @@ export async function getTestServer({
       prefix: '[TestServer]',
       transport: {
         handle: t.mock.fn(),
+        stop: t.mock.fn(),
       },
     });
 
@@ -41,11 +42,9 @@ export async function getTestServer({
    * @type {import('../../db/index.js').IDb}
    */
   let db = deps.db;
-  let dbUrl = '';
 
   if (!db) {
-    dbUrl = await setupDbFile();
-    db = await getDb(dbUrl);
+    db = await getDb(config.db.url);
   }
 
   const router = getRouter(config, { logger, ajv, db }, connectMiddleware);
@@ -99,10 +98,7 @@ export async function getTestServer({
 
   async function stop() {
     await server.destroy();
-
-    if (dbUrl) {
-      await clearDbFile(dbUrl);
-    }
+    await clearDbFile(config.db.url);
   }
 
   t.after(stop);
@@ -118,13 +114,18 @@ export async function getTestServer({
 
 /**
  * @TODO: make a configuration validator
- * @returns {import('../../core/server.js').IConfig}
+ * @returns {Promise<import('../../core/server.js').IConfig>}
  */
-export function getTestConfig() {
+export async function getTestConfig() {
+  const dbUrl = await setupDbFile();
+
   return {
+    db: {
+      url: dbUrl,
+    },
     logger: {
-      enabled: process.env.ENABLE_LOGGER === '1',
-      transport: process.env.LOGGER_TRANSPORT,
+      enabled: true,
+      transport: 'console',
       destinations: [
         {
           level: 'all',
@@ -132,7 +133,7 @@ export function getTestConfig() {
         },
       ],
     },
-    port: process.env.PORT,
+    port: 4138,
     static: [
       {
         prefix: '/media',
@@ -159,15 +160,15 @@ export function getTestConfig() {
       fieldname: 'image',
     },
     salt: {
-      password: process.env.PASSWORD_SALT || '123',
+      password: '123',
     },
     jwt: {
       cookie: 'token',
-      key: process.env.JWT_KEY,
-      expirationTime: process.env.JWT_EXPIRATION_TIME,
+      key: '123',
+      expirationTime: '2h',
     },
     restrictions: {
-      ip: process.env.ALLOWED_IP,
+      ip: '127.0.0.1',
     },
   };
 }

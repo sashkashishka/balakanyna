@@ -53,7 +53,7 @@ let saveDir = undefined;
 const fieldname = 'file';
 
 beforeEach(async () => {
-  saveDir = await fsp.mkdtemp(path.resolve(import.meta.dirname, 'tmp', 'test'));
+  saveDir = await fsp.mkdtemp(path.resolve(import.meta.dirname, 'tmp'));
 });
 
 afterEach(async () => {

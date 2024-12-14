@@ -9,8 +9,8 @@
     "start:watch": "node --watch --env-file=.env ./src/index.js",
     "drizzle": "drizzle-kit",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
-    "test": "node --env-file=.env.test ./src/test/index.js",
-    "test:watch": "TEST_WATCH=1 node --env-file=.env.test ./src/test/index.js"
+    "test": "node ./src/test/index.js",
+    "test:watch": "TEST_WATCH=1 node ./src/test/index.js"
   },
   "keywords": [],
   "author": "",

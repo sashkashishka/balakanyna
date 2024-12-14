@@ -15,6 +15,9 @@ export interface IDependencies {
 }
 
 export interface IConfig {
+  db: {
+    url: string;
+  };
   logger: {
     enabled: boolean;
     transport: 'console' | 'file';

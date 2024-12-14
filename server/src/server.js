@@ -32,7 +32,7 @@ export async function createServer(config, deps = {}) {
       prefix: '[BalakanynaServer]',
       transport: Logger.getTransport(config),
     });
-  const db = deps.database || (await getDb(process.env.DATABASE_URL));
+  const db = deps.database || (await getDb(config.db.url));
   const router = deps.router || getRouter(config, { logger, ajv, db });
 
   return new Server(config, {

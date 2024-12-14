@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  balakanyna:
+    container_name: balakanyna
+    image: balakanyna:$TAG
+    restart: "on-failure"
+    healthcheck:
+      test: ["CMD", "node", "./server/src/healthcheck.js"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+      start_interval: 5s
+    volumes:
+      - type: bind
+        source: ./$DB_FILE
+        target: /usr/app/server/src/$DB_FILE
+        read_only: false
+      - type: bind
+        source: .$IMAGES_DIR
+        target: /usr/app/server/src$IMAGES_DIR
+        read_only: false
+      - type: bind
+        source: ./logs/$LOG_FILE
+        target: /usr/app/server/src/$LOG_FILE
+        read_only: false
+    ports:
+      - '$PORT:$PORT'
+    expose:
+      - $PORT
+    env_file:
+      - ".env"

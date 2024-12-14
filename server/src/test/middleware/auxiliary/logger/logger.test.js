@@ -9,10 +9,11 @@ describe('[middleware] logger', async () => {
     const url = `/${Date.now()}`;
     const prefix = 'test';
     const handle = t.mock.fn();
+    const stop = t.mock.fn();
     const logger = new Logger({
       enabled: true,
       prefix,
-      transport: { handle },
+      transport: { handle, stop },
     });
     const { request } = await getTestServer({
       t,

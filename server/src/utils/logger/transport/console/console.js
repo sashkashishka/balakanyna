@@ -6,12 +6,12 @@ export function consoleTransport() {
       switch (level) {
         case 'error':
         case 'warn': {
-          return stderr.write('\n' + JSON.stringify(entity) + '\n');
+          return stderr.write(JSON.stringify(entity) + '\n');
         }
 
         case 'log':
         default: {
-          return stdout.write('\n' + JSON.stringify(entity) + '\n');
+          return stdout.write(JSON.stringify(entity) + '\n');
         }
       }
     },
