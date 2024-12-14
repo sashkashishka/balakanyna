@@ -3,8 +3,6 @@ import { run } from 'node:test';
 import process from 'node:process';
 import { argv } from 'node:process';
 
-import './helpers/setup.js';
-
 const file = argv[2];
 
 let options = {

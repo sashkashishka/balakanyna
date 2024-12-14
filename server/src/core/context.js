@@ -111,7 +111,7 @@ export class Context {
      */
     this.ajv = ajv;
     /**
-     * @type {import('../utils/logger.js').Logger}
+     * @type {import('../utils/logger/logger.js').Logger}
      */
     this.logger = logger;
     /**
@@ -140,6 +140,8 @@ export class Context {
   json(val, code = 200) {
     try {
       const str = JSON.stringify(val);
+
+      this.logger.log({ res: { val, code } });
 
       this.res
         .writeHead(code, {

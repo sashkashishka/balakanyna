@@ -5,8 +5,8 @@ export async function safeFileRm(file, logger = () => void 0) {
     await fsp.rm(file);
 
     return true;
-  } catch (e) {
-    logger(e);
+  } catch (err) {
+    logger({ err, place: 'safeFileRm' });
     return false;
   }
 }

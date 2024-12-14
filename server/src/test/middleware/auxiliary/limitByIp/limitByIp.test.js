@@ -20,7 +20,7 @@ describe('[auxiliary] limit by ip', async () => {
       },
     });
 
-    const resp = await request('/', { method: 'get'});
+    const resp = await request('/', { method: 'get' });
     const body = await resp.json();
 
     assert.equal(resp.status, 403);
@@ -41,7 +41,7 @@ describe('[auxiliary] limit by ip', async () => {
       },
     });
 
-    const resp = await request('/', { method: 'get'});
+    const resp = await request('/', { method: 'get' });
     const body = await resp.json();
 
     assert.equal(resp.status, 403);
@@ -66,7 +66,34 @@ describe('[auxiliary] limit by ip', async () => {
       },
     });
 
-    const resp = await request('/', { method: 'get'});
+    const resp = await request('/', { method: 'get' });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.deepEqual(body, answer);
+  });
+
+  test('should check proxy header x-real-ip and allow if ip equals', async (t) => {
+    const ip = '182.2.10.28';
+    const answer = { ok: 1 };
+    const { request } = await getTestServer({
+      t,
+      deps: { db: dbStub },
+      config: {
+        restrictions: { ip },
+      },
+      connectMiddleware: (router) => {
+        router.use(limitByIpMiddleware);
+        router.use((ctx) => {
+          ctx.json(answer);
+        });
+      },
+    });
+
+    const resp = await request('/', {
+      method: 'get',
+      headers: { 'x-real-ip': ip },
+    });
     const body = await resp.json();
 
     assert.equal(resp.status, 200);

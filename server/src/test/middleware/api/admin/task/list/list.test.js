@@ -1397,13 +1397,8 @@ describe('[api] task list', async () => {
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         await seedTasks(db, [
-          tasks[0],
-          {
-            ...semaphoreTextTask,
-            config: {
-              foo: 1,
-            },
-          },
+          semaphoreTextTask,
+          imageSliderTask,
         ]);
       },
     });

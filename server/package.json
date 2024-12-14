@@ -5,12 +5,12 @@
   "type": "module",
   "main": "./src/index.js",
   "scripts": {
-    "start": "node --env-file=.env ./src/index.js",
+    "start": "node ./src/index.js",
     "start:watch": "node --watch --env-file=.env ./src/index.js",
     "drizzle": "drizzle-kit",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
-    "test": "node --env-file=.env.test ./src/test/index.js",
-    "test:watch": "TEST_WATCH=1 node --env-file=.env.test ./src/test/index.js"
+    "test": "node ./src/test/index.js",
+    "test:watch": "TEST_WATCH=1 node ./src/test/index.js"
   },
   "keywords": [],
   "author": "",
@@ -21,14 +21,14 @@
     "drizzle-kit": "^0.26.2"
   },
   "dependencies": {
-    "@fastify/busboy": "^3.0.0",
-    "ajv": "^8.17.1",
-    "ajv-formats": "^3.0.1",
-    "better-sqlite3": "^11.5.0",
-    "cookie": "^1.0.1",
-    "drizzle-orm": "^0.35.3",
-    "jose": "^5.9.6",
-    "mime-types": "^2.1.35",
+    "@fastify/busboy": "3.0.0",
+    "ajv": "8.17.1",
+    "ajv-formats": "3.0.1",
+    "better-sqlite3": "11.5.0",
+    "cookie": "1.0.1",
+    "drizzle-orm": "0.35.3",
+    "jose": "5.9.6",
+    "mime-types": "2.1.35",
     "shared": "workspace:*"
   }
 }

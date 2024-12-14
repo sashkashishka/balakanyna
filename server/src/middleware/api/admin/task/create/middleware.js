@@ -69,8 +69,11 @@ async function createTaskMiddleware(ctx) {
         }
 
         return result;
-      } catch (e) {
-        ctx.logger.error('[createTaskTransaction]', e);
+      } catch (err) {
+        ctx.logger.error({
+          err,
+          place: '[createTaskTransaction]',
+        });
         tx.rollback();
       }
     },

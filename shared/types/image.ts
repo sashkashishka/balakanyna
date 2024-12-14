@@ -1,4 +1,4 @@
-import type { ILabel } from './label';
+import type { ILabel } from './label.ts';
 
 export interface IImageEntry {
   id: number;

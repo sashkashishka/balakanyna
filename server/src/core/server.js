@@ -8,7 +8,7 @@ export class Server {
    */
   #config = undefined;
   /**
-   * @type {import('../utils/logger.js').Logger}
+   * @type {import('../utils/logger/logger.js').Logger}
    */
   #logger = undefined;
   /**
@@ -59,7 +59,9 @@ export class Server {
 
   listen() {
     this.#server.listen({ port: this.#config.port, host: '0.0.0.0' }, () =>
-      this.#logger.log('Server started'),
+      this.#logger.log({
+        message: 'Server started',
+      }),
     );
   }
 
@@ -68,11 +70,15 @@ export class Server {
    */
   async destroy(signal) {
     if (signal) {
-      this.#logger.log('destroy', signal);
+      this.#logger.log({
+        message: 'Destroy',
+        signal,
+      });
     }
 
     await this.#closeServer();
     this.#db.$client.close();
+    await this.#logger.stop();
 
     process.removeAllListeners();
   }
@@ -103,7 +109,7 @@ export class Server {
         timers.clearTimeout(timer);
 
         if (err && err.code !== 'ERR_SERVER_NOT_RUNNING') {
-          this.#logger.error(err);
+          this.#logger.error({ err });
 
           return reject(err);
         }

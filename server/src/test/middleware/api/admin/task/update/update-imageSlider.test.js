@@ -2,7 +2,7 @@ import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { getTestServer } from '../../../../../helpers/getTestServer.js';
-import { getAuthCookie } from '../../../../../helpers/utils.js';
+import { getAuthCookie, sleep } from '../../../../../helpers/utils.js';
 
 import * as taskUpdate from '../../../../../../middleware/api/admin/task/update/middleware.js';
 
@@ -255,6 +255,8 @@ describe('[api] task update slider', () => {
         ],
       },
     };
+
+    await sleep(1000);
 
     const resp = await request(taskUpdate.route, {
       method: taskUpdate.method,

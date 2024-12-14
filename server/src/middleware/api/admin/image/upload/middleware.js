@@ -171,7 +171,7 @@ async function uploadImageMiddelware(ctx) {
 
       file.once('error', function onFileError(err) {
         destroyFileWriteStream();
-        ctx.logger.error(err);
+        ctx.logger.error({ err, place: 'fileUploadMidleware' });
         reject(err);
       });
     },
