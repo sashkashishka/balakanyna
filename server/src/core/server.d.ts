@@ -5,6 +5,7 @@ import type { Router } from './core/router.js';
 import type { Logger } from './utils/logger/logger.js';
 import type { IDb } from './db/index.js';
 import type { Context } from './context.js';
+import type { IDestination } from '../utils/logger/transport/file/file.js';
 
 export interface IDependencies {
   router: Router;
@@ -16,6 +17,8 @@ export interface IDependencies {
 export interface IConfig {
   logger: {
     enabled: boolean;
+    transport: 'console' | 'file';
+    destinations: IDestination[];
   };
   port: number;
   static: Array<{ prefix: string; dir: string; notFound: 'default' | 'index' }>;
@@ -23,6 +26,7 @@ export interface IConfig {
     connection: number;
     request: number;
     close: number;
+    worker: number;
   };
   search: {
     limit: number;

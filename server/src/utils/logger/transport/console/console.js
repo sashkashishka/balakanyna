@@ -14,6 +14,7 @@ export function consoleTransport() {
           return stdout.write('\n' + JSON.stringify(entity) + '\n');
         }
       }
-    }
-  }
+    },
+    stop() {},
+  };
 }

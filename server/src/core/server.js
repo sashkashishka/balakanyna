@@ -60,7 +60,7 @@ export class Server {
   listen() {
     this.#server.listen({ port: this.#config.port, host: '0.0.0.0' }, () =>
       this.#logger.log({
-        message: 'Server started'
+        message: 'Server started',
       }),
     );
   }
@@ -72,12 +72,13 @@ export class Server {
     if (signal) {
       this.#logger.log({
         message: 'Destroy',
-        signal
+        signal,
       });
     }
 
     await this.#closeServer();
     this.#db.$client.close();
+    await this.#logger.stop();
 
     process.removeAllListeners();
   }

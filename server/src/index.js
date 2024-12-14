@@ -11,6 +11,13 @@ process.title = 'balakanyna-server';
 const config = {
   logger: {
     enabled: process.env.ENABLE_LOGGER === '1',
+    transport: process.env.LOGGER_TRANSPORT,
+    destinations: [
+      {
+        level: 'all',
+        file: path.resolve(import.meta.dirname, './balakanyna.log'),
+      },
+    ],
   },
   port: process.env.PORT,
   static: [
@@ -24,6 +31,7 @@ const config = {
     connection: 10000,
     request: 5000,
     close: 3000,
+    worker: 3000,
   },
   search: {
     limit: 50,

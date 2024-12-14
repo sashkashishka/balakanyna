@@ -1,10 +1,29 @@
 import { consoleTransport } from './transport/console/console.js';
+import { fileTransport } from './transport/file/file.js';
 
 export class Logger {
   #enabled = true;
   #prefix = '';
   #transport = undefined;
   #metadata = {};
+
+  /**
+   * @argument {import('../../core/server.js').IConfig} config
+   */
+  static getTransport(config) {
+    switch (config.logger.transport) {
+      case 'file':
+        return fileTransport({
+          destinations: config.logger.destinations,
+          timeout: {
+            close: config.timeouts.worker,
+          },
+        });
+
+      default:
+        return consoleTransport();
+    }
+  }
 
   constructor({ enabled, prefix, transport, metadata }) {
     this.#enabled = enabled;
@@ -20,6 +39,10 @@ export class Logger {
       transport: this.#transport,
       metadata: metadata,
     });
+  }
+
+  stop() {
+    return this.#transport.stop();
   }
 
   #prepareEntity(level, entity) {
@@ -47,20 +70,20 @@ export class Logger {
     return entity;
   }
 
-  #handle(level, entity) {
+  #write(level, entity) {
     if (!this.#enabled) return;
     return this.#transport.handle(level, this.#prepareEntity(level, entity));
   }
 
   log(entity) {
-    this.#handle('log', entity);
+    this.#write('log', entity);
   }
 
   error(entity) {
-    this.#handle('error', entity);
+    this.#write('error', entity);
   }
 
   warn(entity) {
-    this.#handle('warn', entity);
+    this.#write('warn', entity);
   }
 }

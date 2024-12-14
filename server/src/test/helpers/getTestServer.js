@@ -124,6 +124,13 @@ export function getTestConfig() {
   return {
     logger: {
       enabled: process.env.ENABLE_LOGGER === '1',
+      transport: process.env.LOGGER_TRANSPORT,
+      destinations: [
+        {
+          level: 'all',
+          file: path.resolve(import.meta.dirname, './log/balakanyna.log'),
+        },
+      ],
     },
     port: process.env.PORT,
     static: [
@@ -140,6 +147,7 @@ export function getTestConfig() {
       connection: 1000,
       request: 500,
       close: 100,
+      worker: 100,
     },
     media: {
       prefix: 'media',
