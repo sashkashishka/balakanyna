@@ -65,8 +65,11 @@ async function deleteTaskMiddleware(ctx) {
         .delete(taskImageTable)
         .where(eq(taskImageTable.taskId, searchParams.id));
       await tx.delete(taskTable).where(eq(taskTable.id, searchParams.id));
-    } catch (e) {
-      ctx.logger.error('[deleteTaskTransaction]', e);
+    } catch (err) {
+      ctx.logger.error({
+        err,
+        place: '[deleteTaskTransaction]',
+      });
       tx.rollback();
     }
   });

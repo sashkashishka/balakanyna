@@ -44,12 +44,14 @@ import { receiveJsonBodyMiddleware } from './auxiliary/receiveJsonBody/middlewar
 import { createStaticMiddleware } from './auxiliary/static/middleware.js';
 import { limitByIpMiddleware } from './auxiliary/limitByIp/middleware.js';
 import { verifyTokenMiddleware } from './auxiliary/jwt/middleware.js';
+import { loggerMiddleware } from './auxiliary/logger/middleware.js';
 
 /**
  * @argument {import('../core/router.js').Router<import('../core/context.js').Context>} router
  * @argument {import('../core/server.js').IConfig} config
  */
 export function connectMiddlewares(router, config) {
+  router.use(loggerMiddleware);
   router.use(receiveJsonBodyMiddleware);
   router[healthcheck.method](healthcheck.route, healthcheck.middleware);
 

@@ -1,3 +1,4 @@
+import { getRandomId } from '../utils/randomId.js';
 import { Composer } from './composer.js';
 import { Context } from './context.js';
 
@@ -26,7 +27,7 @@ export class Router extends Composer {
       res,
       this.#db,
       this.#ajv,
-      this.#logger,
+      this.#logger.clone({ reqId: getRandomId() }),
       this.#config,
     );
 

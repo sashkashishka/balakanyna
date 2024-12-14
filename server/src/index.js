@@ -9,6 +9,9 @@ process.title = 'balakanyna-server';
  * @type {import('./core/server.js').IConfig}
  */
 const config = {
+  logger: {
+    enabled: process.env.ENABLE_LOGGER === '1',
+  },
   port: process.env.PORT,
   static: [
     {

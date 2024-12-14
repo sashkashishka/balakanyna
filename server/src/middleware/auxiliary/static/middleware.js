@@ -56,9 +56,9 @@ export function createStaticMiddleware(options, deps = {}) {
 
         ctx.throw(new ERR_FILE_STREAM_ERROR());
       });
-    } catch (e) {
-      ctx.logger.error(e);
-      throw e;
+    } catch (err) {
+      ctx.logger.error({ err, place: '[staticMiddleware]' });
+      throw err;
     }
   };
 }

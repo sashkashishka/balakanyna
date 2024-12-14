@@ -2,7 +2,7 @@ import type { Servers as HttpServer } from 'node:http';
 import type { Ajv } from 'ajv';
 
 import type { Router } from './core/router.js';
-import type { Logger } from './utils/logger.js';
+import type { Logger } from './utils/logger/logger.js';
 import type { IDb } from './db/index.js';
 import type { Context } from './context.js';
 
@@ -14,6 +14,9 @@ export interface IDependencies {
 }
 
 export interface IConfig {
+  logger: {
+    enabled: boolean;
+  };
   port: number;
   static: Array<{ prefix: string; dir: string; notFound: 'default' | 'index' }>;
   timeouts: {

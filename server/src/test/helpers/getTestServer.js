@@ -3,7 +3,7 @@ import path from 'node:path';
 import { getAjv } from '../../core/ajv.js';
 import { getDb } from '../../db/index.js';
 import { createServer, getRouter } from '../../server.js';
-import { Logger } from '../../utils/logger.js';
+import { Logger } from '../../utils/logger/logger.js';
 import { clearDbFile, setupDbFile } from './db.js';
 import { mergeDeep } from '../../utils/merge.js';
 
@@ -25,16 +25,15 @@ export async function getTestServer({
 }) {
   const config = mergeDeep(getTestConfig(), externalConfig);
 
-  const loggerTransport = {
-    log: t.mock.fn(),
-    warn: t.mock.fn(),
-    error: t.mock.fn(),
-  };
-
-  const logger = new Logger({
-    prefix: '[TestServer]',
-    transport: loggerTransport,
-  });
+  const logger =
+    deps.logger ||
+    new Logger({
+      enabled: config.logger.enabled,
+      prefix: '[TestServer]',
+      transport: {
+        handle: t.mock.fn(),
+      },
+    });
 
   const ajv = deps.ajv || getAjv();
 
@@ -112,7 +111,6 @@ export async function getTestServer({
     db,
     server,
     request,
-    loggerTransport,
     config,
     baseUrl: `http://localhost:${config.port}`,
   };
@@ -120,10 +118,13 @@ export async function getTestServer({
 
 /**
  * @TODO: make a configuration validator
- * @type {import('../../core/server.js').IConfig}
+ * @returns {import('../../core/server.js').IConfig}
  */
 export function getTestConfig() {
   return {
+    logger: {
+      enabled: process.env.ENABLE_LOGGER === '1',
+    },
     port: process.env.PORT,
     static: [
       {

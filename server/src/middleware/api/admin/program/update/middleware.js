@@ -120,8 +120,11 @@ async function updateProgramMiddleware(ctx) {
         }
 
         return program;
-      } catch (e) {
-        ctx.logger.error('[updateProgramTransaction]', e);
+      } catch (err) {
+        ctx.logger.error({
+          err,
+          place: '[updateProgramTransaction]',
+        });
         tx.rollback();
       }
     },
