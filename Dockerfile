@@ -1,6 +1,7 @@
 FROM node:22.9.0-alpine as base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
+ENV COREPACK_INTEGRITY_KEYS=0
 RUN corepack enable
 WORKDIR /usr/app
 COPY package.json .
