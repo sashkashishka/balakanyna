@@ -5,7 +5,7 @@
   script_dir=$(dirname "$0")
   source $script_dir/../.env
 
-  PROD_BACKUP_CMD="bash $DIR/scripts/backup.sh $DIR $DB_FILE $IMAGE_DIR"
+  PROD_BACKUP_CMD="bash $DIR/scripts/backup.sh $DIR $DB_FILE $IMAGES_DIR"
   PROD_DELETE_OLD_BACKUPS="bash $DIR/scripts/delete_old_files.sh $DIR/backup"
   DELETE_OLD_BALAKANYNA_IMAGES="bash $DIR/scripts/delete_old_docker_images.sh balakanyna"
 
