@@ -108,7 +108,7 @@ export function UserForm({ name, action, initialValues }: IProps) {
             name="grade"
             rules={[{ required: true, message: 'Please point a grade' }]}
           >
-            <InputNumber min={1} max={15} />
+            <InputNumber min={0} max={15} />
           </Form.Item>
         </Col>
 
