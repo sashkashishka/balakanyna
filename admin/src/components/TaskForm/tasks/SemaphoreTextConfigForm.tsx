@@ -13,6 +13,7 @@ import type { TTask } from 'shared/types/task';
 import type { ITaskFormProps } from '../TaskForm';
 import { safeLS } from '@/utils/storage';
 import { SortableFormList } from '@/components/FormFields/SortableFormList';
+import { useEffect, useMemo } from 'react';
 
 type TSemaphoreTextTask = Extract<TTask, { type: 'semaphoreText' }>;
 
@@ -32,16 +33,25 @@ export function SemaphoreTextConfigForm({
   const formName = 'semaphore-text-config-form';
   const LS_KEY = `${action}:${formName}`;
 
+  const defaultValues = useMemo(
+    () => ({
+      ...initialValues,
+      ...(action === 'create' && safeLS.getItem(LS_KEY)),
+      type: 'semaphoreText',
+    }),
+    [initialValues],
+  );
+
+  useEffect(() => {
+    form.setFieldsValue(defaultValues);
+  }, [form, defaultValues]);
+
   return (
     <Form
       form={form}
       name={formName}
       validateTrigger={['onChange', 'onFocus']}
-      initialValues={{
-        ...initialValues,
-        ...(action === 'create' && safeLS.getItem(LS_KEY)),
-        type: 'semaphoreText',
-      }}
+      initialValues={defaultValues}
       onFinish={async (values) => {
         const result = await onFinish(values);
 

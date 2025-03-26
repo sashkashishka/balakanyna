@@ -1,7 +1,7 @@
 import type { ILabel } from './label.ts';
 import type { IImageEntry } from './image.ts';
 
-export type TTaskType = 'semaphoreText' | 'imageSlider';
+export type TTaskType = 'semaphoreText' | 'imageSlider' | 'wordwall';
 
 interface ITask {
   id: number;
@@ -30,4 +30,11 @@ interface IImageSliderTask extends ITask {
   };
 }
 
-export type TTask = ISemaphoreTextTask | IImageSliderTask;
+interface IWordwallTask extends ITask {
+  type: Extract<TTaskType, 'wordwall'>;
+  config: {
+    link: string;
+  };
+}
+
+export type TTask = ISemaphoreTextTask | IImageSliderTask | IWordwallTask;

@@ -1,8 +1,12 @@
 import { createResource, lazy, Match, Show, Suspense, Switch } from 'solid-js';
 import { fetchTask } from './utils.ts';
+import type { TTaskType } from 'shared/types/task.ts';
 
-const ImageSliderTask = lazy(() => import('@/tasks/ImageSlider/index.ts'));
-const SemaphoreTextTask = lazy(() => import('@/tasks/SemaphoreText/index.ts'));
+const TASKS: Record<TTaskType, ReturnType<typeof lazy>> = {
+  imageSlider: lazy(() => import('@/tasks/ImageSlider/index.ts')),
+  semaphoreText: lazy(() => import('@/tasks/SemaphoreText/index.ts')),
+  wordwall: lazy(() => import('@/tasks/Wordwall/index.ts')),
+};
 
 interface IProps {
   id?: string;
@@ -25,24 +29,15 @@ export function Task(props: IProps) {
         <Match when={task()}>
           <Show when={task()} keyed>
             {(task) => {
-              switch (task.type) {
-                case 'imageSlider':
-                  return (
-                    <Suspense>
-                      <ImageSliderTask config={task.config} />
-                    </Suspense>
-                  );
+              const Component = TASKS[task.type];
 
-                case 'semaphoreText':
-                  return (
-                    <Suspense>
-                      <SemaphoreTextTask config={task.config} />
-                    </Suspense>
-                  );
+              if (!Component) return null;
 
-                default:
-                  return null;
-              }
+              return (
+                <Suspense>
+                  <Component config={task.config} />
+                </Suspense>
+              );
             }}
           </Show>
         </Match>

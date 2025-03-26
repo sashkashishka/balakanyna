@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Row, Col, Form, Input, Button, type FormInstance } from 'antd';
 
 import type { TTask } from 'shared/types/task';
@@ -59,15 +59,24 @@ export function ImageSliderConfigForm({
     };
   }, [initialValues]);
 
+  const defaultValues = useMemo(
+    () => ({
+      ...normalizedInitialValues,
+      ...(action === 'create' && safeLS.getItem(LS_KEY)),
+      type: 'imageSlider',
+    }),
+    [normalizedInitialValues],
+  );
+
+  useEffect(() => {
+    form.setFieldsValue(defaultValues);
+  }, [form, defaultValues]);
+
   return (
     <Form
       form={form}
       name={formName}
-      initialValues={{
-        ...normalizedInitialValues,
-        ...(action === 'create' && safeLS.getItem(LS_KEY)),
-        type: 'imageSlider',
-      }}
+      initialValues={defaultValues}
       onFinish={async (values) => {
         const result = await onFinish(prepareBody(values));
 

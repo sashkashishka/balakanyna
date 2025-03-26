@@ -7,4 +7,5 @@ export const taskTypeOptions: SelectProps<
 >['options'] = [
   { label: 'semaphoreText', value: 'semaphoreText' },
   { label: 'imageSlider', value: 'imageSlider' },
+  { label: 'wordwall', value: 'wordwall' },
 ];
