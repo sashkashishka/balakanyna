@@ -1,5 +1,5 @@
-import type { ILabel } from './label';
-import type { IImageEntry } from './image';
+import type { ILabel } from './label.ts';
+import type { IImageEntry } from './image.ts';
 
 export type TTaskType = 'semaphoreText' | 'imageSlider';
 

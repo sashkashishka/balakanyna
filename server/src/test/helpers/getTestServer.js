@@ -3,8 +3,8 @@ import path from 'node:path';
 import { getAjv } from '../../core/ajv.js';
 import { getDb } from '../../db/index.js';
 import { createServer, getRouter } from '../../server.js';
-import { Logger } from '../../utils/logger.js';
-import { clearDb, getTmpDbUrl, setupDb } from './db.js';
+import { Logger } from '../../utils/logger/logger.js';
+import { clearDbFile, setupDbFile } from './db.js';
 import { mergeDeep } from '../../utils/merge.js';
 
 /**
@@ -23,18 +23,18 @@ export async function getTestServer({
   seed = () => void 0,
   deps = {},
 }) {
-  const config = mergeDeep(getTestConfig(), externalConfig);
+  const config = mergeDeep(await getTestConfig(), externalConfig);
 
-  const loggerTransport = {
-    log: t.mock.fn(),
-    warn: t.mock.fn(),
-    error: t.mock.fn(),
-  };
-
-  const logger = new Logger({
-    prefix: '[TestServer]',
-    transport: loggerTransport,
-  });
+  const logger =
+    deps.logger ||
+    new Logger({
+      enabled: config.logger.enabled,
+      prefix: '[TestServer]',
+      transport: {
+        handle: t.mock.fn(),
+        stop: t.mock.fn(),
+      },
+    });
 
   const ajv = deps.ajv || getAjv();
 
@@ -42,11 +42,9 @@ export async function getTestServer({
    * @type {import('../../db/index.js').IDb}
    */
   let db = deps.db;
-  let dbDir = '';
 
   if (!db) {
-    dbDir = await setupDb(getTmpDbUrl());
-    db = await getDb(dbDir);
+    db = await getDb(config.db.url);
   }
 
   const router = getRouter(config, { logger, ajv, db }, connectMiddleware);
@@ -100,10 +98,7 @@ export async function getTestServer({
 
   async function stop() {
     await server.destroy();
-
-    if (dbDir) {
-      await clearDb(dbDir);
-    }
+    await clearDbFile(config.db.url);
   }
 
   t.after(stop);
@@ -112,7 +107,6 @@ export async function getTestServer({
     db,
     server,
     request,
-    loggerTransport,
     config,
     baseUrl: `http://localhost:${config.port}`,
   };
@@ -120,11 +114,26 @@ export async function getTestServer({
 
 /**
  * @TODO: make a configuration validator
- * @type {import('../../core/server.js').IConfig}
+ * @returns {Promise<import('../../core/server.js').IConfig>}
  */
-export function getTestConfig() {
+export async function getTestConfig() {
+  const dbUrl = await setupDbFile();
+
   return {
-    port: process.env.PORT,
+    db: {
+      url: dbUrl,
+    },
+    logger: {
+      enabled: true,
+      transport: 'console',
+      destinations: [
+        {
+          level: 'all',
+          file: path.resolve(import.meta.dirname, './log/balakanyna.log'),
+        },
+      ],
+    },
+    port: 4138,
     static: [
       {
         prefix: '/media',
@@ -139,6 +148,7 @@ export function getTestConfig() {
       connection: 1000,
       request: 500,
       close: 100,
+      worker: 100,
     },
     media: {
       prefix: 'media',
@@ -150,15 +160,15 @@ export function getTestConfig() {
       fieldname: 'image',
     },
     salt: {
-      password: process.env.PASSWORD_SALT || '123',
+      password: '123',
     },
     jwt: {
       cookie: 'token',
-      key: process.env.JWT_KEY,
-      expirationTime: process.env.JWT_EXPIRATION_TIME,
+      key: '123',
+      expirationTime: '2h',
     },
     restrictions: {
-      ip: process.env.ALLOWED_IP,
+      ip: '127.0.0.1',
     },
   };
 }

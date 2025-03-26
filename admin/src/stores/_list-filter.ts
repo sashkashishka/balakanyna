@@ -15,7 +15,7 @@ interface IOptions {
 
 export function createListFilters<T extends IFilters>(
   defaultValue: T,
-  options?: IOptions = {},
+  options: IOptions = {},
 ) {
   const { syncSearchParams = true } = options;
 

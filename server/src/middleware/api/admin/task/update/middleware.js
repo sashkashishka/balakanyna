@@ -120,8 +120,11 @@ async function updateTaskMiddleware(ctx) {
         }
 
         return result;
-      } catch (e) {
-        ctx.logger.error('[updateTaskTransaction]', e);
+      } catch (err) {
+        ctx.logger.error({
+          err,
+          place: '[updateTaskTransaction]',
+        });
         tx.rollback();
       }
     },
