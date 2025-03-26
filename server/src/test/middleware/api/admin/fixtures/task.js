@@ -25,6 +25,14 @@ export const semaphoreTextTask = {
   updatedAt: '2024-03-16T00:00:00.000Z',
 };
 
+export const wordwallTask = {
+  name: 'wordwall task',
+  type: 'wordwall',
+  config: {
+    link: 'https://google.com',
+  },
+};
+
 export const tasks = [
   {
     name: 'Task 1',

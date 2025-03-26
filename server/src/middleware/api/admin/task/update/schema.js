@@ -10,7 +10,7 @@ export const taskUpdateBodySchema = {
     },
     type: {
       type: 'string',
-      enum: ['imageSlider', 'semaphoreText'],
+      enum: ['imageSlider', 'semaphoreText', 'wordwall'],
     },
     config: {
       type: 'object',
