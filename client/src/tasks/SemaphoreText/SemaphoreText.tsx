@@ -18,15 +18,18 @@ export function SemaphoreText({ config }: IProps) {
   const timer = window.setInterval(
     () => {
       let newIndex = random(0, colors.length - 1);
+      let newSyllableIndex = random(0, text.length - 1);
 
       while (newIndex === index() && colors.length > 1) {
         newIndex = random(0, colors.length - 1);
       }
 
+      while (newSyllableIndex === syllableIndex() && text.length > 1) {
+        newSyllableIndex = random(0, text.length - 1);
+      }
+
       setIndex(newIndex);
-      setSyllableIndex(
-        syllableIndex() === text.length - 1 ? 0 : syllableIndex() + 1,
-      );
+      setSyllableIndex(newSyllableIndex);
     },
     random(delayRange[0]!, delayRange[1]!),
   );
