@@ -1,4 +1,4 @@
-import { Table, Space, Button } from 'antd';
+import { Table, Button } from 'antd';
 import type { TableProps } from 'antd';
 import type { FetcherStore } from '@nanostores/query';
 import type { ReadableAtom, WritableAtom } from 'nanostores';
@@ -71,7 +71,15 @@ export function ProgramTable({
       title: 'Name',
       dataIndex: 'name',
       render(_id, record) {
-        return <Space direction="vertical">{record.name}</Space>;
+        return (
+          <a
+            // TODO: think how to refactor it
+            href={`/program/${record.id}`}
+            target="_blank"
+          >
+            {record.name}
+          </a>
+        );
       },
       sorter: true,
       sortDirections: ['descend', 'ascend'],
