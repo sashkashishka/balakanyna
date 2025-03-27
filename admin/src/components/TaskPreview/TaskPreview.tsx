@@ -2,7 +2,12 @@ import { useEffect, useId } from 'react';
 import type { JSX } from 'solid-js';
 import { render, createComponent } from 'solid-js/web';
 
-import { SemaphoreText, ImageSliderPreview, Wordwall } from 'client';
+import {
+  SemaphoreText,
+  ImageSliderPreview,
+  Wordwall,
+  SchulteTable,
+} from 'client';
 import 'client/lib/style.css';
 
 import type { TTaskType, TTask } from 'shared/types/task';
@@ -11,6 +16,7 @@ const TASK_MAP: Record<TTaskType, () => JSX.Element> = {
   semaphoreText: SemaphoreText,
   imageSlider: ImageSliderPreview,
   wordwall: Wordwall,
+  schulteTable: SchulteTable,
 };
 
 interface IProps {

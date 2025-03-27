@@ -1,3 +1,5 @@
+export const tasks = ['imageSlider', 'semaphoreText', 'wordwall', 'schulteTable'];
+
 export const uploadImageSchema = {
   type: 'object',
   properties: {

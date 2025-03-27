@@ -5,17 +5,20 @@ import {
 } from 'shared/schemas/imageSlider.js';
 import { semaphoreTextSchema } from 'shared/schemas/semaphoreText.js';
 import { wordwallSchema } from 'shared/schemas/wordwall.js';
+import { schulteTableSchema } from 'shared/schemas/schulteTable.js';
 
 export const uploadTypeToSchema = {
   imageSlider: uploadImageSliderSchema,
   semaphoreText: semaphoreTextSchema,
   wordwall: wordwallSchema,
+  schulteTable: schulteTableSchema,
 };
 
 export const fullTypeToSchema = {
   imageSlider: fullImageSliderSchema,
   semaphoreText: semaphoreTextSchema,
   wordwall: wordwallSchema,
+  schulteTable: schulteTableSchema,
 };
 
 const ERR_INVALID_TASK_CONFIG = createError(
@@ -37,6 +40,8 @@ export function verifyTaskConfigSchemaMiddleware(ctx, next) {
   const body = ctx.body;
 
   const validator = getTaskConfigValidator(ctx.ajv, body.type);
+
+  console.log(validator(body.config))
 
   if (!validator(body.config)) {
     throw new ERR_INVALID_TASK_CONFIG(body.type);
