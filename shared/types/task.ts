@@ -1,8 +1,11 @@
-import type { tasks } from '../schemas/common.js';
 import type { ILabel } from './label.ts';
 import type { IImageEntry } from './image.ts';
 
-export type TTaskType = typeof tasks[keyof typeof tasks];
+export type TTaskType =
+  | 'imageSlider'
+  | 'semaphoreText'
+  | 'wordwall'
+  | 'schulteTable';
 
 interface ITask {
   id: number;
@@ -47,4 +50,8 @@ interface ISchulteTableTask extends ITask {
   };
 }
 
-export type TTask = ISemaphoreTextTask | IImageSliderTask | IWordwallTask | ISchulteTableTask;
+export type TTask =
+  | ISemaphoreTextTask
+  | IImageSliderTask
+  | IWordwallTask
+  | ISchulteTableTask;

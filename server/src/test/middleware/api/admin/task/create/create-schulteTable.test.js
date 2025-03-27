@@ -10,7 +10,7 @@ import { seedAdmins } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
 import { schulteTableTask } from '../../fixtures/task.js';
 
-describe('[api] task create wordwall', () => {
+describe('[api] task create schulte table', () => {
   test('should retun 400 if config is invalid', async (t) => {
     const { request } = await getTestServer({
       t,
@@ -70,7 +70,7 @@ describe('[api] task create wordwall', () => {
     assert.equal(body.config.reverse, payload.config.reverse);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 8);
+    assert.equal(Object.keys(body).length, 6);
   });
 });
 
