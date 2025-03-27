@@ -1,7 +1,8 @@
+import type { tasks } from '../schemas/common.js';
 import type { ILabel } from './label.ts';
 import type { IImageEntry } from './image.ts';
 
-export type TTaskType = 'semaphoreText' | 'imageSlider' | 'wordwall';
+export type TTaskType = typeof tasks[keyof typeof tasks];
 
 interface ITask {
   id: number;
@@ -37,4 +38,13 @@ interface IWordwallTask extends ITask {
   };
 }
 
-export type TTask = ISemaphoreTextTask | IImageSliderTask | IWordwallTask;
+interface ISchulteTableTask extends ITask {
+  type: Extract<TTaskType, 'schulteTable'>;
+  config: {
+    x: number;
+    y: number;
+    reverse: boolean;
+  };
+}
+
+export type TTask = ISemaphoreTextTask | IImageSliderTask | IWordwallTask | ISchulteTableTask;
