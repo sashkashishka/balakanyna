@@ -4,15 +4,18 @@ import {
   fullImageSliderSchema,
 } from 'shared/schemas/imageSlider.js';
 import { semaphoreTextSchema } from 'shared/schemas/semaphoreText.js';
+import { wordwallSchema } from 'shared/schemas/wordwall.js';
 
 export const uploadTypeToSchema = {
   imageSlider: uploadImageSliderSchema,
   semaphoreText: semaphoreTextSchema,
+  wordwall: wordwallSchema,
 };
 
 export const fullTypeToSchema = {
   imageSlider: fullImageSliderSchema,
   semaphoreText: semaphoreTextSchema,
+  wordwall: wordwallSchema,
 };
 
 const ERR_INVALID_TASK_CONFIG = createError(

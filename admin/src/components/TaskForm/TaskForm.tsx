@@ -7,13 +7,21 @@ import { $createTask, $updateTask } from '@/stores/task';
 
 import { SemaphoreTextConfigForm } from './tasks/SemaphoreTextConfigForm';
 import { ImageSliderConfigForm } from './tasks/ImageSliderConfigForm';
+import { WordwallConfigForm } from './tasks/WordwallConfigForm';
 import { TaskPreview } from '../TaskPreview';
 import { CONFIG_VALIDATOR_MAP } from './utils';
+
+const TASK_FORMS = {
+  imageSlider: ImageSliderConfigForm,
+  semaphoreText: SemaphoreTextConfigForm,
+  wordwall: WordwallConfigForm,
+};
 
 export interface ITaskFormProps {
   taskType: TTaskType;
   action: 'update' | 'create';
-  initialValues?: Partial<TTask>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  initialValues?: any;
   onSuccess?(p: TTask): void;
   onDuplicate?(id: number): void;
 }
@@ -74,38 +82,19 @@ export function TaskForm({
   }
 
   const taskForm = useMemo(() => {
-    switch (taskType) {
-      case 'imageSlider': {
-        return (
-          <ImageSliderConfigForm
-            form={form}
-            action={action}
-            onFinish={onFinish}
-            initialValues={
-              initialValues as Partial<Extract<TTask, { type: 'imageSlider' }>>
-            }
-          />
-        );
-      }
+    const TaskForm = TASK_FORMS[taskType];
 
-      case 'semaphoreText': {
-        return (
-          <SemaphoreTextConfigForm
-            form={form}
-            action={action}
-            onFinish={onFinish}
-            initialValues={
-              initialValues as Partial<
-                Extract<TTask, { type: 'semaphoreText' }>
-              >
-            }
-          />
-        );
-      }
+    if (!TaskForm) return null;
 
-      default:
-        return null;
-    }
+    return (
+      <TaskForm
+        key={Date.now()}
+        form={form}
+        action={action}
+        onFinish={onFinish}
+        initialValues={initialValues}
+      />
+    );
   }, [initialValues, taskType]);
 
   return (
