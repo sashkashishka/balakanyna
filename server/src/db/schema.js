@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { integer, text, sqliteTable } from 'drizzle-orm/sqlite-core';
+import { tasks } from 'shared/schemas/common.js';
 
 const timestamps = {
   createdAt: text().default(sql`(datetime('now'))`),
@@ -39,7 +40,7 @@ export const programTable = sqliteTable('program', {
 export const taskTable = sqliteTable('task', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text().notNull(),
-  type: text({ enum: ['imageSlider', 'semaphoreText', 'wordwall'] }).notNull(),
+  type: text({ enum: tasks }).notNull(),
   config: text({ mode: 'json' }),
   ...timestamps,
 });

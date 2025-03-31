@@ -33,6 +33,16 @@ export const wordwallTask = {
   },
 };
 
+export const schulteTableTask = {
+  name: 'schulte task',
+  type: 'schulteTable',
+  config: {
+    x: 2,
+    y: 5,
+    reverse: false,
+  },
+};
+
 export const tasks = [
   {
     name: 'Task 1',

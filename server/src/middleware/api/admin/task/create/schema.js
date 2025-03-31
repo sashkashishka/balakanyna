@@ -1,3 +1,5 @@
+import { tasks} from 'shared/schemas/common.js';
+
 export const taskCreateBodySchema = {
   title: 'TaskCreateBody',
   type: 'object',
@@ -7,7 +9,7 @@ export const taskCreateBodySchema = {
     },
     type: {
       type: 'string',
-      enum: ['imageSlider', 'semaphoreText', 'wordwall'],
+      enum: tasks,
     },
     config: {
       type: 'object',

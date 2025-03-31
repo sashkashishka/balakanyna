@@ -1,50 +1,42 @@
 import { useEffect, useMemo } from 'react';
-import { Row, Col, Form, Input, Button, type FormInstance } from 'antd';
+import {
+  Row,
+  Col,
+  Form,
+  Input,
+  Button,
+  type FormInstance,
+  InputNumber,
+  Checkbox,
+} from 'antd';
 
 import type { TTask } from 'shared/types/task';
 import type { ITaskFormProps } from '../TaskForm';
 import { safeLS } from '@/utils/storage';
 
-type TWordwallTask = Extract<TTask, { type: 'wordwall' }>;
+type TSchulteTableTask = Extract<TTask, { type: 'schulteTable' }>;
 
 interface IProps extends Pick<ITaskFormProps, 'action'> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: FormInstance<any>;
-  initialValues?: Partial<TWordwallTask>;
+  initialValues?: Partial<TSchulteTableTask>;
   onFinish(v: unknown): Promise<boolean>;
 }
 
-function extractUrlFromIframe(iframeString: string) {
-  try {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(iframeString, 'text/html');
-    const iframe = doc.querySelector('iframe');
-    return iframe ? iframe.getAttribute('src') : null;
-  } catch (error) {
-    console.error(error);
-    // Method 3: Fallback string splitting
-    try {
-      return iframeString?.split?.('src="')?.[1]?.split?.('"')?.[0];
-    } catch {
-      return null;
-    }
-  }
-}
-
-export function WordwallConfigForm({
+export function SchulteTableConfigForm({
   form,
   initialValues,
   onFinish,
   action,
 }: IProps) {
-  const formName = 'wordwall-config-form';
+  const formName = 'schulte-table-config-form';
   const LS_KEY = `${action}:${formName}`;
 
   const defaultValues = useMemo(
     () => ({
       ...initialValues,
       ...(action === 'create' && safeLS.getItem(LS_KEY)),
-      type: 'wordwall',
+      type: 'schulteTable',
     }),
     [initialValues],
   );
@@ -73,18 +65,18 @@ export function WordwallConfigForm({
       }}
     >
       <Row gutter={24}>
-        <Form.Item<TWordwallTask> name="id" hidden>
+        <Form.Item<TSchulteTableTask> name="id" hidden>
           <Input />
         </Form.Item>
 
         <Col span={24}>
-          <Form.Item<TWordwallTask> label="Task type" name="type">
+          <Form.Item<TSchulteTableTask> label="Task type" name="type">
             <Input disabled />
           </Form.Item>
         </Col>
 
         <Col span={24}>
-          <Form.Item<TWordwallTask>
+          <Form.Item<TSchulteTableTask>
             label="Task name"
             name="name"
             rules={[{ required: true, message: 'Please input task name!' }]}
@@ -93,16 +85,34 @@ export function WordwallConfigForm({
           </Form.Item>
         </Col>
 
-        <Col span={24}>
-          <Form.Item<TWordwallTask>
-            label="Wordwall link"
-            name={['config', 'link']}
-            rules={[
-              { required: true, message: 'Please input link to wordwall' },
-            ]}
-            normalize={extractUrlFromIframe}
+        <Col span={24} sm={8}>
+          <Form.Item<TSchulteTableTask>
+            label="X"
+            name={['config', 'x']}
+            rules={[{ required: true, message: 'Please input dimensions' }]}
           >
-            <Input.TextArea rows={3} />
+            <InputNumber />
+          </Form.Item>
+        </Col>
+
+        <Col span={24} sm={8}>
+          <Form.Item<TSchulteTableTask>
+            label="X"
+            name={['config', 'y']}
+            rules={[{ required: true, message: 'Please input dimensions' }]}
+          >
+            <InputNumber />
+          </Form.Item>
+        </Col>
+
+        <Col span={24} sm={8}>
+          <Form.Item<TSchulteTableTask>
+            label="Reverse"
+            name={['config', 'reverse']}
+            valuePropName="checked"
+            initialValue={false}
+          >
+            <Checkbox />
           </Form.Item>
         </Col>
 
