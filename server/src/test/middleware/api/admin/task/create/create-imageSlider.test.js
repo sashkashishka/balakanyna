@@ -91,6 +91,10 @@ describe('[api] task create slider', () => {
         junctionIds.findIndex((item) => item.imageId === slide.image.id),
         -1,
       );
+      assert.notEqual(
+        junctionIds.findIndex((item) => item.taskId === body.id),
+        -1,
+      );
     }
 
     assert.equal(isNaN(new Date(body.createdAt)), false);

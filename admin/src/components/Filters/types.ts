@@ -51,8 +51,8 @@ export interface ILabelSelectorFilter extends IFilter {
   maxCount: number;
 }
 
-export interface ITaskTypeSelectorFilter extends IFilter {
-  type: 'task-type-selector';
+export interface ITaskTypesSelectorFilter extends IFilter {
+  type: 'task-types-selector';
   label: ReactNode;
   name: string;
   placeholder?: string;
@@ -65,5 +65,5 @@ export type TFilters =
   | IUserSelectorFilter
   | ISelectFilter
   | ILabelSelectorFilter
-  | ITaskTypeSelectorFilter
+  | ITaskTypesSelectorFilter
   | INumberRangeFilter;

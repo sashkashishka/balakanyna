@@ -79,7 +79,7 @@ export function Filters<T extends Record<string, any>>({
           );
         }
 
-        case 'task-type-selector': {
+        case 'task-types-selector': {
           return (
             <Space
               key={`${filter.type}${i}`}
@@ -88,6 +88,7 @@ export function Filters<T extends Record<string, any>>({
             >
               {filter.label}
               <Select
+                mode="multiple"
                 disabled={filter.disabled}
                 style={{ width: '100%' }}
                 value={tmpFilters[filter.name]}

@@ -14,7 +14,7 @@ const { Paragraph } = Typography;
 
 interface IProps {
   filters?: Partial<IImageListFilters>;
-  setSelected(v: IImage): void;
+  setSelected(v: IImage[]): void;
 }
 
 export function ImageSelectDrawerContent({ filters, setSelected }: IProps) {
@@ -57,9 +57,9 @@ export function ImageSelectDrawerContent({ filters, setSelected }: IProps) {
         setListFilter={setListFilter}
         resetListFilter={resetListFilter}
         rowSelection={{
-          type: 'radio',
-          onSelect(record) {
-            setSelected(record);
+          type: 'checkbox',
+          onChange(_ids, records) {
+            setSelected(records);
           },
         }}
       />

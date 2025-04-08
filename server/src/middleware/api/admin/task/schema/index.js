@@ -41,8 +41,6 @@ export function verifyTaskConfigSchemaMiddleware(ctx, next) {
 
   const validator = getTaskConfigValidator(ctx.ajv, body.type);
 
-  console.log(validator(body.config))
-
   if (!validator(body.config)) {
     throw new ERR_INVALID_TASK_CONFIG(body.type);
   }

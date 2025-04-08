@@ -7,7 +7,8 @@ import { $createProgram, $updateProgram } from '@/stores/program';
 import { SortableFormList } from '@/components/FormFields/SortableFormList';
 
 import { UserSearchInput } from '../UserSearchInput';
-import { TaskField } from '../FormFields/TaskField';
+import { TaskField } from './TaskField';
+import { TaskSelector } from './TaskSelector';
 
 interface IProps {
   name: string;
@@ -22,6 +23,7 @@ export function ProgramForm({
   initialValues,
   onSuccess,
 }: IProps) {
+  const [form] = Form.useForm();
   const { mutate: createProgram } = useStore($createProgram);
   const { mutate: updateProgram } = useStore($updateProgram);
 
@@ -69,6 +71,7 @@ export function ProgramForm({
 
   return (
     <Form
+      form={form}
       name={name}
       style={{ maxWidth: '650px' }}
       initialValues={initialValues}
@@ -141,7 +144,7 @@ export function ProgramForm({
               name={['tasks']}
               item={{}}
               label="Tasks"
-              addButtonLabel="Add task"
+              addButton={<TaskSelector form={form} name={['tasks']} />}
             >
               <TaskField />
             </SortableFormList>

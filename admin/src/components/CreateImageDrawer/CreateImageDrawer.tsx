@@ -6,7 +6,7 @@ import type { IImage } from 'shared/types/image';
 import { ImageForm } from '../ImageForm';
 
 interface IProps {
-  onSuccess?(p: IImage): void;
+  onSuccess?(p: IImage[]): void;
 }
 
 export function CreateImageDrawer({ onSuccess }: IProps) {
@@ -15,12 +15,12 @@ export function CreateImageDrawer({ onSuccess }: IProps) {
   return (
     <>
       <Button type="primary" onClick={() => setOpen(true)}>
-        Create new image
+        Upload new images
       </Button>
 
       <Drawer
         size="default"
-        title="Create new image"
+        title="Upload new images"
         open={open}
         onClose={() => setOpen(false)}
         destroyOnClose

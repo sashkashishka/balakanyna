@@ -126,7 +126,6 @@ export function SemaphoreTextConfigForm({
           <SortableFormList
             name={['config', 'colors']}
             label="Colors"
-            addButtonLabel="Add color"
             item={{
               rules: [{ required: true, message: 'Please input color' }],
               normalize: (color) => color.toHexString(),
@@ -140,7 +139,6 @@ export function SemaphoreTextConfigForm({
           <SortableFormList
             name={['config', 'text']}
             label="Text"
-            addButtonLabel="Add text"
             item={{
               rules: [{ required: true, message: 'Please enter some text' }],
             }}

@@ -17,7 +17,7 @@ import {
 const filtersConfig: TFilters[] = [
   filters.name,
   filters.label,
-  filters.taskType,
+  filters.taskTypes,
   getUserSelectorFilter({
     disabled: true,
   }),
