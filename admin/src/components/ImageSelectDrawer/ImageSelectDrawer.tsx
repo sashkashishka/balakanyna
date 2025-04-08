@@ -8,12 +8,12 @@ import { PlusOutlined } from '@ant-design/icons';
 
 interface IProps {
   filters?: Partial<IImageListFilters>;
-  onSelect?(p: IImage): void;
+  onSelect?(p: IImage[]): void;
 }
 
 export function ImageSelectDrawer({ onSelect, filters }: IProps) {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<IImage>();
+  const [selected, setSelected] = useState<IImage[]>();
 
   const onDrawerClose = () => {
     setSelected(undefined);
@@ -40,13 +40,11 @@ export function ImageSelectDrawer({ onSelect, filters }: IProps) {
 
       <Drawer
         size="large"
-        title="Pick an image"
+        title="Pick images"
         open={open}
         onClose={onDrawerClose}
         footer={
           <Space>
-            <Image width="60px" height="60px" src={selected?.path} />
-
             <Button
               onClick={onDrawerSelect}
               type="primary"

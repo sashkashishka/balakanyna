@@ -19,7 +19,7 @@ interface IProps {
   name: string | number | (string | number)[];
   item: FormItemProps;
   label: ReactNode;
-  addButtonLabel: ReactNode;
+  addButton: ReactNode;
   children: ReactNode;
 }
 
@@ -27,7 +27,7 @@ export function SortableFormList({
   name,
   item,
   label,
-  addButtonLabel,
+  addButton,
   children,
 }: IProps) {
   const sensors = useSensors(
@@ -42,7 +42,7 @@ export function SortableFormList({
 
   return (
     <Form.List name={name} rules={[{ validator: atLeastOneEntry }]}>
-      {(fields, { add, remove, move }, { errors }) => (
+      {(fields, { remove, move }, { errors }) => (
         <Space direction="vertical" style={{ width: '100%' }}>
           {label}
           <DndContext
@@ -82,14 +82,7 @@ export function SortableFormList({
           </DndContext>
 
           <Form.Item>
-            <Button
-              type="dashed"
-              onClick={() => add()}
-              block
-              icon={<PlusOutlined />}
-            >
-              {addButtonLabel}
-            </Button>
+            {addButton}
             <Form.ErrorList errors={errors} />
           </Form.Item>
         </Space>

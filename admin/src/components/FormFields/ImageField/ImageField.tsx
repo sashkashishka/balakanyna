@@ -1,16 +1,15 @@
 import { Image } from 'antd';
 
 import type { IImageEntry } from 'shared/types/image';
-import { ImageSelectDrawer } from '@/components/ImageSelectDrawer';
 
 interface IProps {
   value?: IImageEntry;
-  onChange?(v: IImageEntry): void;
 }
-export function ImageField({ value, onChange }: IProps) {
-  if (value) {
-    return <Image width="60px" height="60px" src={value.path} />;
+
+export function ImageField({ value }: IProps) {
+  if (!value) {
+    return 'no image';
   }
 
-  return <ImageSelectDrawer onSelect={onChange} />;
+  return <Image width="60px" height="60px" src={value.path} />;
 }

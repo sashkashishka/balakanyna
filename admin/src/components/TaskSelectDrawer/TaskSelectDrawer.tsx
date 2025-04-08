@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Drawer, Flex, Space } from 'antd';
+import { Button, Drawer, Space } from 'antd';
 
 import type { ITaskListFilters } from '@/stores/task';
 import type { TTask } from 'shared/types/task';
@@ -8,12 +8,12 @@ import { PlusOutlined } from '@ant-design/icons';
 
 interface IProps {
   filters?: Partial<ITaskListFilters>;
-  onSelect?(p: TTask): void;
+  onSelect?(p: TTask[]): void;
 }
 
 export function TaskSelectDrawer({ onSelect, filters }: IProps) {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<TTask>();
+  const [selected, setSelected] = useState<TTask[]>();
 
   const onDrawerClose = () => {
     setSelected(undefined);
@@ -43,12 +43,10 @@ export function TaskSelectDrawer({ onSelect, filters }: IProps) {
         onClose={onDrawerClose}
         footer={
           <Space>
-            <Flex style={{ width: '60px' }}>{selected?.id || 'none'}</Flex>
-
             <Button
               onClick={onDrawerSelect}
               type="primary"
-              disabled={!selected}
+              disabled={selected?.length === 0}
             >
               Select
             </Button>

@@ -4,7 +4,7 @@ import { Row, Col, Form, Input, Button, type FormInstance } from 'antd';
 import type { TTask } from 'shared/types/task';
 import { safeLS } from '@/utils/storage';
 import { SortableFormList } from '@/components/FormFields/SortableFormList';
-import { ImageField } from '@/components/FormFields/ImageField';
+import { ImageField, ImageSelector } from '@/components/FormFields/ImageField';
 import type { IImage } from 'shared/types/image';
 import type { ITaskFormProps } from '../TaskForm';
 
@@ -131,7 +131,13 @@ export function ImageSliderConfigForm({
               rules: [{ required: true, message: 'Please input image' }],
             }}
             label="Slides"
-            addButtonLabel="Add slide"
+            addButton={
+              <ImageSelector
+                form={form}
+                name={['config', 'slides']}
+                itemPrefix="image"
+              />
+            }
           >
             <ImageField />
           </SortableFormList>
