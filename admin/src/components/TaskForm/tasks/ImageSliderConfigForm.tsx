@@ -51,6 +51,7 @@ export function ImageSliderConfigForm({
       type: initialValues?.type,
       config: {
         ...initialValues?.config,
+        title: initialValues?.config?.title || ' ',
         slides: initialValues?.config?.slides?.map(({ image }) => ({
           // @ts-expect-error TODO should provide proper typing
           image: normalizeImage(image),
