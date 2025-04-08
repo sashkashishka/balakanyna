@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Drawer, Space, Image } from 'antd';
+import { Button, Drawer, Space } from 'antd';
 
 import type { IImageListFilters } from '@/stores/image';
 import type { IImage } from 'shared/types/image';

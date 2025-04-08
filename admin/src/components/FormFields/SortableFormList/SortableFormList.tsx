@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Form, Button, Space } from 'antd';
+import { Form, Space, Button } from 'antd';
 import type { FormItemProps } from 'antd/es/form';
 import {
   closestCenter,
@@ -19,7 +19,7 @@ interface IProps {
   name: string | number | (string | number)[];
   item: FormItemProps;
   label: ReactNode;
-  addButton: ReactNode;
+  addButton?: ReactNode;
   children: ReactNode;
 }
 
@@ -42,7 +42,7 @@ export function SortableFormList({
 
   return (
     <Form.List name={name} rules={[{ validator: atLeastOneEntry }]}>
-      {(fields, { remove, move }, { errors }) => (
+      {(fields, { add, remove, move }, { errors }) => (
         <Space direction="vertical" style={{ width: '100%' }}>
           {label}
           <DndContext
@@ -82,7 +82,16 @@ export function SortableFormList({
           </DndContext>
 
           <Form.Item>
-            {addButton}
+            {addButton || (
+              <Button
+                type="dashed"
+                onClick={() => add()}
+                block
+                icon={<PlusOutlined />}
+              >
+                Add
+              </Button>
+            )}
             <Form.ErrorList errors={errors} />
           </Form.Item>
         </Space>
