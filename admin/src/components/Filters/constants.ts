@@ -4,7 +4,7 @@ import type {
   INumberRangeFilter,
   ISearchStringFilter,
   ISelectFilter,
-  ITaskTypeSelectorFilter,
+  ITaskTypesSelectorFilter,
   IUserSelectorFilter,
 } from './types';
 
@@ -125,14 +125,14 @@ export function getLabelSelectorFilter({
   };
 }
 
-export function getTaskTypeSelectorFilter({
+export function getTaskTypesSelectorFilter({
   label,
   name,
   placeholder,
   maxCount,
-}: Omit<ITaskTypeSelectorFilter, 'type'>): ITaskTypeSelectorFilter {
+}: Omit<ITaskTypesSelectorFilter, 'type'>): ITaskTypesSelectorFilter {
   return {
-    type: 'task-type-selector',
+    type: 'task-types-selector',
     label,
     name,
     placeholder,

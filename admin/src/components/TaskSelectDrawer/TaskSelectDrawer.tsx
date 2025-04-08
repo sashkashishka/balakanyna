@@ -38,7 +38,7 @@ export function TaskSelectDrawer({ onSelect, filters }: IProps) {
 
       <Drawer
         size="large"
-        title="Pick an task"
+        title="Pick the task"
         open={open}
         onClose={onDrawerClose}
         footer={

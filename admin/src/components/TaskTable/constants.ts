@@ -3,7 +3,7 @@ import {
   getLabelSelectorFilter,
   getSearchStringFilter,
   getSelectFilter,
-  getTaskTypeSelectorFilter,
+  getTaskTypesSelectorFilter,
   getUserSelectorFilter,
 } from '../Filters/constants';
 import type { TFilters } from '../Filters/types';
@@ -23,9 +23,9 @@ export const label = getLabelSelectorFilter({
 
 export const userSearch = getUserSelectorFilter();
 
-export const taskType = getTaskTypeSelectorFilter({
-  label: 'Task type',
-  name: 'type',
+export const taskTypes = getTaskTypesSelectorFilter({
+  label: 'Task types',
+  name: 'types',
   maxCount: 50,
 });
 
@@ -44,6 +44,6 @@ export const filtersConfig: Array<TFilters> = [
   name,
   label,
   userSearch,
-  taskType,
+  taskTypes,
   getCreatedAtFilter(),
 ];
