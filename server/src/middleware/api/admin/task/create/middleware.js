@@ -1,4 +1,4 @@
-import { eq, inArray } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 import { Composer } from '../../../../../core/composer.js';
 import {
@@ -56,13 +56,9 @@ async function createTaskMiddleware(ctx) {
         const imageIds = getUniqueImageIds(result);
 
         if (imageIds.length) {
-          await tx
-            .delete(taskImageTable)
-            .where(eq(taskImageTable.taskId, body.id));
-
           const values = imageIds.map((imageId) => ({
             imageId,
-            taskId: body.id,
+            taskId: result.id,
           }));
 
           await tx.insert(taskImageTable).values(values);
