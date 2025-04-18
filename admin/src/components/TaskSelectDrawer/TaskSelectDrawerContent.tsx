@@ -14,7 +14,7 @@ const { Paragraph } = Typography;
 
 interface IProps {
   filters?: Partial<ITaskListFilters>;
-  setSelected(v: TTask): void;
+  setSelected(v: TTask[]): void;
 }
 
 export function TaskSelectDrawerContent({ filters, setSelected }: IProps) {
@@ -57,9 +57,9 @@ export function TaskSelectDrawerContent({ filters, setSelected }: IProps) {
         setListFilter={setListFilter}
         resetListFilter={resetListFilter}
         rowSelection={{
-          type: 'radio',
-          onSelect(record) {
-            setSelected(record);
+          type: 'checkbox',
+          onChange(_ids, records) {
+            setSelected(records);
           },
         }}
       />

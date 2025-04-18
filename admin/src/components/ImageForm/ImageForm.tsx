@@ -7,7 +7,7 @@ import { PlusOutlined } from '@ant-design/icons';
 
 interface IProps {
   initialValues?: Partial<IImage>;
-  onSuccess?(p: IImage): void;
+  onSuccess?(p: IImage[]): void;
 }
 
 export function ImageForm({ initialValues, onSuccess }: IProps) {
@@ -43,17 +43,23 @@ export function ImageForm({ initialValues, onSuccess }: IProps) {
       action="/api/admin/image/upload"
       method="post"
       name="image"
-      multiple={false}
-      maxCount={1}
+      multiple={true}
+      maxCount={10}
       listType="picture-card"
-      onChange={({ file }) => {
-        if (file.status === 'done') {
+      onRemove={() => {
+        notification.error({
+          message: "This won't remove image from the database",
+        });
+      }}
+      onChange={({ fileList }) => {
+        if (fileList?.length > 0 && fileList.every((f) => f.status === 'done')) {
           invalidateKeys((key) => key.startsWith(IMAGE_KEYS.list));
-          onSuccess?.(file.response[0]);
+          onSuccess?.(fileList.map((f) => f.response[0]));
         }
 
-        if (file.status === 'error') {
-          const { response } = file;
+        if (fileList.some((f) => f.status === 'error')) {
+          const file = fileList.find((f) => f.status === 'error');
+          const { response } = file!;
 
           if ('error' in response && typeof response.message === 'string') {
             notification.error({ message: response.message });
