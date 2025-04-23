@@ -41,5 +41,16 @@ export function TaskPreview({ type, config }: IProps) {
     return () => void 0;
   }, [config, id]);
 
-  return <div id={id} />;
+  return (
+    <div
+      id={id}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
+      }}
+    />
+  );
 }
