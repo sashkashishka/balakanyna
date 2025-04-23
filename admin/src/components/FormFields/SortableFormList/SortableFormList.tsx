@@ -15,21 +15,25 @@ import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 import { atLeastOneEntry } from './validators';
 import { SortableItem } from './SortableItem';
 
-interface IProps {
-  name: string | number | (string | number)[];
+interface IProps<T extends (string | number)[]> {
+  name: T;
   item: FormItemProps;
   label: ReactNode;
+  wrapWithField?: boolean;
   addButton?: ReactNode;
-  children: ReactNode;
+  children:
+    | ReactNode
+    | ((options: { name: [...T, number] }) => ReactNode);
 }
 
-export function SortableFormList({
+export function SortableFormList<T extends (string | number)[]>({
   name,
   item,
   label,
   addButton,
+  wrapWithField = true,
   children,
-}: IProps) {
+}: IProps<T>) {
   const sensors = useSensors(
     useSensor(MouseSensor),
     useSensor(TouchSensor, {
@@ -69,11 +73,20 @@ export function SortableFormList({
                   formItemName.push(item.name);
                 }
 
+                const result =
+                  typeof children === 'function'
+                    ? children({ name: formItemName })
+                    : children;
+
                 return (
                   <SortableItem key={key} id={key}>
-                    <Form.Item {...item} name={formItemName}>
-                      {children}
-                    </Form.Item>
+                    {wrapWithField ? (
+                      <Form.Item {...item} name={formItemName}>
+                        {result}
+                      </Form.Item>
+                    ) : (
+                      result
+                    )}
                     <MinusCircleOutlined onClick={() => remove(name)} />
                   </SortableItem>
                 );
