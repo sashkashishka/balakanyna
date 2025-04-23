@@ -43,6 +43,14 @@ export const schulteTableTask = {
   },
 };
 
+export const lettersToSyllableTask = {
+  name: 'letters to syllable',
+  type: 'lettersToSyllable',
+  config: {
+    list: [{ first: 'a', last: 'b', vowelColor: 'red' }],
+  },
+};
+
 export const tasks = [
   {
     name: 'Task 1',

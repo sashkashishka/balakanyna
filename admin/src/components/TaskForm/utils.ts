@@ -6,6 +6,7 @@ import { semaphoreTextSchema } from 'shared/schemas/semaphoreText';
 import { fullImageSliderSchema } from 'shared/schemas/imageSlider';
 import { wordwallSchema } from 'shared/schemas/wordwall';
 import { schulteTableSchema } from 'shared/schemas/schulteTable';
+import { lettersToSyllableSchema } from 'shared/schemas/lettersToSyllable';
 
 const ajv = getAjv();
 
@@ -14,4 +15,5 @@ export const CONFIG_VALIDATOR_MAP: Record<TTaskType, ValidateFunction> = {
   imageSlider: ajv.compile(fullImageSliderSchema),
   wordwall: ajv.compile(wordwallSchema),
   schulteTable: ajv.compile(schulteTableSchema),
+  lettersToSyllable: ajv.compile(lettersToSyllableSchema),
 };

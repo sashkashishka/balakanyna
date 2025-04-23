@@ -9,6 +9,7 @@ import { SemaphoreTextConfigForm } from './tasks/SemaphoreTextConfigForm';
 import { ImageSliderConfigForm } from './tasks/ImageSliderConfigForm';
 import { WordwallConfigForm } from './tasks/WordwallConfigForm';
 import { SchulteTableConfigForm } from './tasks/SchulteTableConfigForm';
+import { LettersToSyllableConfigForm } from './tasks/LettersToSyllableConfigForm';
 import { TaskPreview } from '../TaskPreview';
 import { CONFIG_VALIDATOR_MAP } from './utils';
 
@@ -17,6 +18,7 @@ const TASK_FORMS = {
   semaphoreText: SemaphoreTextConfigForm,
   wordwall: WordwallConfigForm,
   schulteTable: SchulteTableConfigForm,
+  lettersToSyllable: LettersToSyllableConfigForm,
 };
 
 export interface ITaskFormProps {

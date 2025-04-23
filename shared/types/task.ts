@@ -5,6 +5,7 @@ export type TTaskType =
   | 'imageSlider'
   | 'semaphoreText'
   | 'wordwall'
+  | 'lettersToSyllable'
   | 'schulteTable';
 
 interface ITask {
@@ -50,8 +51,20 @@ interface ISchulteTableTask extends ITask {
   };
 }
 
+interface ILettersToSyllableTask extends ITask {
+  type: Extract<TTaskType, 'lettersToSyllable'>;
+  config: {
+    list: Array<{
+      first: string;
+      last: string;
+      vowelColor?: string;
+    }>;
+  };
+}
+
 export type TTask =
   | ISemaphoreTextTask
   | IImageSliderTask
   | IWordwallTask
+  | ILettersToSyllableTask
   | ISchulteTableTask;

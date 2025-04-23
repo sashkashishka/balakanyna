@@ -1,0 +1,36 @@
+.container {
+  display: grid;
+  height: inherit;
+  align-content: center;
+}
+
+.container :global(.swiper) {
+  max-width: 100%;
+}
+
+.syllable {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-self: center;
+  /* delete the size of arrows plus add some space*/
+  width: calc(100% - 27px * 2 - 24px * 2);
+  height: 128px;
+  font-size: 128px;
+  line-height: 128px;
+  color: black;
+  font-weight: 500;
+  cursor: pointer;
+
+  .letterWrapper:first-of-type {
+    text-align: start;
+  }
+
+  .letterWrapper:last-of-type {
+    text-align: end;
+  }
+
+  .letter {
+    position: relative;
+    display: inline-block;
+  }
+}

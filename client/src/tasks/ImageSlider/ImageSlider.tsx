@@ -1,8 +1,8 @@
+import { For } from 'solid-js';
 import type { TTask } from 'shared/types/task.ts';
 import { Slide, Slider } from '../../components/Slider/Slider.tsx';
 
 import styles from './ImageSlider.module.css';
-import { For } from 'solid-js';
 
 interface IProps {
   config: Extract<TTask, { type: 'imageSlider' }>['config'];
