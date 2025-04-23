@@ -4,7 +4,6 @@ import {
   Form,
   Input,
   Button,
-  InputNumber,
   ColorPicker,
   type FormInstance,
 } from 'antd';
@@ -93,19 +92,23 @@ export function LettersToSyllableConfigForm({
             item={{}}
             wrapWithField={false}
           >
-            {({ name }) => (
+            {({ index }) => (
               <>
                 <Form.Item<TLettersToSyllableTask>
                   label="First part of syllable or word"
-                  name={[...name, 'first']}
-                  rules={[{ required: true, message: 'First part is required' }]}
+                  // @ts-expect-error nested form items
+                  name={[index, 'first']}
+                  rules={[
+                    { required: true, message: 'First part is required' },
+                  ]}
                 >
                   <Input type="text" placeholder="e.g. В" />
                 </Form.Item>
 
                 <Form.Item<TLettersToSyllableTask>
                   label="Last part of syllable or word"
-                  name={[...name, 'last']}
+                  // @ts-expect-error nested form items
+                  name={[index, 'last']}
                   rules={[{ required: true, message: 'Last part is required' }]}
                 >
                   <Input type="text" placeholder="e.g. A" />
@@ -113,8 +116,10 @@ export function LettersToSyllableConfigForm({
 
                 <Form.Item<TLettersToSyllableTask>
                   label="Vowel color"
-                  name={[...name, 'vowelColor']}
+                  // @ts-expect-error nested form items
+                  name={[index, 'vowelColor']}
                   initialValue="#ff1616"
+                  normalize={(color) => color.toHexString()}
                 >
                   <ColorPicker />
                 </Form.Item>

@@ -23,7 +23,7 @@ interface IProps<T extends (string | number)[]> {
   addButton?: ReactNode;
   children:
     | ReactNode
-    | ((options: { name: [...T, number] }) => ReactNode);
+    | ((options: { index: number }) => ReactNode);
 }
 
 export function SortableFormList<T extends (string | number)[]>({
@@ -67,7 +67,7 @@ export function SortableFormList<T extends (string | number)[]>({
               strategy={rectSortingStrategy}
             >
               {fields.map(({ key, name }) => {
-                const formItemName: (string | number)[] = [name];
+                const formItemName = [name];
 
                 if (item.name) {
                   formItemName.push(item.name);
@@ -75,7 +75,7 @@ export function SortableFormList<T extends (string | number)[]>({
 
                 const result =
                   typeof children === 'function'
-                    ? children({ name: formItemName })
+                    ? children({ index: name })
                     : children;
 
                 return (

@@ -17,8 +17,6 @@ interface ILetterProps {
 }
 
 function Letter(props: ILetterProps) {
-  const isVowel = vowels.includes(props.value.toLowerCase());
-
   return (
     <div class={styles.letterWrapper}>
       <Motion.div
@@ -28,11 +26,16 @@ function Letter(props: ILetterProps) {
           translate: `${props.dir === 'left' ? '-' : ''}${props.destination}%`,
         }}
         transition={{ duration: 1, easing: [0.2, -0.09, 0.13, 1.03] }}
-        style={{
-          color: isVowel ? props.vowelColor : undefined,
-        }}
       >
-        {props.value}
+        {props.value.split('').map((l) => {
+          const isVowel = vowels.includes(l.toLowerCase());
+
+          return isVowel ? (
+            <span style={{ color: props.vowelColor }}>{l}</span>
+          ) : (
+            l
+          );
+        })}
       </Motion.div>
     </div>
   );
