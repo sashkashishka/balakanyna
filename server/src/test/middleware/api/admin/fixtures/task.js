@@ -25,9 +25,9 @@ export const semaphoreTextTask = {
   updatedAt: '2024-03-16T00:00:00.000Z',
 };
 
-export const wordwallTask = {
-  name: 'wordwall task',
-  type: 'wordwall',
+export const iframeViewerTask = {
+  name: 'iframeViewer task',
+  type: 'iframeViewer',
   config: {
     link: 'https://google.com',
   },

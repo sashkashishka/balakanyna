@@ -5,7 +5,7 @@ import { render, createComponent } from 'solid-js/web';
 import {
   SemaphoreText,
   ImageSliderPreview,
-  Wordwall,
+  IframeViewer,
   SchulteTable,
   LettersToSyllable,
 } from 'client';
@@ -16,7 +16,7 @@ import type { TTaskType, TTask } from 'shared/types/task';
 const TASK_MAP: Record<TTaskType, () => JSX.Element> = {
   semaphoreText: SemaphoreText,
   imageSlider: ImageSliderPreview,
-  wordwall: Wordwall,
+  iframeViewer: IframeViewer,
   schulteTable: SchulteTable,
   lettersToSyllable: LettersToSyllable,
 };

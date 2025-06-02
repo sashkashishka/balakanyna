@@ -4,7 +4,7 @@ import type { IImageEntry } from './image.ts';
 export type TTaskType =
   | 'imageSlider'
   | 'semaphoreText'
-  | 'wordwall'
+  | 'iframeViewer'
   | 'lettersToSyllable'
   | 'schulteTable';
 
@@ -35,8 +35,8 @@ interface IImageSliderTask extends ITask {
   };
 }
 
-interface IWordwallTask extends ITask {
-  type: Extract<TTaskType, 'wordwall'>;
+interface IIframeViewerTask extends ITask {
+  type: Extract<TTaskType, 'iframeViewer'>;
   config: {
     link: string;
   };
@@ -65,6 +65,6 @@ interface ILettersToSyllableTask extends ITask {
 export type TTask =
   | ISemaphoreTextTask
   | IImageSliderTask
-  | IWordwallTask
+  | IIframeViewerTask
   | ILettersToSyllableTask
   | ISchulteTableTask;

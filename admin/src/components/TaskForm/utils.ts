@@ -4,7 +4,7 @@ import type { ValidateFunction } from 'ajv';
 import type { TTaskType } from 'shared/types/task';
 import { semaphoreTextSchema } from 'shared/schemas/semaphoreText';
 import { fullImageSliderSchema } from 'shared/schemas/imageSlider';
-import { wordwallSchema } from 'shared/schemas/wordwall';
+import { iframeViewerSchema } from 'shared/schemas/iframeViewer';
 import { schulteTableSchema } from 'shared/schemas/schulteTable';
 import { lettersToSyllableSchema } from 'shared/schemas/lettersToSyllable';
 
@@ -13,7 +13,7 @@ const ajv = getAjv();
 export const CONFIG_VALIDATOR_MAP: Record<TTaskType, ValidateFunction> = {
   semaphoreText: ajv.compile(semaphoreTextSchema),
   imageSlider: ajv.compile(fullImageSliderSchema),
-  wordwall: ajv.compile(wordwallSchema),
+  iframeViewer: ajv.compile(iframeViewerSchema),
   schulteTable: ajv.compile(schulteTableSchema),
   lettersToSyllable: ajv.compile(lettersToSyllableSchema),
 };

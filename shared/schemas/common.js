@@ -1,7 +1,7 @@
 export const tasks = [
   'imageSlider',
   'semaphoreText',
-  'wordwall',
+  'iframeViewer',
   'schulteTable',
   'lettersToSyllable',
 ];
