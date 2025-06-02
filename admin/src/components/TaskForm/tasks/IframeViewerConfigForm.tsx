@@ -19,10 +19,8 @@ function extractUrlFromIframe(iframeString: string) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(iframeString, 'text/html');
     const iframe = doc.querySelector('iframe');
-    console.log(iframeString);
-    return iframe ? iframe.getAttribute('src') : null;
-  } catch (error) {
-    console.error(error);
+    return iframe!.getAttribute('src');
+  } catch {
     // Method 3: Fallback string splitting
     try {
       // @ts-expect-error if this is not an iframe - let it throw an error
