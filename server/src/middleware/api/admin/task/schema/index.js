@@ -6,12 +6,14 @@ import {
 import { semaphoreTextSchema } from 'shared/schemas/semaphoreText.js';
 import { wordwallSchema } from 'shared/schemas/wordwall.js';
 import { schulteTableSchema } from 'shared/schemas/schulteTable.js';
+import { lettersToSyllableSchema } from 'shared/schemas/lettersToSyllable.js';
 
 export const uploadTypeToSchema = {
   imageSlider: uploadImageSliderSchema,
   semaphoreText: semaphoreTextSchema,
   wordwall: wordwallSchema,
   schulteTable: schulteTableSchema,
+  lettersToSyllable: lettersToSyllableSchema,
 };
 
 export const fullTypeToSchema = {
@@ -19,6 +21,7 @@ export const fullTypeToSchema = {
   semaphoreText: semaphoreTextSchema,
   wordwall: wordwallSchema,
   schulteTable: schulteTableSchema,
+  lettersToSyllable: lettersToSyllableSchema,
 };
 
 const ERR_INVALID_TASK_CONFIG = createError(

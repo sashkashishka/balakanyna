@@ -7,6 +7,7 @@ import {
   ImageSliderPreview,
   Wordwall,
   SchulteTable,
+  LettersToSyllable,
 } from 'client';
 import 'client/lib/style.css';
 
@@ -17,6 +18,7 @@ const TASK_MAP: Record<TTaskType, () => JSX.Element> = {
   imageSlider: ImageSliderPreview,
   wordwall: Wordwall,
   schulteTable: SchulteTable,
+  lettersToSyllable: LettersToSyllable,
 };
 
 interface IProps {
@@ -39,5 +41,16 @@ export function TaskPreview({ type, config }: IProps) {
     return () => void 0;
   }, [config, id]);
 
-  return <div id={id} />;
+  return (
+    <div
+      id={id}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
+      }}
+    />
+  );
 }
