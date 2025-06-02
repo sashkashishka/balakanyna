@@ -5,12 +5,12 @@ import type { TTask } from 'shared/types/task';
 import type { ITaskFormProps } from '../TaskForm';
 import { safeLS } from '@/utils/storage';
 
-type TWordwallTask = Extract<TTask, { type: 'wordwall' }>;
+type TIframeViewerTask = Extract<TTask, { type: 'iframeViewer' }>;
 
 interface IProps extends Pick<ITaskFormProps, 'action'> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: FormInstance<any>;
-  initialValues?: Partial<TWordwallTask>;
+  initialValues?: Partial<TIframeViewerTask>;
   onFinish(v: unknown): Promise<boolean>;
 }
 
@@ -19,32 +19,34 @@ function extractUrlFromIframe(iframeString: string) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(iframeString, 'text/html');
     const iframe = doc.querySelector('iframe');
+    console.log(iframeString);
     return iframe ? iframe.getAttribute('src') : null;
   } catch (error) {
     console.error(error);
     // Method 3: Fallback string splitting
     try {
-      return iframeString?.split?.('src="')?.[1]?.split?.('"')?.[0];
+      // @ts-expect-error if this is not an iframe - let it throw an error
+      return iframeString.split('src="')[1].split('"')[0];
     } catch {
-      return null;
+      return iframeString;
     }
   }
 }
 
-export function WordwallConfigForm({
+export function IframeViewerConfigForm({
   form,
   initialValues,
   onFinish,
   action,
 }: IProps) {
-  const formName = 'wordwall-config-form';
+  const formName = 'iframeViewer-config-form';
   const LS_KEY = `${action}:${formName}`;
 
   const defaultValues = useMemo(
     () => ({
       ...initialValues,
       ...(action === 'create' && safeLS.getItem(LS_KEY)),
-      type: 'wordwall',
+      type: 'iframeViewer',
     }),
     [initialValues],
   );
@@ -73,18 +75,18 @@ export function WordwallConfigForm({
       }}
     >
       <Row gutter={24}>
-        <Form.Item<TWordwallTask> name="id" hidden>
+        <Form.Item<TIframeViewerTask> name="id" hidden>
           <Input />
         </Form.Item>
 
         <Col span={24}>
-          <Form.Item<TWordwallTask> label="Task type" name="type">
+          <Form.Item<TIframeViewerTask> label="Task type" name="type">
             <Input disabled />
           </Form.Item>
         </Col>
 
         <Col span={24}>
-          <Form.Item<TWordwallTask>
+          <Form.Item<TIframeViewerTask>
             label="Task name"
             name="name"
             rules={[{ required: true, message: 'Please input task name!' }]}
@@ -94,12 +96,10 @@ export function WordwallConfigForm({
         </Col>
 
         <Col span={24}>
-          <Form.Item<TWordwallTask>
-            label="Wordwall link"
+          <Form.Item<TIframeViewerTask>
+            label="Iframe link"
             name={['config', 'link']}
-            rules={[
-              { required: true, message: 'Please input link to wordwall' },
-            ]}
+            rules={[{ required: true, message: 'Please input link' }]}
             normalize={extractUrlFromIframe}
           >
             <Input.TextArea rows={3} />

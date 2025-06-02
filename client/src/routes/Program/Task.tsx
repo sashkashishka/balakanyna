@@ -5,7 +5,7 @@ import type { TTaskType } from 'shared/types/task.ts';
 const TASKS: Record<TTaskType, ReturnType<typeof lazy>> = {
   imageSlider: lazy(() => import('@/tasks/ImageSlider/index.ts')),
   semaphoreText: lazy(() => import('@/tasks/SemaphoreText/index.ts')),
-  wordwall: lazy(() => import('@/tasks/Wordwall/index.ts')),
+  iframeViewer: lazy(() => import('@/tasks/IframeViewer/index.ts')),
   schulteTable: lazy(() => import('@/tasks/SchulteTable/index.ts')),
   lettersToSyllable: lazy(() => import('@/tasks/LettersToSyllable/index.ts')),
 };

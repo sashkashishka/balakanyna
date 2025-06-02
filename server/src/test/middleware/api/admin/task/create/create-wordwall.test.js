@@ -8,9 +8,9 @@ import * as taskCreate from '../../../../../../middleware/api/admin/task/create/
 
 import { seedAdmins } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
-import { wordwallTask } from '../../fixtures/task.js';
+import { iframeViewerTask } from '../../fixtures/task.js';
 
-describe('[api] task create wordwall', () => {
+describe('[api] task create iframeViewer', () => {
   test('should retun 400 if config is invalid', async (t) => {
     const { request } = await getTestServer({
       t,
@@ -20,7 +20,7 @@ describe('[api] task create wordwall', () => {
     });
 
     const payload = {
-      ...wordwallTask,
+      ...iframeViewerTask,
       config: {
         foo: 1,
       },
@@ -50,7 +50,7 @@ describe('[api] task create wordwall', () => {
       },
     });
 
-    const payload = wordwallTask;
+    const payload = iframeViewerTask;
 
     const resp = await request(taskCreate.route, {
       method: taskCreate.method,

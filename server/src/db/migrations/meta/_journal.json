@@ -8,6 +8,13 @@
       "when": 1732884779543,
       "tag": "0000_worthless_vivisector",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1748894444179,
+      "tag": "0001_rename-task-type",
+      "breakpoints": true
     }
   ]
 }

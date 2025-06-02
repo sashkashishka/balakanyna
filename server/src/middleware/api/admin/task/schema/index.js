@@ -4,14 +4,14 @@ import {
   fullImageSliderSchema,
 } from 'shared/schemas/imageSlider.js';
 import { semaphoreTextSchema } from 'shared/schemas/semaphoreText.js';
-import { wordwallSchema } from 'shared/schemas/wordwall.js';
+import { iframeViewerSchema } from 'shared/schemas/iframeViewer.js';
 import { schulteTableSchema } from 'shared/schemas/schulteTable.js';
 import { lettersToSyllableSchema } from 'shared/schemas/lettersToSyllable.js';
 
 export const uploadTypeToSchema = {
   imageSlider: uploadImageSliderSchema,
   semaphoreText: semaphoreTextSchema,
-  wordwall: wordwallSchema,
+  iframeViewer: iframeViewerSchema,
   schulteTable: schulteTableSchema,
   lettersToSyllable: lettersToSyllableSchema,
 };
@@ -19,7 +19,7 @@ export const uploadTypeToSchema = {
 export const fullTypeToSchema = {
   imageSlider: fullImageSliderSchema,
   semaphoreText: semaphoreTextSchema,
-  wordwall: wordwallSchema,
+  iframeViewer: iframeViewerSchema,
   schulteTable: schulteTableSchema,
   lettersToSyllable: lettersToSyllableSchema,
 };

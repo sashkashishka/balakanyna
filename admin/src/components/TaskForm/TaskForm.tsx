@@ -7,7 +7,7 @@ import { $createTask, $updateTask } from '@/stores/task';
 
 import { SemaphoreTextConfigForm } from './tasks/SemaphoreTextConfigForm';
 import { ImageSliderConfigForm } from './tasks/ImageSliderConfigForm';
-import { WordwallConfigForm } from './tasks/WordwallConfigForm';
+import { IframeViewerConfigForm } from './tasks/IframeViewerConfigForm';
 import { SchulteTableConfigForm } from './tasks/SchulteTableConfigForm';
 import { LettersToSyllableConfigForm } from './tasks/LettersToSyllableConfigForm';
 import { TaskPreview } from '../TaskPreview';
@@ -16,7 +16,7 @@ import { CONFIG_VALIDATOR_MAP } from './utils';
 const TASK_FORMS = {
   imageSlider: ImageSliderConfigForm,
   semaphoreText: SemaphoreTextConfigForm,
-  wordwall: WordwallConfigForm,
+  iframeViewer: IframeViewerConfigForm,
   schulteTable: SchulteTableConfigForm,
   lettersToSyllable: LettersToSyllableConfigForm,
 };

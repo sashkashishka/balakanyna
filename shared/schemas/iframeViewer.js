@@ -1,5 +1,5 @@
-export const wordwallSchema = {
-  title: 'WordwallTaskConfig',
+export const iframeViewerSchema = {
+  title: 'IframeViewerTaskConfig',
   type: 'object',
   properties: {
     link: {

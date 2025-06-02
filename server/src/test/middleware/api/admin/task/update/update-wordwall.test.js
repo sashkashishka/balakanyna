@@ -8,9 +8,9 @@ import * as taskUpdate from '../../../../../../middleware/api/admin/task/update/
 
 import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
-import { wordwallTask } from '../../fixtures/task.js';
+import { iframeViewerTask } from '../../fixtures/task.js';
 
-describe('[api] task update wordwall', () => {
+describe('[api] task update iframeViewer', () => {
   test('should retun 400 if config is invalid', async (t) => {
     let dbTasks = [];
 
@@ -18,12 +18,12 @@ describe('[api] task update wordwall', () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [wordwallTask]);
+        dbTasks = await seedTasks(db, [iframeViewerTask]);
       },
     });
 
     const payload = {
-      ...wordwallTask,
+      ...iframeViewerTask,
       id: dbTasks[0].id,
       config: {
         foo: 1,
@@ -53,12 +53,12 @@ describe('[api] task update wordwall', () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [wordwallTask]);
+        dbTasks = await seedTasks(db, [iframeViewerTask]);
       },
     });
 
     const payload = {
-      ...wordwallTask,
+      ...iframeViewerTask,
       id: dbTasks[0].id,
       type: 'semaphoreText',
       name: 'BrandNewName',
@@ -100,12 +100,12 @@ describe('[api] task update wordwall', () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [wordwallTask]);
+        dbTasks = await seedTasks(db, [iframeViewerTask]);
       },
     });
 
     const payload = {
-      ...wordwallTask,
+      ...iframeViewerTask,
       id: dbTasks[0].id,
       type: 'semaphoreText',
       name: 'BrandNewName',
@@ -141,12 +141,12 @@ describe('[api] task update wordwall', () => {
       config: { media: { prefix } },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [wordwallTask]);
+        dbTasks = await seedTasks(db, [iframeViewerTask]);
       },
     });
 
     const payload = {
-      ...wordwallTask,
+      ...iframeViewerTask,
       id: dbTasks[0].id,
       name: 'BrandNewName',
       config: {

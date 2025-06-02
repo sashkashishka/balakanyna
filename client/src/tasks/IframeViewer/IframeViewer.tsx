@@ -1,12 +1,12 @@
 import type { TTask } from 'shared/types/task.ts';
 
-import styles from './Wordwall.module.css';
+import styles from './IframeViewer.module.css';
 
 interface IProps {
-  config: Extract<TTask, { type: 'wordwall' }>['config'];
+  config: Extract<TTask, { type: 'iframeViewer' }>['config'];
 }
 
-export function Wordwall({ config }: IProps) {
+export function IframeViewer({ config }: IProps) {
   const { link } = config;
 
   return (
