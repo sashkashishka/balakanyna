@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react';
 import {
   Row,
   Col,
@@ -14,7 +15,6 @@ import type { TTask } from 'shared/types/task';
 import type { ITaskFormProps } from '../TaskForm';
 import { safeLS } from '@/utils/storage';
 import { SortableFormList } from '@/components/FormFields/SortableFormList';
-import { useEffect, useMemo, useState } from 'react';
 
 type TSemaphoreTextTask = Extract<TTask, { type: 'semaphoreText' }>;
 
@@ -46,6 +46,12 @@ export function SemaphoreTextConfigForm({
   const [enableTimer, setEnableTimer] = useState(
     Boolean(defaultValues?.config?.timer?.duration),
   );
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     form.setFieldsValue(defaultValues);
@@ -174,7 +180,7 @@ export function SemaphoreTextConfigForm({
               rules: [{ required: true, message: 'Please enter some text' }],
             }}
           >
-            <Input />
+            <Input autoFocus={mounted} />
           </SortableFormList>
         </Col>
 
