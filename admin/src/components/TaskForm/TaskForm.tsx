@@ -105,7 +105,7 @@ export function TaskForm({
     <Row gutter={24}>
       <Col span={12}>{taskForm}</Col>
       <Col span={12}>
-        <Flex align="center" justify="center" style={{ height: '100%' }}>
+        <Flex align="center" justify="center">
           {values && CONFIG_VALIDATOR_MAP[taskType](values?.config) && (
             <TaskPreview type={taskType} config={values?.config} />
           )}

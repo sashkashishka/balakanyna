@@ -22,6 +22,7 @@ interface ISemaphoreTextTask extends ITask {
     colors: string[];
     text: string[];
     delayRange: number[];
+    timer?: { duration: number };
   };
 }
 

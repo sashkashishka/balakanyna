@@ -8,7 +8,7 @@ import * as taskCreate from '../../../../../../middleware/api/admin/task/create/
 
 import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
-import { imageSliderTask } from '../../fixtures/task.js';
+import { semaphoreTextTask } from '../../fixtures/task.js';
 
 describe('[api] task create', async () => {
   test('should return 401 if unauthorized', async (t) => {
@@ -87,7 +87,7 @@ describe('[api] task create', async () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [imageSliderTask]);
+        dbTasks = await seedTasks(db, [semaphoreTextTask]);
       },
     });
 
@@ -97,7 +97,8 @@ describe('[api] task create', async () => {
         cookie: await getAuthCookie(request, admin),
       },
       body: {
-        ...imageSliderTask,
+        type: semaphoreTextTask.type,
+        config: semaphoreTextTask.config,
         name: 'Task New',
       },
     });
@@ -117,7 +118,7 @@ describe('[api] task create', async () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [imageSliderTask]);
+        dbTasks = await seedTasks(db, [semaphoreTextTask]);
       },
     });
 
@@ -127,17 +128,12 @@ describe('[api] task create', async () => {
         cookie: await getAuthCookie(request, admin),
       },
       body: {
-        ...imageSliderTask,
+        type: semaphoreTextTask.type,
         name: 'Task New',
         config: {
-          slides: [
-            {
-              image: {
-                id: 1,
-              },
-            },
-          ],
-          title: 'Hello',
+          text: ['c'],
+          delayRange: [3, 4],
+          colors: ['yellow'],
         },
       },
     });
@@ -179,6 +175,41 @@ describe('[api] task create', async () => {
     assert.equal(
       JSON.stringify(body.config),
       '{"colors":["yellow"],"delayRange":[3,4],"text":["c"]}',
+    );
+  });
+
+  test('should accept timer property', async (t) => {
+    const { request } = await getTestServer({
+      t,
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+      },
+    });
+
+    const resp = await request(taskCreate.route, {
+      method: taskCreate.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+      body: {
+        type: 'semaphoreText',
+        name: 'Task New',
+        config: {
+          timer: {
+            duration: 200,
+          },
+          colors: ['yellow'],
+          delayRange: [3, 4],
+          text: ['c'],
+        },
+      },
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(
+      JSON.stringify(body.config),
+      '{"colors":["yellow"],"delayRange":[3,4],"text":["c"],"timer":{"duration":200}}',
     );
   });
 });

@@ -25,7 +25,7 @@ export function SortableItem({ id, children }: IProps) {
       <Space size="large" align="baseline">
         {children}
 
-        <Button icon={<DragOutlined />} {...listeners} {...attributes} />
+        <Button icon={<DragOutlined />} {...listeners} {...attributes} tabIndex={-1} />
       </Space>
     </Flex>
   );

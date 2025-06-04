@@ -49,7 +49,7 @@ export function TaskPreview({ type, config }: IProps) {
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
-        height: '100%',
+        height: '80vh',
       }}
     />
   );

@@ -96,6 +96,9 @@ importers:
 
   client:
     dependencies:
+      classnames:
+        specifier: ^2.5.1
+        version: 2.5.1
       shared:
         specifier: workspace:*
         version: link:../shared

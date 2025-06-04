@@ -9,11 +9,8 @@ import * as taskUpdate from '../../../../../../middleware/api/admin/task/update/
 import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
 
 import { admin } from '../../fixtures/admin.js';
-import {
-  imageSliderTask,
-  semaphoreTextTask,
-  tasks,
-} from '../../fixtures/task.js';
+import { semaphoreTextTask, tasks } from '../../fixtures/task.js';
+import { config } from 'node:process';
 
 describe('[api] task update', async () => {
   test('should return 401 if unauthorized', async (t) => {
@@ -97,7 +94,9 @@ describe('[api] task update', async () => {
       },
       body: {
         id: 300,
-        ...imageSliderTask,
+        type: semaphoreTextTask.type,
+        config: semaphoreTextTask.config,
+        name: semaphoreTextTask.name,
       },
     });
     const body = await resp.json();
@@ -282,6 +281,64 @@ describe('[api] task update', async () => {
       name: 'Brand new Task',
       config: {
         colors: ['yellow'],
+        text: ['c'],
+        delayRange: [3, 4],
+      },
+    };
+
+    const resp = await request(taskUpdate.route, {
+      method: taskUpdate.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+      body: payload,
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(body.id, dbTasks[0].id);
+    assert.equal(body.name, payload.name);
+    assert.equal(body.type, payload.type);
+    assert.deepEqual(body.config, payload.config);
+    assert.equal(isNaN(new Date(body.createdAt)), false);
+    assert.equal(isNaN(new Date(body.updatedAt)), false);
+    assert.equal(Object.keys(body).length, 6);
+
+    assert.doesNotMatch(
+      body.updatedAt,
+      /T/,
+      'use sqlite datetime to update column',
+    );
+
+    assert.notEqual(
+      new Date(body.updatedAt).getTime(),
+      new Date(dbTasks[0].updatedAt).getTime(),
+      'should update updatetAt field',
+    );
+    assert.equal(
+      new Date(body.createdAt).getTime(),
+      new Date(dbTasks[0].createdAt).getTime(),
+    );
+  });
+
+  test('should accept timer property, return 200 and update task', async (t) => {
+    let dbTasks = [];
+
+    const { request } = await getTestServer({
+      t,
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbTasks = await seedTasks(db, [semaphoreTextTask]);
+      },
+    });
+
+    const payload = {
+      id: dbTasks[0].id,
+      type: 'semaphoreText',
+      name: 'Brand new Task',
+      config: {
+        colors: ['yellow'],
+        timer: { duration: 2000 },
         text: ['c'],
         delayRange: [3, 4],
       },
