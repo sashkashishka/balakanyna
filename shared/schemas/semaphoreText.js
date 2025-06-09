@@ -2,6 +2,14 @@ export const semaphoreTextSchema = {
   title: 'SemaphoreTextTaskConfig',
   type: 'object',
   properties: {
+    timer: {
+      type: 'object',
+      properties: {
+        duration: {
+          type: 'number',
+        },
+      },
+    },
     colors: {
       type: 'array',
       items: {

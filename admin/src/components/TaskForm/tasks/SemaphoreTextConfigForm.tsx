@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react';
 import {
   Row,
   Col,
@@ -6,6 +7,7 @@ import {
   Button,
   InputNumber,
   ColorPicker,
+  Switch,
   type FormInstance,
 } from 'antd';
 
@@ -13,7 +15,6 @@ import type { TTask } from 'shared/types/task';
 import type { ITaskFormProps } from '../TaskForm';
 import { safeLS } from '@/utils/storage';
 import { SortableFormList } from '@/components/FormFields/SortableFormList';
-import { useEffect, useMemo } from 'react';
 
 type TSemaphoreTextTask = Extract<TTask, { type: 'semaphoreText' }>;
 
@@ -41,6 +42,16 @@ export function SemaphoreTextConfigForm({
     }),
     [initialValues],
   );
+
+  const [enableTimer, setEnableTimer] = useState(
+    Boolean(defaultValues?.config?.timer?.duration),
+  );
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     form.setFieldsValue(defaultValues);
@@ -84,6 +95,32 @@ export function SemaphoreTextConfigForm({
           >
             <Input type="text" placeholder="e.g. Alice task 1" />
           </Form.Item>
+        </Col>
+
+        <Col span={12}>
+          <Form.Item<TSemaphoreTextTask>
+            label="Enable timer"
+            rules={[{ required: true, message: 'Please input timer name!' }]}
+          >
+            <Switch
+              checked={enableTimer}
+              onChange={() => setEnableTimer(!enableTimer)}
+            />
+          </Form.Item>
+        </Col>
+
+        <Col span={12}>
+          {enableTimer && (
+            <Form.Item<TSemaphoreTextTask>
+              label="Timer name (s)"
+              name={['config', 'timer', 'duration']}
+              rules={[
+                { required: true, message: 'Please input timer duration' },
+              ]}
+            >
+              <InputNumber placeholder="120" />
+            </Form.Item>
+          )}
         </Col>
 
         <Col span={24} sm={12}>
@@ -143,7 +180,7 @@ export function SemaphoreTextConfigForm({
               rules: [{ required: true, message: 'Please enter some text' }],
             }}
           >
-            <Input />
+            <Input autoFocus={mounted} />
           </SortableFormList>
         </Col>
 
