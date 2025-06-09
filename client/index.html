@@ -6,10 +6,29 @@
   <link rel="icon" type="image/png" href="/src/images/logo-blue.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Balakanyna</title>
+
+  <script
+    src="https://js.sentry-cdn.com/%VITE_SENTRY_KEY%.min.js"
+    crossorigin="anonymous"
+  ></script>
+  <script>
+    Sentry.onLoad(function() {
+      Sentry.init({
+        release: window.SENTRY_RELEASE.id,
+        environment: '%MODE%',
+        denyUrls: [
+          'https://wordwall.com',
+          'https://online.childdevelop.com.ua',
+        ],
+        normalizeDepth: 5,
+      });
+    });
+  </script>
 </head>
 
 <body>
   <div id="root"></div>
+
   <script type="module" src="/src/index.tsx"></script>
 </body>
 
