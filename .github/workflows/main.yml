@@ -14,6 +14,11 @@ env:
   NODE_ENV: production
   BALAKANYNA_IMAGE: balakanyna:${{github.sha}}
   BALAKANYNA_IMAGE_FILE: balakanyna.tar
+  VITE_SENTRY_KEY: ${{ secrets.SENTRY_KEY }}
+  VITE_CLIENT_VERSION: ${{ github.sha }}
+  VITE_SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+  VITE_SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+  VITE_SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
 jobs:
   deploy:
