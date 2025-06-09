@@ -39,8 +39,8 @@ export default defineConfig(({ mode }) => {
         project: process.env.VITE_SENTRY_PROJECT,
         authToken: process.env.VITE_SENTRY_AUTH_TOKEN,
         release: {
-          name: process.env.VITE_CLIENT_VERSION
-        }
+          name: process.env.VITE_CLIENT_VERSION,
+        },
       }),
     ],
     resolve: {
