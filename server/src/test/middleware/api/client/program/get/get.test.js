@@ -157,7 +157,6 @@ describe('[api] client program get', async () => {
             userId: dbUsers[0].id,
             start: new Date(),
             expiration: new Date(new Date().getTime() + 100000),
-
           }),
         ]);
       },
@@ -171,7 +170,7 @@ describe('[api] client program get', async () => {
     const body = await resp.json();
 
     assert.equal(resp.status, 200);
-    assert.equal(body.hash.length, 8);
+    assert.equal(body.id.length, 8);
     assert.ok(Array.isArray(body.tasks));
     assert.equal(body.tasks.length, 0);
     assert.equal(Object.keys(body).length, 2);
@@ -228,7 +227,7 @@ describe('[api] client program get', async () => {
     const body = await resp.json();
 
     assert.equal(resp.status, 200);
-    assert.equal(body.hash.length, 8);
+    assert.equal(body.id.length, 8);
     assert.ok(Array.isArray(body.tasks));
     assert.equal(body.tasks.length, 3);
 
@@ -239,7 +238,7 @@ describe('[api] client program get', async () => {
       );
 
       assert.equal(
-        task.hash,
+        task.id,
         dbTask.hash,
         'should be in the order that was saved',
       );
@@ -247,7 +246,7 @@ describe('[api] client program get', async () => {
         dbProgramTasks.findIndex((t) => t.taskId === dbTask.id),
         -1,
       );
-      assert.ok(task.hash);
+      assert.ok(task.id);
       assert.equal(Object.keys(task).length, 1);
     }
 
@@ -306,12 +305,12 @@ describe('[api] client program get', async () => {
     const body = await resp.json();
 
     assert.equal(resp.status, 200);
-    assert.equal(body.hash.length, 8);
+    assert.equal(body.id.length, 8);
     assert.ok(Array.isArray(body.tasks));
     assert.equal(body.tasks.length, 4);
 
     assert.equal(
-      body.tasks.filter((t) => t.hash === dbTasks[2].hash).length,
+      body.tasks.filter((t) => t.id === dbTasks[2].hash).length,
       2,
       'should return repetetive tasks',
     );
@@ -323,7 +322,7 @@ describe('[api] client program get', async () => {
       );
 
       assert.equal(
-        task.hash,
+        task.id,
         dbTask.hash,
         'should be in the order that was saved',
       );
@@ -331,7 +330,7 @@ describe('[api] client program get', async () => {
         dbProgramTasks.findIndex((t) => t.taskId === dbTask.id),
         -1,
       );
-      assert.ok(task.hash);
+      assert.ok(task.id);
       assert.equal(Object.keys(task).length, 1);
     }
 

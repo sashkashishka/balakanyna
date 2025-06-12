@@ -62,10 +62,10 @@ async function getProgramMiddleware(ctx) {
   const tasks = result.map(({ task }) => task).filter((task) => task?.id);
 
   ctx.json({
-    hash: program.hash,
+    id: program.hash,
     tasks: program.tasks
       .map(({ taskId }) => tasks.find((t) => t.id === taskId))
-      .map(({ hash }) => ({ hash })),
+      .map(({ hash }) => ({ id: hash })),
   });
 }
 
