@@ -41,18 +41,42 @@ async function checkIfUserExistsMiddleware(ctx, next) {
 async function createProgramMiddleware(ctx) {
   const body = ctx.body;
 
-  const [result] = await ctx.db
-    .insert(programTable)
-    .values({
-      name: body.name,
-      userId: body.userId,
-      startDatetime: body.startDatetime,
-      expirationDatetime: body.expirationDatetime,
-    })
-    .returning();
+  const result = await ctx.db.transaction(
+    async function createProgramTransaction(tx) {
+      try {
+        const [raw] = await tx
+          .insert(programTable)
+          .values({
+            hash: '',
+            name: body.name,
+            userId: body.userId,
+            startDatetime: body.startDatetime,
+            expirationDatetime: body.expirationDatetime,
+          })
+          .returning();
+
+        const [program] = await tx
+          .update(programTable)
+          .set({
+            hash: ctx.hash.update(JSON.stringify(raw)),
+          })
+          .where(eq(programTable.id, raw.id))
+          .returning();
+
+        return program;
+      } catch (err) {
+        ctx.logger.error({
+          err,
+          place: '[createProgramTransaction]',
+        });
+        tx.rollback();
+      }
+    },
+  );
 
   ctx.json({
     id: result.id,
+    hash: result.hash,
     name: result.name,
     userId: result.userId,
     startDatetime: result.startDatetime,
