@@ -15,6 +15,13 @@
       "when": 1748894444179,
       "tag": "0001_rename-task-type",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1749741948451,
+      "tag": "0002_hash_col_to_program_and_task",
+      "breakpoints": true
     }
   ]
 }
