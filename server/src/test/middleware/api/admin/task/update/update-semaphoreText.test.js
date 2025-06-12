@@ -10,7 +10,6 @@ import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
 
 import { admin } from '../../fixtures/admin.js';
 import { semaphoreTextTask, tasks } from '../../fixtures/task.js';
-import { config } from 'node:process';
 
 describe('[api] task update', async () => {
   test('should return 401 if unauthorized', async (t) => {
@@ -137,12 +136,13 @@ describe('[api] task update', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbTasks[0].id);
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, payload.name);
     assert.equal(body.type, payload.type);
     assert.deepEqual(body.config, payload.config);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 6);
+    assert.equal(Object.keys(body).length, 7);
 
     assert.notEqual(
       new Date(body.updatedAt).getTime(),
@@ -297,12 +297,13 @@ describe('[api] task update', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbTasks[0].id);
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, payload.name);
     assert.equal(body.type, payload.type);
     assert.deepEqual(body.config, payload.config);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 6);
+    assert.equal(Object.keys(body).length, 7);
 
     assert.doesNotMatch(
       body.updatedAt,
@@ -355,12 +356,13 @@ describe('[api] task update', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbTasks[0].id);
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, payload.name);
     assert.equal(body.type, payload.type);
     assert.deepEqual(body.config, payload.config);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 6);
+    assert.equal(Object.keys(body).length, 7);
 
     assert.doesNotMatch(
       body.updatedAt,

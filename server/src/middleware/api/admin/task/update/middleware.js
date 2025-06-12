@@ -1,4 +1,4 @@
-import { and, count, eq, inArray, not, sql } from 'drizzle-orm';
+import { and, count, eq, not, sql } from 'drizzle-orm';
 
 import { Composer } from '../../../../../core/composer.js';
 import {
@@ -97,6 +97,7 @@ async function updateTaskMiddleware(ctx) {
         const [result] = await ctx.db
           .update(taskTable)
           .set({
+            hash: ctx.hash.update(JSON.stringify(body)),
             name: body.name,
             config: sortJsonKeys(body.config),
             updatedAt: sql`(datetime())`,
@@ -132,6 +133,7 @@ async function updateTaskMiddleware(ctx) {
 
   ctx.json({
     id: task.id,
+    hash: task.hash,
     name: task.name,
     type: task.type,
     config: task.config,

@@ -47,6 +47,7 @@ async function createTaskMiddleware(ctx) {
         const [result] = await tx
           .insert(taskTable)
           .values({
+            hash: ctx.hash.update(JSON.stringify(body)),
             name: body.name,
             type: body.type,
             config: sortJsonKeys(body.config),
@@ -77,6 +78,7 @@ async function createTaskMiddleware(ctx) {
 
   ctx.json({
     id: task.id,
+    hash: task.hash,
     name: task.name,
     type: task.type,
     config: task.config,

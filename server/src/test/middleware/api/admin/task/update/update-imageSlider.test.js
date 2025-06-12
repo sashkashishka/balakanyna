@@ -193,6 +193,7 @@ describe('[api] task update slider', () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, payload.id);
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, payload.name);
     assert.equal(body.type, payload.type);
     assert.ok(Array.isArray(body.config.slides));
@@ -210,7 +211,7 @@ describe('[api] task update slider', () => {
 
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 6);
+    assert.equal(Object.keys(body).length, 7);
   });
 
   test('should return 200 if provide repetetive images in config', async (t) => {
@@ -270,6 +271,7 @@ describe('[api] task update slider', () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, payload.id);
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, payload.name);
     assert.equal(body.name, payload.name);
     assert.ok(Array.isArray(body.config.slides));
@@ -292,7 +294,7 @@ describe('[api] task update slider', () => {
 
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 6);
+    assert.equal(Object.keys(body).length, 7);
 
     assert.notEqual(
       new Date(body.updatedAt).getTime(),
