@@ -29,6 +29,7 @@ export const userTable = sqliteTable('user', {
 
 export const programTable = sqliteTable('program', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
+  hash: text().notNull(),
   name: text().notNull(),
   userId: integer('user_id').references(() => userTable.id),
   startDatetime: text().default(sql`(datetime('now'))`),
@@ -39,6 +40,7 @@ export const programTable = sqliteTable('program', {
 
 export const taskTable = sqliteTable('task', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
+  hash: text().notNull(),
   name: text().notNull(),
   type: text({ enum: tasks }).notNull(),
   config: text({ mode: 'json' }),
