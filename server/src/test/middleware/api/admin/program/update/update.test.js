@@ -206,6 +206,7 @@ describe('[api] program update', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, payload.id);
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, payload.name);
     assert.equal(body.userId, dbPrograms[0].userId, 'should not change userId');
     assert.equal(body.startDatetime, payload.startDatetime);
@@ -224,7 +225,7 @@ describe('[api] program update', async () => {
 
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 8);
+    assert.equal(Object.keys(body).length, 9);
 
     assert.doesNotMatch(
       body.updatedAt,
@@ -294,6 +295,7 @@ describe('[api] program update', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(typeof body.id, 'number');
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, payload.name);
     assert.equal(body.userId, dbPrograms[0].userId, 'should not change userId');
     assert.equal(body.startDatetime, payload.startDatetime);
@@ -312,7 +314,7 @@ describe('[api] program update', async () => {
 
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 8);
+    assert.equal(Object.keys(body).length, 9);
 
     assert.doesNotMatch(
       body.updatedAt,
@@ -361,6 +363,7 @@ describe('[api] program update', async () => {
 
     assert.equal(resp2.status, 200);
     assert.equal(body2.id, payload2.id);
+    assert.equal(body2.hash.length, 8);
     assert.equal(body2.name, payload2.name);
     assert.equal(
       body2.userId,
@@ -387,7 +390,7 @@ describe('[api] program update', async () => {
 
     assert.equal(isNaN(new Date(body2.createdAt)), false);
     assert.equal(isNaN(new Date(body2.updatedAt)), false);
-    assert.equal(Object.keys(body2).length, 8);
+    assert.equal(Object.keys(body2).length, 9);
 
     assert.doesNotMatch(
       body.updatedAt,
@@ -484,6 +487,7 @@ describe('[api] program update', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(typeof body.id, 'number');
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, payload.name);
     assert.equal(body.userId, dbPrograms[0].userId, 'should not change userId');
     assert.equal(body.startDatetime, payload.startDatetime);
@@ -492,7 +496,7 @@ describe('[api] program update', async () => {
     assert.equal(body.tasks.length, 0);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 8);
+    assert.equal(Object.keys(body).length, 9);
 
     assert.doesNotMatch(
       body.updatedAt,
