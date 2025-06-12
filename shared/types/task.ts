@@ -10,6 +10,7 @@ export type TTaskType =
 
 interface ITask {
   id: number;
+  hash: number;
   name: number;
   labels: ILabel[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

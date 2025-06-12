@@ -2,7 +2,11 @@ import { useStore } from '@nanostores/react';
 import dayjs from 'dayjs';
 import { Button, Col, DatePicker, Form, Input, notification, Row } from 'antd';
 
-import type { IProgram, IProgramFull, IProgramBody } from 'shared/types/program';
+import type {
+  IProgram,
+  IProgramFull,
+  IProgramBody,
+} from 'shared/types/program';
 import { $createProgram, $updateProgram } from '@/stores/program';
 import { SortableFormList } from '@/components/FormFields/SortableFormList';
 
@@ -118,7 +122,7 @@ export function ProgramForm({
             })}
             normalize={(value) => value && `${dayjs(value).toISOString()}`}
           >
-            <DatePicker />
+            <DatePicker minDate={dayjs()} showTime />
           </Form.Item>
         </Col>
 
@@ -134,7 +138,7 @@ export function ProgramForm({
             })}
             normalize={(value) => value && `${dayjs(value).toISOString()}`}
           >
-            <DatePicker />
+            <DatePicker minDate={dayjs().add(1, 'days')} showTime />
           </Form.Item>
         </Col>
 
