@@ -29,6 +29,8 @@ function getEndpoint(baseUrl, { id }) {
   return url;
 }
 
+const hash = '8'.repeat(8);
+
 describe('[api] task get', async () => {
   test('should return 401 if unauthorized', async (t) => {
     const { request } = await getTestServer({
@@ -129,7 +131,7 @@ describe('[api] task get', async () => {
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
         const dbLabels = await seedLabels(db, labels);
-        dbTasks = await seedTasks(db, [semaphoreTextTask]);
+        dbTasks = await seedTasks(db, [{ ...semaphoreTextTask, hash }]);
 
         dbTaskLabels = await seedTaskLabels(db, [
           {
@@ -160,6 +162,7 @@ describe('[api] task get', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbTasks[0].id);
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, semaphoreTextTask.name);
     assert.equal(body.type, semaphoreTextTask.type);
     assert.deepEqual(body.config, semaphoreTextTask.config);
@@ -179,7 +182,7 @@ describe('[api] task get', async () => {
 
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 8);
+    assert.equal(Object.keys(body).length, 9);
   });
 
   test('should return 200 and label with empty err', async (t) => {
@@ -189,7 +192,7 @@ describe('[api] task get', async () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [semaphoreTextTask]);
+        dbTasks = await seedTasks(db, [{ ...semaphoreTextTask, hash }]);
       },
     });
 
@@ -205,6 +208,7 @@ describe('[api] task get', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbTasks[0].id);
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, semaphoreTextTask.name);
     assert.equal(body.type, semaphoreTextTask.type);
     assert.deepEqual(body.config, semaphoreTextTask.config);
@@ -213,7 +217,7 @@ describe('[api] task get', async () => {
     assert.equal(body.labels.length, 0);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 8);
+    assert.equal(Object.keys(body).length, 9);
   });
 
   test('should return 200 and task validation err if saved in db data is invalid', async (t) => {
@@ -230,7 +234,7 @@ describe('[api] task get', async () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [invalidConfigTask]);
+        dbTasks = await seedTasks(db, [{ ...invalidConfigTask, hash }]);
       },
     });
 
@@ -246,6 +250,7 @@ describe('[api] task get', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbTasks[0].id);
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, invalidConfigTask.name);
     assert.equal(body.type, invalidConfigTask.type);
     assert.deepEqual(body.config, invalidConfigTask.config);
@@ -255,7 +260,7 @@ describe('[api] task get', async () => {
     assert.equal(body.labels.length, 0);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 8);
+    assert.equal(Object.keys(body).length, 9);
   });
 
   test('should return 200 and empty image list if image was not found', async (t) => {
@@ -272,6 +277,7 @@ describe('[api] task get', async () => {
         dbTasks = await seedTasks(db, [
           {
             ...imageSliderTask,
+            hash,
             config: {
               slides: [
                 { image: { id: dbImages[0].id } },
@@ -300,6 +306,7 @@ describe('[api] task get', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbTasks[0].id);
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, imageSliderTask.name);
     assert.equal(body.type, imageSliderTask.type);
     assert.ok(Array.isArray(body.config.slides));
@@ -318,7 +325,7 @@ describe('[api] task get', async () => {
     assert.equal(body.labels.length, 0);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 8);
+    assert.equal(Object.keys(body).length, 9);
   });
 
   test('should return 200 and add image prefix if task config includes images', async (t) => {
@@ -335,6 +342,7 @@ describe('[api] task get', async () => {
         dbTasks = await seedTasks(db, [
           {
             ...imageSliderTask,
+            hash,
             config: {
               slides: [
                 { image: { id: dbImages[0].id } },
@@ -364,6 +372,7 @@ describe('[api] task get', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbTasks[0].id);
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, imageSliderTask.name);
     assert.equal(body.type, imageSliderTask.type);
     assert.ok(Array.isArray(body.config.slides));
@@ -388,6 +397,6 @@ describe('[api] task get', async () => {
     assert.equal(body.labels.length, 0);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 8);
+    assert.equal(Object.keys(body).length, 9);
   });
 });

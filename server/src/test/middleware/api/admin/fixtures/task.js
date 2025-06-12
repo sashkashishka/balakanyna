@@ -55,6 +55,7 @@ export const tasks = [
   {
     name: 'Task 1',
     type: 'imageSlider',
+    hash: '11111111',
     config: {
       slides: [
         {
@@ -71,6 +72,7 @@ export const tasks = [
   {
     name: 'Task 2',
     type: 'imageSlider',
+    hash: '22222222',
     config: {
       slides: [
         {
@@ -87,6 +89,7 @@ export const tasks = [
   {
     name: 'Task 3',
     type: 'imageSlider',
+    hash: '33333333',
     config: {
       slides: [
         {
@@ -103,6 +106,7 @@ export const tasks = [
   {
     name: 'Task 4',
     type: 'imageSlider',
+    hash: '44444444',
     config: {
       slides: [
         {
@@ -119,6 +123,7 @@ export const tasks = [
   {
     name: 'Task 5',
     type: 'semaphoreText',
+    hash: '55555555',
     config: {
       colors: ['red'],
       delayRange: [1, 2],
@@ -130,6 +135,7 @@ export const tasks = [
   {
     name: 'Task 6',
     type: 'semaphoreText',
+    hash: '66666666',
     config: {
       colors: ['green'],
       delayRange: [2, 3],
@@ -141,6 +147,7 @@ export const tasks = [
   {
     name: 'Task 7',
     type: 'semaphoreText',
+    hash: '77777777',
     config: {
       colors: ['yellow'],
       delayRange: [3, 4],
@@ -152,6 +159,7 @@ export const tasks = [
   {
     name: 'Task 8',
     type: 'semaphoreText',
+    hash: '88888888',
     config: {
       colors: ['brown'],
       delayRange: [4, 5],
