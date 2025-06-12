@@ -28,7 +28,9 @@ function getEndpoint(baseUrl, { id }) {
   return url;
 }
 
-describe('[api] program get', async () => {
+const hash = '8'.repeat(8);
+
+describe('[api] admin program get', async () => {
   test('should return 401 if unauthorized', async (t) => {
     const { request } = await getTestServer({
       t,
@@ -130,6 +132,7 @@ describe('[api] program get', async () => {
         dbUsers = await seedUsers(db, [user]);
         dbPrograms = await seedPrograms(db, [
           getProgram({
+            hash,
             userId: dbUsers[0].id,
           }),
         ]);
@@ -148,6 +151,7 @@ describe('[api] program get', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(typeof body.id, 'number');
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, dbPrograms[0].name);
     assert.equal(body.userId, dbPrograms[0].userId);
     assert.equal(body.startDatetime, dbPrograms[0].startDatetime);
@@ -158,7 +162,7 @@ describe('[api] program get', async () => {
     assert.equal(isNaN(new Date(body.expirationDatetime)), false);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 8);
+    assert.equal(Object.keys(body).length, 9);
   });
 
   test('should return 200 and list of task ids', async (t) => {
@@ -176,6 +180,7 @@ describe('[api] program get', async () => {
 
         dbPrograms = await seedPrograms(db, [
           getProgram({
+            hash,
             userId: dbUsers[0].id,
             tasks: [
               { taskId: dbTasks[2].id },
@@ -214,6 +219,7 @@ describe('[api] program get', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(typeof body.id, 'number');
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, dbPrograms[0].name);
     assert.equal(body.userId, dbPrograms[0].userId);
     assert.equal(body.startDatetime, dbPrograms[0].startDatetime);
@@ -233,19 +239,20 @@ describe('[api] program get', async () => {
         dbProgramTasks.findIndex((t) => t.taskId === task.id),
         -1,
       );
+      assert.ok(task.hash);
       assert.ok(task.name);
       assert.ok(task.type);
       assert.ok(task.config);
       assert.ok(task.createdAt);
       assert.ok(task.updatedAt);
-      assert.equal(Object.keys(task).length, 6);
+      assert.equal(Object.keys(task).length, 7);
     }
 
     assert.equal(isNaN(new Date(body.startDatetime)), false);
     assert.equal(isNaN(new Date(body.expirationDatetime)), false);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 8);
+    assert.equal(Object.keys(body).length, 9);
   });
 
   test('should return 200 and list with repetetive tasks', async (t) => {
@@ -263,6 +270,7 @@ describe('[api] program get', async () => {
 
         dbPrograms = await seedPrograms(db, [
           getProgram({
+            hash,
             userId: dbUsers[0].id,
             tasks: [
               { taskId: dbTasks[2].id },
@@ -302,6 +310,7 @@ describe('[api] program get', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(typeof body.id, 'number');
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, dbPrograms[0].name);
     assert.equal(body.userId, dbPrograms[0].userId);
     assert.equal(body.startDatetime, dbPrograms[0].startDatetime);
@@ -327,18 +336,19 @@ describe('[api] program get', async () => {
         dbProgramTasks.findIndex((t) => t.taskId === task.id),
         -1,
       );
+      assert.ok(task.hash);
       assert.ok(task.name);
       assert.ok(task.type);
       assert.ok(task.config);
       assert.ok(task.createdAt);
       assert.ok(task.updatedAt);
-      assert.equal(Object.keys(task).length, 6);
+      assert.equal(Object.keys(task).length, 7);
     }
 
     assert.equal(isNaN(new Date(body.startDatetime)), false);
     assert.equal(isNaN(new Date(body.expirationDatetime)), false);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 8);
+    assert.equal(Object.keys(body).length, 9);
   });
 });

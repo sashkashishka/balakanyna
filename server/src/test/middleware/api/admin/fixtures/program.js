@@ -1,11 +1,14 @@
-export function getProgram({ userId, tasks }) {
-  const startDatetime = new Date();
+export function getProgram({ userId, tasks, hash, start, expiration }) {
+  const startDatetime = start || new Date();
+  const expirationDatetime =
+    expiration || new Date(startDatetime.getTime() + 100000);
 
   return {
+    hash,
     userId,
     name: `Program ${userId}`,
     startDatetime: startDatetime.toISOString(),
-    expirationDatetime: new Date(startDatetime.getTime() + 100000).toISOString(),
+    expirationDatetime: expirationDatetime.toISOString(),
     tasks,
   };
 }

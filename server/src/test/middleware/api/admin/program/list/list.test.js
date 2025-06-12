@@ -9,19 +9,14 @@ import * as programList from '../../../../../../middleware/api/admin/program/lis
 
 import {
   seedAdmins,
-  seedTasks,
-  seedLabels,
-  seedTaskLabels,
   seedUsers,
   seedPrograms,
-  seedProgramTask,
 } from '../../../../../../db/seeders.js';
 
 import { admin } from '../../fixtures/admin.js';
-import { imageSliderTask, tasks } from '../../fixtures/task.js';
-import { labels } from '../../fixtures/label.js';
+import { tasks } from '../../fixtures/task.js';
 import { getProgram, programs } from '../../fixtures/program.js';
-import { user, users } from '../../fixtures/user.js';
+import { users } from '../../fixtures/user.js';
 
 function getEndpoint(
   baseUrl,
