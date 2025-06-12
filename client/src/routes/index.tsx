@@ -1,4 +1,4 @@
-import { Switch, Match } from 'solid-js';
+import { Switch, Match, ErrorBoundary } from 'solid-js';
 import { useRouter } from '@/core/router/router.tsx';
 
 import { DefaultLayout } from '@/components/Layout/Default/Default.tsx';
@@ -25,7 +25,19 @@ export function Routes() {
             router.alias === ALIASES.PROGRAM || router.alias === ALIASES.TASK
           }
         >
-          <ProgramPage />
+          <ErrorBoundary
+            fallback={(err) => {
+              Sentry.forceLoad();
+              // eslint-disable-next-line
+              Sentry.withScope((scope: any) => {
+                scope.setTag('program', router?.params?.tid);
+                Sentry.captureException(err);
+              });
+              return null;
+            }}
+          >
+            <ProgramPage />
+          </ErrorBoundary>
         </Match>
       </Switch>
     </DefaultLayout>

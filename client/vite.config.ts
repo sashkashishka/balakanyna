@@ -2,6 +2,7 @@ import path from 'node:path';
 import { defineConfig } from 'vite';
 import solid from 'vite-plugin-solid';
 import { externalizeDeps } from 'vite-plugin-externalize-deps';
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 
 export default defineConfig(({ mode }) => {
   if (mode === 'build-lib') {
@@ -28,7 +29,20 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    plugins: [solid()],
+    build: {
+      sourcemap: mode === 'production',
+    },
+    plugins: [
+      solid(),
+      sentryVitePlugin({
+        org: process.env.VITE_SENTRY_ORG,
+        project: process.env.VITE_SENTRY_PROJECT,
+        authToken: process.env.VITE_SENTRY_AUTH_TOKEN,
+        release: {
+          name: process.env.VITE_CLIENT_VERSION,
+        },
+      }),
+    ],
     resolve: {
       alias: {
         '@': path.resolve(import.meta.dirname, './src'),

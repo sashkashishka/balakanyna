@@ -29,7 +29,12 @@ jobs:
 
       - name: Build docker image
         run: |
-          docker build -t ${{env.BALAKANYNA_IMAGE}} .
+          docker build -t ${{env.BALAKANYNA_IMAGE}} \
+          --build-arg VITE_SENTRY_KEY=${{ secrets.SENTRY_KEY }} \
+          --build-arg VITE_CLIENT_VERSION=${{ github.sha }} \
+          --build-arg VITE_SENTRY_ORG=${{ secrets.SENTRY_ORG }} \
+          --build-arg VITE_SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }} \
+          --build-arg VITE_SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} .
 
       - name: Save docker image
         run: |
