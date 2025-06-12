@@ -1,8 +1,8 @@
 {
-  "id": "e87b7b1e-5f32-4928-9f84-eb342b154d63",
-  "prevId": "b37fb0e6-7aff-4604-b457-dec7223a7f14",
   "version": "6",
   "dialect": "sqlite",
+  "id": "d2f39670-97ca-46e2-a7cc-bda23b731aa2",
+  "prevId": "b37fb0e6-7aff-4604-b457-dec7223a7f14",
   "tables": {
     "admin": {
       "name": "admin",
@@ -151,28 +151,28 @@
         "label_image_image_id_image_id_fk": {
           "name": "label_image_image_id_image_id_fk",
           "tableFrom": "label_image",
+          "tableTo": "image",
           "columnsFrom": [
             "image_id"
           ],
-          "tableTo": "image",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "label_image_label_id_label_id_fk": {
           "name": "label_image_label_id_label_id_fk",
           "tableFrom": "label_image",
+          "tableTo": "label",
           "columnsFrom": [
             "label_id"
           ],
-          "tableTo": "label",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -243,6 +243,14 @@
           "notNull": true,
           "autoincrement": true
         },
+        "hash": {
+          "name": "hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
         "name": {
           "name": "name",
           "type": "text",
@@ -303,15 +311,15 @@
         "program_user_id_user_id_fk": {
           "name": "program_user_id_user_id_fk",
           "tableFrom": "program",
+          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -364,28 +372,28 @@
         "program_task_program_id_program_id_fk": {
           "name": "program_task_program_id_program_id_fk",
           "tableFrom": "program_task",
+          "tableTo": "program",
           "columnsFrom": [
             "program_id"
           ],
-          "tableTo": "program",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "program_task_task_id_task_id_fk": {
           "name": "program_task_task_id_task_id_fk",
           "tableFrom": "program_task",
+          "tableTo": "task",
           "columnsFrom": [
             "task_id"
           ],
-          "tableTo": "task",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -438,28 +446,28 @@
         "task_image_image_id_image_id_fk": {
           "name": "task_image_image_id_image_id_fk",
           "tableFrom": "task_image",
+          "tableTo": "image",
           "columnsFrom": [
             "image_id"
           ],
-          "tableTo": "image",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "task_image_task_id_task_id_fk": {
           "name": "task_image_task_id_task_id_fk",
           "tableFrom": "task_image",
+          "tableTo": "task",
           "columnsFrom": [
             "task_id"
           ],
-          "tableTo": "task",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -512,28 +520,28 @@
         "task_label_label_id_label_id_fk": {
           "name": "task_label_label_id_label_id_fk",
           "tableFrom": "task_label",
+          "tableTo": "label",
           "columnsFrom": [
             "label_id"
           ],
-          "tableTo": "label",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "task_label_task_id_task_id_fk": {
           "name": "task_label_task_id_task_id_fk",
           "tableFrom": "task_label",
+          "tableTo": "task",
           "columnsFrom": [
             "task_id"
           ],
-          "tableTo": "task",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -549,6 +557,14 @@
           "primaryKey": true,
           "notNull": true,
           "autoincrement": true
+        },
+        "hash": {
+          "name": "hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
         },
         "name": {
           "name": "name",
@@ -687,9 +703,9 @@
   "views": {},
   "enums": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
+    "tables": {},
+    "columns": {}
   },
   "internal": {
     "indexes": {}
