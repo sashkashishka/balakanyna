@@ -1,0 +1,10 @@
+.container {
+  width: 90vw;
+  height: 90%;
+  background: var(--bg);
+}
+
+.table {
+  width: 100%;
+  border-spacing: 12px;
+}

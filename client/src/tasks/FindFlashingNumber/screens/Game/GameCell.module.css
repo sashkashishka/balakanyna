@@ -1,0 +1,73 @@
+.gameCell {
+  text-align: center;
+  vertical-align: middle;
+  color: white;
+  background: var(--cell-color);
+  font-weight: 600;
+  font-size: 20px;
+  height: 48px;
+}
+
+.gameCellSwing {
+  display: block;
+  animation: swing linear var(--animation-duration) infinite;
+  transform-origin: center center;
+}
+
+@keyframes swing {
+  0% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(25deg);
+  }
+  50% {
+    transform: rotate(0);
+  }
+  75% {
+    transform: rotate(-25deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
+
+.gameCellOpacity {
+  animation: opacity linear var(--animation-duration) infinite;
+  transform-origin: center center;
+}
+
+@keyframes opacity {
+  0% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.1;
+  }
+  75% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.gameCellZoom {
+  animation: zoom linear var(--animation-duration) infinite;
+  transform-origin: center center;
+}
+
+@keyframes zoom {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
