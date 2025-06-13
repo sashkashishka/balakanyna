@@ -30,10 +30,10 @@ interface IProps {
 export function Router(props: IProps) {
   const parser = createParser(props.routes);
 
-  const [state, setState] = createStore<IRoute>(parser(location.pathname));
+  const [state, setState] = createStore<IRoute>(parser(location.href));
 
   const onChange = () => {
-    setState(parser(location.pathname));
+    setState(parser(location.href));
   };
 
   window.addEventListener('popstate', onChange);
