@@ -167,11 +167,12 @@ describe('[api] task update schulteTable', () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, payload.id);
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, payload.name);
     assert.equal(body.type, payload.type);
     assert.equal(body.config.link, payload.config.link);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 6);
+    assert.equal(Object.keys(body).length, 7);
   });
 });

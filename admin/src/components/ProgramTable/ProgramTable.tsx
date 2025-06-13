@@ -74,7 +74,7 @@ export function ProgramTable({
         return (
           <a
             // TODO: think how to refactor it
-            href={`/program/${record.id}`}
+            href={`/program/${record.hash}`}
             target="_blank"
           >
             {record.name}

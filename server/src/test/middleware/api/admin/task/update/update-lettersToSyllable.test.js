@@ -160,12 +160,13 @@ describe('[api] task update lettersToSyllable', () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, payload.id);
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, payload.name);
     assert.equal(body.type, payload.type);
     assert.deepEqual(body.config.list, payload.config.list);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 6);
+    assert.equal(Object.keys(body).length, 7);
   });
 
   test('should return 200 and update task with absent vowelColor property', async (t) => {
@@ -201,6 +202,7 @@ describe('[api] task update lettersToSyllable', () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, payload.id);
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, payload.name);
     assert.equal(body.type, payload.type);
     assert.equal(body.config.list[0].first, payload.config.list[0].first);
@@ -208,6 +210,6 @@ describe('[api] task update lettersToSyllable', () => {
     assert.equal(body.config.list[0].vowelColor, undefined, 'should overwrite vowelColor');
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 6);
+    assert.equal(Object.keys(body).length, 7);
   });
 });

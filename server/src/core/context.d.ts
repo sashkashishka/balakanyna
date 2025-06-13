@@ -25,6 +25,10 @@ export class Jwt {
   verify<TPayload>(token: string): Promise<false | TPayload>;
 }
 
+export class Hash {
+  update(data: string): string;
+}
+
 export class Context {
   constructor(
     req: IncomingMessage,
@@ -48,6 +52,7 @@ export class Context {
 
   cookie: Cookie;
   jwt: Jwt;
+  hash: Hash;
 
   json<T>(val: T, code: number): void;
   throw(err: Error): void;

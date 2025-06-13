@@ -1,4 +1,4 @@
-import { asc, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 import { Composer } from '../../../../../core/composer.js';
 import {
@@ -23,6 +23,7 @@ async function getProgramMiddleware(ctx) {
   const result = await ctx.db
     .select({
       id: programTable.id,
+      hash: programTable.hash,
       name: programTable.name,
       userId: programTable.userId,
       startDatetime: programTable.startDatetime,
@@ -32,6 +33,7 @@ async function getProgramMiddleware(ctx) {
       updatedAt: programTable.updatedAt,
       task: {
         id: taskTable.id,
+        hash: taskTable.hash,
         name: taskTable.name,
         type: taskTable.type,
         config: taskTable.config,
@@ -53,6 +55,7 @@ async function getProgramMiddleware(ctx) {
 
   ctx.json({
     id: program.id,
+    hash: program.hash,
     name: program.name,
     userId: program.userId,
     startDatetime: program.startDatetime,

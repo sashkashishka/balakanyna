@@ -15,6 +15,20 @@
       "when": 1748894444179,
       "tag": "0001_rename-task-type",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1749749540296,
+      "tag": "0002_reflective_mentor",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1749749616515,
+      "tag": "0003_populate-hash-column",
+      "breakpoints": true
     }
   ]
 }

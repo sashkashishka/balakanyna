@@ -2,6 +2,7 @@ import type { TTask } from './task.ts';
 
 export interface IProgram {
   id: number;
+  hash: string;
   name: string;
   userId: number;
   startDatetime: string;

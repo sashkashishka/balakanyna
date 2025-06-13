@@ -63,6 +63,7 @@ describe('[api] task create schulte table', () => {
 
     assert.equal(resp.status, 200);
     assert.equal(typeof body.id, 'number');
+    assert.equal(body.hash.length, 8);
     assert.equal(body.name, payload.name);
     assert.equal(body.type, payload.type);
     assert.equal(body.config.x, payload.config.x);
@@ -70,7 +71,7 @@ describe('[api] task create schulte table', () => {
     assert.equal(body.config.reverse, payload.config.reverse);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 6);
+    assert.equal(Object.keys(body).length, 7);
   });
 });
 

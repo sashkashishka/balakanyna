@@ -26,6 +26,7 @@ export function createTransformTask(ctx) {
       if (!acc.has(id)) {
         acc.set(id, {
           id,
+          hash: curr.hash,
           name: curr.name,
           type: curr.type,
           config: curr.config,

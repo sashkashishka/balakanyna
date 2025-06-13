@@ -26,6 +26,7 @@ async function getTaskMiddleware(ctx) {
   const result = await ctx.db
     .select({
       id: taskTable.id,
+      hash: taskTable.hash,
       name: taskTable.name,
       type: taskTable.type,
       config: taskTable.config,
@@ -63,6 +64,7 @@ async function getTaskMiddleware(ctx) {
 
   ctx.json({
     id: task.id,
+    hash: task.hash,
     name: task.name,
     type: task.type,
     config: task.config,

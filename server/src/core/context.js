@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import cookie from 'cookie';
 import { SignJWT, jwtVerify, importJWK } from 'jose';
 
@@ -92,6 +93,14 @@ export class Jwt {
   }
 }
 
+export class Hash {
+  update(data) {
+    return createHash('shake256', { outputLength: 4 })
+      .update(data)
+      .digest('hex');
+  }
+}
+
 export class Context {
   constructor(req, res, db, ajv, logger, config) {
     /**
@@ -129,6 +138,10 @@ export class Context {
       key: config.jwt.key,
       expirationTime: config.jwt.expirationTime,
     });
+    /**
+     * @type { Hash}
+     */
+    this.hash = new Hash();
 
     this.body = undefined;
 
