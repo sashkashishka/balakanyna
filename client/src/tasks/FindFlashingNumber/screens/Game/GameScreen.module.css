@@ -1,7 +1,50 @@
 .container {
-  width: 90vw;
-  height: 90%;
+  width: 100%;
+  height: 100%;
+}
+
+.scoreboardContainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  opacity: 0.8;
   background: var(--bg);
+}
+
+.timer, .score {
+  font-weight: 500;
+  font-size: 18px;
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
+}
+
+.gameArea {
+  padding-top: 20px;
+  background: var(--bg);
+  height: 100%;
+}
+
+.searchNumberContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  margin: 0 12px;
+  box-shadow: 0 4px 8px 2px #00000094;
+  border-radius: 8px;
+}
+
+.searchNumberTitle {
+  margin: 0 0 12px;
+  color: white;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.searchNumber {
+  color: white;
+  font-weight: 600;
+  font-size: 40px;
 }
 
 .table {

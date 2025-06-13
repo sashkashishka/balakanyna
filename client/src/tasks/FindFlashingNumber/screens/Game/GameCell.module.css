@@ -6,6 +6,8 @@
   font-weight: 600;
   font-size: 20px;
   height: 48px;
+  cursor: pointer;
+  border-radius: 8px;
 }
 
 .gameCellSwing {

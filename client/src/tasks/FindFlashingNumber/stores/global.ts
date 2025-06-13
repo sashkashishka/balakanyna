@@ -4,7 +4,7 @@ import type { IGlobalState, IStreak } from '../types.ts';
 
 const defaultState: IGlobalState = {
   score: 0,
-  screen: 'game',
+  screen: 'start',
   streak: [],
   lives: 0,
 };

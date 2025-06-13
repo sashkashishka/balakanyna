@@ -12,6 +12,7 @@ interface IProps {
   config: Extract<TTask, { type: 'findFlashingNumber' }>['config'];
 }
 
+// TODO: remove
 const defaultConfig: IProps['config'] = {
   duration: 60,
   streak: { length: 15 },
@@ -35,43 +36,36 @@ const defaultConfig: IProps['config'] = {
 
 export function FindFlashingNumber({ config = defaultConfig }: IProps) {
   const { globalStore, addStreak, nextScreen, addScore } = useGlobalStore();
-  // const { link } = config;
 
   return (
-    <Switch>
-      <Match when={globalStore.screen === 'start'}>
-        <StartScreen
-          globalStore={globalStore}
-          addStreak={addStreak}
-          nextScreen={nextScreen}
-        />
-      </Match>
+    <div class={styles.container}>
+      <Switch>
+        <Match when={globalStore.screen === 'start'}>
+          <StartScreen
+            globalStore={globalStore}
+            addStreak={addStreak}
+            nextScreen={nextScreen}
+          />
+        </Match>
 
-      <Match when={globalStore.screen === 'game'}>
-        <GameScreen
-          config={config}
-          globalStore={globalStore}
-          addStreak={addStreak}
-          nextScreen={nextScreen}
-          addScore={addScore}
-        />
-      </Match>
+        <Match when={globalStore.screen === 'game'}>
+          <GameScreen
+            config={config}
+            globalStore={globalStore}
+            addStreak={addStreak}
+            nextScreen={nextScreen}
+            addScore={addScore}
+          />
+        </Match>
 
-      <Match when={globalStore.screen === 'finish'}>
-        <FinishScreen
-          globalStore={globalStore}
-          addStreak={addStreak}
-          nextScreen={nextScreen}
-        />
-      </Match>
-    </Switch>
+        <Match when={globalStore.screen === 'finish'}>
+          <FinishScreen
+            globalStore={globalStore}
+            addStreak={addStreak}
+            nextScreen={nextScreen}
+          />
+        </Match>
+      </Switch>
+    </div>
   );
 }
-
-// start screen
-// game screen
-// finish screen
-
-// algorithm
-// 1. start with x.min and y.min
-// 2. check consecutive streak and depending on progress - increase to max x and y and also number
