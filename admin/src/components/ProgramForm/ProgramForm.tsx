@@ -138,7 +138,7 @@ export function ProgramForm({
             })}
             normalize={(value) => value && `${dayjs(value).toISOString()}`}
           >
-            <DatePicker minDate={dayjs().add(1, 'days')} showTime />
+            <DatePicker minDate={dayjs()} showTime />
           </Form.Item>
         </Col>
 
