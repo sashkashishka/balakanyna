@@ -97,10 +97,5 @@ describe('[api] login', async () => {
       /HttpOnly/i,
       'token cookie should be httpOnly',
     );
-    assert.match(
-      resp.headers.get('set-cookie'),
-      /path=\/;/i,
-      'token cookie should be httpOnly',
-    );
   });
 });

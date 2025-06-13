@@ -60,7 +60,6 @@ async function loginMiddleware(ctx) {
 
   ctx.cookie.setCookie(ctx.config.jwt.cookie, token, {
     httpOnly: true,
-    path: '/',
   });
 
   ctx.json(admin);
