@@ -1,4 +1,4 @@
-import { createEffect, For } from 'solid-js';
+import { For } from 'solid-js';
 import { useGameStore } from '../../stores/game/game.ts';
 import { GameCell } from './GameCell.tsx';
 

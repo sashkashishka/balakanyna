@@ -12,29 +12,7 @@ interface IProps {
   config: Extract<TTask, { type: 'findFlashingNumber' }>['config'];
 }
 
-// TODO: remove
-const defaultConfig: IProps['config'] = {
-  duration: 60,
-  streak: { length: 15 },
-  animation: {
-    min: 700,
-    max: 1000,
-  },
-  positionalDigit: {
-    min: 2,
-    max: 4,
-  },
-  y: {
-    min: 3,
-    max: 6,
-  },
-  x: {
-    min: 4,
-    max: 5,
-  },
-};
-
-export function FindFlashingNumber({ config = defaultConfig }: IProps) {
+export function FindFlashingNumber({ config }: IProps) {
   const { globalStore, addStreak, nextScreen, addScore } = useGlobalStore();
 
   return (
