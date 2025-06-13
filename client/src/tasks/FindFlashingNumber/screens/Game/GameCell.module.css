@@ -1,12 +1,16 @@
+.td {
+  cursor: pointer;
+}
+
 .gameCell {
-  text-align: center;
-  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
   background: var(--cell-color);
   font-weight: 600;
   font-size: 20px;
   height: 48px;
-  cursor: pointer;
   border-radius: 8px;
 }
 

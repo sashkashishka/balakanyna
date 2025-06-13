@@ -10,21 +10,22 @@ interface IProps extends ICell {
 
 export function GameCell({ pickNumber, number, animation, color }: IProps) {
   return (
-    <td
-      class={cn(styles.gameCell, {
-        [styles.gameCellOpacity!]: animation === 'opacity',
-        [styles.gameCellZoom!]: animation === 'zoom',
-      })}
-      style={{ '--cell-color': color, '--animation': animation }}
-      onClick={() => pickNumber(number)}
-    >
-      <span
-        class={cn({
-          [styles.gameCellSwing!]: animation === 'swing',
+    <td class={styles.td} onClick={() => pickNumber(number)}>
+      <div
+        class={cn(styles.gameCell, {
+          [styles.gameCellOpacity!]: animation === 'opacity',
+          [styles.gameCellZoom!]: animation === 'zoom',
         })}
+        style={{ '--cell-color': color }}
       >
-        {number}
-      </span>
+        <span
+          class={cn({
+            [styles.gameCellSwing!]: animation === 'swing',
+          })}
+        >
+          {number}
+        </span>
+      </div>
     </td>
   );
 }

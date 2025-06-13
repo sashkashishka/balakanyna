@@ -32,13 +32,6 @@ export function GameScreen({
 
   const { time, seconds } = useTimer(config.duration);
 
-  createEffect(() => {
-    if (seconds() === 0) {
-      // TODO: add animation to smoothly transition to the next screen
-      nextScreen();
-    }
-  });
-
   return (
     <div
       class={styles.container}
@@ -67,7 +60,13 @@ export function GameScreen({
                   <For each={row}>
                     {(n) => (
                       <GameCell
-                        pickNumber={pickNumber}
+                        pickNumber={(n) => {
+                          pickNumber(n);
+
+                          if (seconds() === 0) {
+                            nextScreen();
+                          }
+                        }}
                         number={n.number}
                         color={n.color}
                         animation={n.animation}

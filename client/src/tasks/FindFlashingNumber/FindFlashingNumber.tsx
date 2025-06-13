@@ -41,11 +41,7 @@ export function FindFlashingNumber({ config = defaultConfig }: IProps) {
     <div class={styles.container}>
       <Switch>
         <Match when={globalStore.screen === 'start'}>
-          <StartScreen
-            globalStore={globalStore}
-            addStreak={addStreak}
-            nextScreen={nextScreen}
-          />
+          <StartScreen nextScreen={nextScreen} />
         </Match>
 
         <Match when={globalStore.screen === 'game'}>
@@ -59,11 +55,7 @@ export function FindFlashingNumber({ config = defaultConfig }: IProps) {
         </Match>
 
         <Match when={globalStore.screen === 'finish'}>
-          <FinishScreen
-            globalStore={globalStore}
-            addStreak={addStreak}
-            nextScreen={nextScreen}
-          />
+          <FinishScreen globalStore={globalStore} />
         </Match>
       </Switch>
     </div>

@@ -1,33 +1,16 @@
-// import styles from './'
-export function FinishScreen({ globalStore, nextScreen, addStreak }) {
+import type { IGlobalState } from '../../types.ts';
+import { COLORS } from '../Game/constants.ts';
+
+import styles from './FinishScreen.module.css';
+
+interface IProps {
+  globalStore: IGlobalState;
+}
+
+export function FinishScreen({ globalStore }: IProps) {
   return (
-    <div>
-      finish screen
-      <br />
-      <br />
-      <button onClick={() => nextScreen()}>next screen</button>
-      <br />
-      <br />
-      <button onClick={() => addStreak({ result: true })}>add streak</button>
-      <br />
-      <br />
-      header with number to find and score field
-      <br />
-      <br />
-      streak
-      {JSON.stringify(globalStore.streak)}
-      <br />
-      <br />
-      lives
-      {globalStore.lives}
-      <br />
-      <br />
-      score
-      {globalStore.score}
-      <br />
-      <br />
-      screen
-      {globalStore.screen}
+    <div class={styles.container} style={{ '--bg': COLORS[0] }}>
+      <h2 class={styles.score}>Рахунок: {globalStore.score}</h2>
     </div>
   );
 }
