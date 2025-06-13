@@ -6,6 +6,7 @@ export type TTaskType =
   | 'semaphoreText'
   | 'iframeViewer'
   | 'lettersToSyllable'
+  | 'findFlashingNumber'
   | 'schulteTable';
 
 interface ITask {
@@ -64,9 +65,34 @@ interface ILettersToSyllableTask extends ITask {
   };
 }
 
+interface IFindFlashingNumberTask extends ITask {
+  type: Extract<TTaskType, 'findFlashingNumber'>;
+  config: {
+    duration: number;
+    streak: { length: number };
+    animation: {
+      min: number;
+      max: number;
+    };
+    positionalDigit: {
+      min: number;
+      max: number;
+    };
+    y: {
+      min: number;
+      max: number;
+    };
+    x: {
+      min: number;
+      max: number;
+    };
+  };
+}
+
 export type TTask =
   | ISemaphoreTextTask
   | IImageSliderTask
   | IIframeViewerTask
   | ILettersToSyllableTask
+  | IFindFlashingNumberTask
   | ISchulteTableTask;
