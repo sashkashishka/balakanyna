@@ -10,6 +10,7 @@ export async function fetchProgram(router: IRoute): Promise<IProgramFull> {
 
   const response = await fetch(
     `/api/client/program/get?id=${router.params.pid}`,
+    { credentials: 'same-origin' },
   );
 
   if (response.ok) {
@@ -26,7 +27,9 @@ export async function fetchTask(id: string): Promise<TTask> {
     throw new Error('No task id has been provided');
   }
 
-  const response = await fetch(`/api/client/task/get?id=${id}`);
+  const response = await fetch(`/api/client/task/get?id=${id}`, {
+    credentials: 'same-origin',
+  });
 
   if (response.ok) {
     return response.json();
