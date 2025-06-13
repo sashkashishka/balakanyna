@@ -1,6 +1,6 @@
 import { unwrap } from 'solid-js/store';
 import type { TTask } from 'shared/types/task.ts';
-import type { ICell, IGameState, IGlobalState } from '../../types.ts';
+import type { IGameState, IGlobalState } from '../../types.ts';
 import { random } from '@/utils/random.ts';
 import { compose } from '@/utils/compose.ts';
 import { easeInSine } from '@/utils/easingFunctions.ts';
