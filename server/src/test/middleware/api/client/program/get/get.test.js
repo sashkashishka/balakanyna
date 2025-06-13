@@ -7,12 +7,15 @@ import { getTestServer } from '../../../../../helpers/getTestServer.js';
 import * as programGet from '../../../../../../middleware/api/client/program/get/middleware.js';
 
 import {
+  seedAdmins,
   seedPrograms,
   seedProgramTask,
   seedTasks,
   seedUsers,
 } from '../../../../../../db/seeders.js';
+import { getAuthCookie } from '../../../../../helpers/utils.js';
 
+import { admin } from '../../../admin/fixtures/admin.js';
 import { user } from '../../../admin/fixtures/user.js';
 import { getProgram } from '../../../admin/fixtures/program.js';
 import { tasks } from '../../../admin/fixtures/task.js';
@@ -141,6 +144,43 @@ describe('[api] client program get', async () => {
       error: 'NOT_FOUND',
       message: 'Not Found',
     });
+  });
+
+  test('should return 200 if program is expired and token is valid', async (t) => {
+    let dbUsers = [];
+    let dbPrograms = [];
+
+    const { request, baseUrl } = await getTestServer({
+      t,
+      async seed(db, config) {
+        await seedAdmins(db, [admin], config.salt.password);
+        dbUsers = await seedUsers(db, [user]);
+        dbPrograms = await seedPrograms(db, [
+          getProgram({
+            hash,
+            userId: dbUsers[0].id,
+            start: new Date(new Date().getTime() - 100000),
+            expiration: new Date(new Date().getTime() - 10000),
+          }),
+        ]);
+      },
+    });
+
+    const endpoint = getEndpoint(baseUrl, { id: dbPrograms[0].hash });
+
+    const resp = await request(endpoint, {
+      method: programGet.method,
+      headers: {
+        cookie: await getAuthCookie(request, admin),
+      },
+    });
+    const body = await resp.json();
+
+    assert.equal(resp.status, 200);
+    assert.equal(body.id.length, 8);
+    assert.ok(Array.isArray(body.tasks));
+    assert.equal(body.tasks.length, 0);
+    assert.equal(Object.keys(body).length, 2);
   });
 
   test('should return 200', async (t) => {
