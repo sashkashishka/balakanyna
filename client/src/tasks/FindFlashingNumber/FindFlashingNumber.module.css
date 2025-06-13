@@ -1,0 +1,7 @@
+.container {
+  width: 90vw;
+  max-width: 650px;
+  height: 85%;
+  overflow: hidden;
+  border-radius: 12px;
+}

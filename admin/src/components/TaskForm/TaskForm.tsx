@@ -10,6 +10,7 @@ import { ImageSliderConfigForm } from './tasks/ImageSliderConfigForm';
 import { IframeViewerConfigForm } from './tasks/IframeViewerConfigForm';
 import { SchulteTableConfigForm } from './tasks/SchulteTableConfigForm';
 import { LettersToSyllableConfigForm } from './tasks/LettersToSyllableConfigForm';
+import { FindFlashingNumberConfigForm } from './tasks/FindFlashingNumberConfigForm';
 import { TaskPreview } from '../TaskPreview';
 import { CONFIG_VALIDATOR_MAP } from './utils';
 
@@ -19,6 +20,7 @@ const TASK_FORMS = {
   iframeViewer: IframeViewerConfigForm,
   schulteTable: SchulteTableConfigForm,
   lettersToSyllable: LettersToSyllableConfigForm,
+  findFlashingNumber: FindFlashingNumberConfigForm,
 };
 
 export interface ITaskFormProps {

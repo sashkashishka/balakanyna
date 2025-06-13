@@ -8,6 +8,9 @@ const TASKS: Record<TTaskType, ReturnType<typeof lazy>> = {
   iframeViewer: lazy(() => import('@/tasks/IframeViewer/index.ts')),
   schulteTable: lazy(() => import('@/tasks/SchulteTable/index.ts')),
   lettersToSyllable: lazy(() => import('@/tasks/LettersToSyllable/index.ts')),
+  findFlashingNumber: lazy(
+    () => import('@/tasks/FindFlashingNumber/index.ts'),
+  ),
 };
 
 interface IProps {

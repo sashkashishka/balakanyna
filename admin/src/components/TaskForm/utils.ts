@@ -7,6 +7,7 @@ import { fullImageSliderSchema } from 'shared/schemas/imageSlider';
 import { iframeViewerSchema } from 'shared/schemas/iframeViewer';
 import { schulteTableSchema } from 'shared/schemas/schulteTable';
 import { lettersToSyllableSchema } from 'shared/schemas/lettersToSyllable';
+import { findFlashingNumberSchema } from 'shared/schemas/findFlashingNumber';
 
 const ajv = getAjv();
 
@@ -16,4 +17,5 @@ export const CONFIG_VALIDATOR_MAP: Record<TTaskType, ValidateFunction> = {
   iframeViewer: ajv.compile(iframeViewerSchema),
   schulteTable: ajv.compile(schulteTableSchema),
   lettersToSyllable: ajv.compile(lettersToSyllableSchema),
+  findFlashingNumber: ajv.compile(findFlashingNumberSchema),
 };

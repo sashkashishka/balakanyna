@@ -4,6 +4,7 @@ export const tasks = [
   'iframeViewer',
   'schulteTable',
   'lettersToSyllable',
+  'findFlashingNumber',
 ];
 
 export const uploadImageSchema = {

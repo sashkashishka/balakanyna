@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+}
+
+.title {
+  margin: 0 0 24px;
+  color: white;
+  font-size: 36px;
+}
+
+.startButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  background: var(--btn-bg);
+  border-radius: 50%;
+  font-size: 28px;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+}

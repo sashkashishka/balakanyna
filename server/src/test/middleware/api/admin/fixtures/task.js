@@ -51,6 +51,31 @@ export const lettersToSyllableTask = {
   },
 };
 
+export const findFlashingNumberTask = {
+  name: 'find flashing number',
+  type: 'findFlashingNumber',
+  config: {
+    duration: 60,
+    streak: { length: 15 },
+    animation: {
+      min: 700,
+      max: 1000,
+    },
+    positionalDigit: {
+      min: 2,
+      max: 4,
+    },
+    y: {
+      min: 3,
+      max: 6,
+    },
+    x: {
+      min: 4,
+      max: 5,
+    },
+  },
+};
+
 export const tasks = [
   {
     name: 'Task 1',

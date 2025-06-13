@@ -8,6 +8,7 @@ import {
   IframeViewer,
   SchulteTable,
   LettersToSyllable,
+  FindFlashingNumber,
 } from 'client';
 import 'client/lib/style.css';
 
@@ -19,6 +20,7 @@ const TASK_MAP: Record<TTaskType, () => JSX.Element> = {
   iframeViewer: IframeViewer,
   schulteTable: SchulteTable,
   lettersToSyllable: LettersToSyllable,
+  findFlashingNumber: FindFlashingNumber,
 };
 
 interface IProps {
