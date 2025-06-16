@@ -97,7 +97,6 @@ async function updateTaskMiddleware(ctx) {
         const [result] = await ctx.db
           .update(taskTable)
           .set({
-            hash: ctx.hash.update(JSON.stringify(body)),
             name: body.name,
             config: sortJsonKeys(body.config),
             updatedAt: sql`(datetime())`,
