@@ -96,7 +96,6 @@ async function updateProgramMiddleware(ctx) {
         const [program] = await tx
           .update(programTable)
           .set({
-            hash: ctx.hash.update(JSON.stringify(ctx.body)),
             name: body.name,
             startDatetime: body.startDatetime,
             expirationDatetime: body.expirationDatetime,

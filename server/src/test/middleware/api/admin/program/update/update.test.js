@@ -19,6 +19,8 @@ import { getProgram } from '../../fixtures/program.js';
 import { tasks } from '../../fixtures/task.js';
 import { programTaskTable } from '../../../../../../db/schema.js';
 
+const hash = '88888888';
+
 describe('[api] program update', async () => {
   test('should return 401 if unauthorized', async (t) => {
     const { request } = await getTestServer({
@@ -166,8 +168,8 @@ describe('[api] program update', async () => {
         dbUsers = await seedUsers(db, [user]);
         dbTasks = await seedTasks(db, tasks);
         dbPrograms = await seedPrograms(db, [
-          getProgram({ userId: dbUsers[0].id }),
-          getProgram({ userId: dbUsers[0].id }),
+          getProgram({ userId: dbUsers[0].id, hash }),
+          getProgram({ userId: dbUsers[0].id, hash: '99999999' }),
         ]);
       },
     });
@@ -206,7 +208,7 @@ describe('[api] program update', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, payload.id);
-    assert.equal(body.hash.length, 8);
+    assert.equal(body.hash, dbPrograms[0].hash, 'should preserve hash');
     assert.equal(body.name, payload.name);
     assert.equal(body.userId, dbPrograms[0].userId, 'should not change userId');
     assert.equal(body.startDatetime, payload.startDatetime);
@@ -255,8 +257,8 @@ describe('[api] program update', async () => {
         dbUsers = await seedUsers(db, [user]);
         dbTasks = await seedTasks(db, tasks);
         dbPrograms = await seedPrograms(db, [
-          getProgram({ userId: dbUsers[0].id }),
-          getProgram({ userId: dbUsers[0].id }),
+          getProgram({ userId: dbUsers[0].id, hash }),
+          getProgram({ userId: dbUsers[0].id, hash: '99999999' }),
         ]);
       },
     });
@@ -295,7 +297,7 @@ describe('[api] program update', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(typeof body.id, 'number');
-    assert.equal(body.hash.length, 8);
+    assert.equal(body.hash, dbPrograms[0].hash, 'should preserve hash');
     assert.equal(body.name, payload.name);
     assert.equal(body.userId, dbPrograms[0].userId, 'should not change userId');
     assert.equal(body.startDatetime, payload.startDatetime);
@@ -458,7 +460,7 @@ describe('[api] program update', async () => {
         await seedAdmins(db, [admin], config.salt.password);
         dbUsers = await seedUsers(db, [user]);
         dbPrograms = await seedPrograms(db, [
-          getProgram({ userId: dbUsers[0].id }),
+          getProgram({ userId: dbUsers[0].id, hash }),
         ]);
       },
     });
@@ -487,7 +489,7 @@ describe('[api] program update', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(typeof body.id, 'number');
-    assert.equal(body.hash.length, 8);
+    assert.equal(body.hash, dbPrograms[0].hash, 'should preserve hash');
     assert.equal(body.name, payload.name);
     assert.equal(body.userId, dbPrograms[0].userId, 'should not change userId');
     assert.equal(body.startDatetime, payload.startDatetime);
