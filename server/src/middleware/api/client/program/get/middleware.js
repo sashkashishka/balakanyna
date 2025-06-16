@@ -20,13 +20,18 @@ import { clientProgramGetSearchParams } from './schema.js';
 async function checkProgramExists(ctx, next) {
   const searchParams = ctx.searchParams;
 
+  const token = ctx.cookie.getCookie(ctx.config.jwt.cookie);
+  const isValid = await ctx.jwt.verify(token);
+
   const [result] = await ctx.db
     .select({ count: count(taskTable.id) })
     .from(programTable)
     .where(
       and(
         eq(programTable.hash, searchParams.id),
-        gt(programTable.expirationDatetime, new Date().toISOString()),
+        isValid
+          ? undefined
+          : gt(programTable.expirationDatetime, new Date().toISOString()),
       ),
     );
 

@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto';
+import { pbkdf2Sync } from 'node:crypto';
 import cookie from 'cookie';
 import { SignJWT, jwtVerify, importJWK } from 'jose';
 
@@ -95,9 +95,9 @@ export class Jwt {
 
 export class Hash {
   update(data) {
-    return createHash('shake256', { outputLength: 4 })
-      .update(data)
-      .digest('hex');
+    return pbkdf2Sync(data, new Date().toISOString(), 5, 6, 'sha512').toString(
+      'base64url',
+    );
   }
 }
 

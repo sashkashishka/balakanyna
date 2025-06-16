@@ -10,6 +10,8 @@ import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
 import { findFlashingNumberTask } from '../../fixtures/task.js';
 
+const hash = '88888888';
+
 describe('[api] task update findFlashingNumber', () => {
   test('should retun 400 if config is invalid', async (t) => {
     let dbTasks = [];
@@ -208,7 +210,7 @@ describe('[api] task update findFlashingNumber', () => {
       config: { media: { prefix } },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [findFlashingNumberTask]);
+        dbTasks = await seedTasks(db, [{ ...findFlashingNumberTask, hash }]);
       },
     });
 
@@ -249,7 +251,7 @@ describe('[api] task update findFlashingNumber', () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, payload.id);
-    assert.equal(body.hash.length, 8);
+    assert.equal(body.hash, hash, 'should preserve hash');
     assert.equal(body.name, payload.name);
     assert.equal(body.type, payload.type);
     assert.deepEqual(body.config.list, payload.config.list);

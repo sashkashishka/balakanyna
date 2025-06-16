@@ -11,6 +11,8 @@ import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
 import { semaphoreTextTask, tasks } from '../../fixtures/task.js';
 
+const hash = '88888888';
+
 describe('[api] task update', async () => {
   test('should return 401 if unauthorized', async (t) => {
     const { request } = await getTestServer({
@@ -114,7 +116,7 @@ describe('[api] task update', async () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [semaphoreTextTask]);
+        dbTasks = await seedTasks(db, [{ ...semaphoreTextTask, hash }]);
       },
     });
 
@@ -136,7 +138,7 @@ describe('[api] task update', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbTasks[0].id);
-    assert.equal(body.hash.length, 8);
+    assert.equal(body.hash, hash, 'should preserve hash');
     assert.equal(body.name, payload.name);
     assert.equal(body.type, payload.type);
     assert.deepEqual(body.config, payload.config);
@@ -235,7 +237,7 @@ describe('[api] task update', async () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [semaphoreTextTask]);
+        dbTasks = await seedTasks(db, [{ ...semaphoreTextTask, hash }]);
       },
     });
 
@@ -271,7 +273,7 @@ describe('[api] task update', async () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [semaphoreTextTask]);
+        dbTasks = await seedTasks(db, [{ ...semaphoreTextTask, hash }]);
       },
     });
 
@@ -297,7 +299,7 @@ describe('[api] task update', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbTasks[0].id);
-    assert.equal(body.hash.length, 8);
+    assert.equal(body.hash, hash, 'should preserve hash');
     assert.equal(body.name, payload.name);
     assert.equal(body.type, payload.type);
     assert.deepEqual(body.config, payload.config);
@@ -329,7 +331,7 @@ describe('[api] task update', async () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        dbTasks = await seedTasks(db, [semaphoreTextTask]);
+        dbTasks = await seedTasks(db, [{ ...semaphoreTextTask, hash }]);
       },
     });
 
@@ -356,7 +358,7 @@ describe('[api] task update', async () => {
 
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbTasks[0].id);
-    assert.equal(body.hash.length, 8);
+    assert.equal(body.hash, hash, 'should preserve hash');
     assert.equal(body.name, payload.name);
     assert.equal(body.type, payload.type);
     assert.deepEqual(body.config, payload.config);
