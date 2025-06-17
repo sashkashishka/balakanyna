@@ -54,7 +54,6 @@ export function useGameStore({
   }
 
   function pickItem(item: string) {
-    console.log(gameStore.field, item);
     const cellIdx = gameStore.field.findIndex((v) => v?.item === item)!;
     const cell = gameStore.field[cellIdx]!;
 

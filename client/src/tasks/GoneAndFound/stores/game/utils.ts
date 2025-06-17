@@ -86,7 +86,6 @@ export function populatePickingBoard(ctx: IContext): IContext {
   const currentCells = ctx.field!.filter(Boolean);
   const preset = ITEM_PRESETS[ctx.config.preset];
 
-  console.log(ctx.progress);
   const additionalItems = random(2, 2 + ITEMS_LENGTH * ctx.progress!);
   const boardLength = Math.min(
     ITEMS_LENGTH,

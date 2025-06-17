@@ -27,13 +27,15 @@ export function RoundLimit({
   return (
     <div class={styles.container}>
       <div class={styles.scoreboardContainer}>
-        <div class={styles.timer}>Раунд: {round()}</div>
+        <div class={styles.timer}>
+          Раунд: {round() + 1}/{config.limit.value}
+        </div>
         <div class={styles.score}>Рахунок: {globalStore.score}</div>
       </div>
 
       <Playground
         checkGameEnd={() => {
-          if (round() === config.limit.value) {
+          if (round() === config.limit.value - 1) {
             return nextScreen();
           }
 
