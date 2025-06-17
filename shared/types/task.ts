@@ -7,6 +7,7 @@ export type TTaskType =
   | 'iframeViewer'
   | 'lettersToSyllable'
   | 'findFlashingNumber'
+  | 'goneAndFound'
   | 'schulteTable';
 
 interface ITask {
@@ -89,10 +90,31 @@ interface IFindFlashingNumberTask extends ITask {
   };
 }
 
+interface IGoneAndFoundTask extends ITask {
+  type: Extract<TTaskType, 'goneAndFound'>;
+  config: {
+    limit: {
+      type: 'timer' | 'rounds';
+      value: number;
+    };
+    preset: 'default';
+    streak: { length: number };
+    items: {
+      min: number;
+      max: number;
+    };
+    y: {
+      min: number;
+      max: number;
+    };
+  };
+}
+
 export type TTask =
   | ISemaphoreTextTask
   | IImageSliderTask
   | IIframeViewerTask
   | ILettersToSyllableTask
   | IFindFlashingNumberTask
+  | IGoneAndFoundTask
   | ISchulteTableTask;
