@@ -4,9 +4,8 @@ import type { IGlobalState, IStreak } from '../types.ts';
 
 const defaultState: IGlobalState = {
   score: 0,
-  screen: 'game',
+  screen: 'start',
   streak: [],
-  lives: 0,
 };
 
 export function useGlobalStore(initialState = defaultState) {
@@ -35,15 +34,10 @@ export function useGlobalStore(initialState = defaultState) {
     setGlobalStore('score', (score) => diff + score);
   }
 
-  function decLives() {
-    setGlobalStore('lives', (lives) => Math.max(0, lives - 1));
-  }
-
   return {
     globalStore,
     addStreak,
     nextScreen,
-    decLives,
     addScore,
   };
 }
