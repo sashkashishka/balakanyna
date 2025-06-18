@@ -20,12 +20,12 @@ export class GameDifficultyManager {
   }
 
   _increaseDifficulty() {
-    const increase = 0.1 + 0.05 * (this.streak - 1);
+    const increase = 0.5 + 0.05 * (this.streak - 1);
     this.difficulty = Math.min(this.difficulty + increase, this.difficutlyCap);
   }
 
   _decreaseDifficulty() {
-    const decrease = 0.2 + 0.2 * (Math.abs(this.streak) - 1);
+    const decrease = 1 + 0.2 * (Math.abs(this.streak) - 1);
     this.difficulty = Math.max(this.difficulty - decrease, 1);
   }
 
