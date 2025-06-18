@@ -8,6 +8,7 @@ import { iframeViewerSchema } from 'shared/schemas/iframeViewer';
 import { schulteTableSchema } from 'shared/schemas/schulteTable';
 import { lettersToSyllableSchema } from 'shared/schemas/lettersToSyllable';
 import { findFlashingNumberSchema } from 'shared/schemas/findFlashingNumber';
+import { goneAndFoundSchema } from 'shared/schemas/goneAndFound';
 
 const ajv = getAjv();
 
@@ -18,4 +19,5 @@ export const CONFIG_VALIDATOR_MAP: Record<TTaskType, ValidateFunction> = {
   schulteTable: ajv.compile(schulteTableSchema),
   lettersToSyllable: ajv.compile(lettersToSyllableSchema),
   findFlashingNumber: ajv.compile(findFlashingNumberSchema),
+  goneAndFound: ajv.compile(goneAndFoundSchema),
 };

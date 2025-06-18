@@ -2,6 +2,7 @@
   position: relative;
   display: grid;
   grid-template-rows: 60% 30%;
+  align-content: space-between;
   gap: 20px;
   height: 100%;
   width: 100%;

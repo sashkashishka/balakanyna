@@ -88,7 +88,6 @@ export function Playground({
             {(cell) => (
               <div
                 class={cn(styles.cell, styles.clickable)}
-                style={{ background: cell.disappear ? 'red' : undefined }}
                 onClick={() => pickItem(cell.item)}
               >
                 <GameCell cell={cell} />

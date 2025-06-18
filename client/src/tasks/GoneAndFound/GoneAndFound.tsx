@@ -11,24 +11,8 @@ import styles from './GoneAndFound.module.css';
 interface IProps {
   config: Extract<TTask, { type: 'goneAndFound' }>['config'];
 }
-const defaultConfig: IProps['config'] = {
-  preset: 'default',
-  streak: { length: 10 },
-  items: {
-    min: 3,
-    max: 12,
-  },
-  limit: {
-    type: 'rounds',
-    value: 60,
-  },
-  y: {
-    min: 3,
-    max: 5,
-  },
-};
 
-export function GoneAndFound({ config = defaultConfig }: IProps) {
+export function GoneAndFound({ config }: IProps) {
   const { globalStore, addStreak, nextScreen, addScore } = useGlobalStore();
 
   return (
