@@ -5,6 +5,7 @@ export const tasks = [
   'schulteTable',
   'lettersToSyllable',
   'findFlashingNumber',
+  'goneAndFound',
 ];
 
 export const uploadImageSchema = {
