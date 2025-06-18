@@ -6,16 +6,6 @@ export const goneAndFoundSchema = {
       type: 'string',
       enum: ['default'],
     },
-    streak: {
-      type: 'object',
-      properties: {
-        length: {
-          type: 'number',
-        },
-      },
-      required: ['length'],
-      additionalProperties: false,
-    },
     items: {
       description: 'number of items to find',
       type: 'object',
@@ -68,6 +58,6 @@ export const goneAndFoundSchema = {
       additionalProperties: false,
     },
   },
-  required: ['preset', 'y', 'streak', 'items', 'limit'],
+  required: ['preset', 'y', 'items', 'limit'],
   additionalProperties: false,
 };

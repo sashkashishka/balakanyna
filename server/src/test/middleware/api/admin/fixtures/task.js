@@ -81,7 +81,6 @@ export const goneAndFoundTask = {
   type: 'goneAndFound',
   config: {
     preset: 'default',
-    streak: { length: 10 },
     items: {
       min: 3,
       max: 11,

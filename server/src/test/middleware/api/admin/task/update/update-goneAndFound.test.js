@@ -196,7 +196,6 @@ describe('[api] task update goneAndFound', () => {
       name: 'BrandNewName',
       config: {
         preset: 'default',
-        streak: { length: 5 },
         items: {
           min: 3,
           max: 6,

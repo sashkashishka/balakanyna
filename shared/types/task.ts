@@ -98,7 +98,6 @@ interface IGoneAndFoundTask extends ITask {
       value: number;
     };
     preset: 'default';
-    streak: { length: number };
     items: {
       min: number;
       max: number;
