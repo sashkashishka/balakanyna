@@ -9,6 +9,7 @@ import {
   SchulteTable,
   LettersToSyllable,
   FindFlashingNumber,
+  GoneAndFound,
 } from 'client';
 import 'client/lib/style.css';
 
@@ -21,6 +22,7 @@ const TASK_MAP: Record<TTaskType, () => JSX.Element> = {
   schulteTable: SchulteTable,
   lettersToSyllable: LettersToSyllable,
   findFlashingNumber: FindFlashingNumber,
+  goneAndFound: GoneAndFound,
 };
 
 interface IProps {
