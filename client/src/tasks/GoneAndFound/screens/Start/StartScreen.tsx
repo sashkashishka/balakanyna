@@ -32,7 +32,7 @@ export function StartScreen({ nextScreen, config }: IProps) {
 
   return (
     <div class={styles.container} style={{ '--bg': `url(${fieldBg})` }}>
-      <h2 class={styles.title}>Знайдіть предмети, що пропали</h2>
+      <h2 class={styles.title}>Знайдіть предмети, що зникли</h2>
       <Switch>
         <Match when={start()}>
           <Countdown nextScreen={nextScreen} />
