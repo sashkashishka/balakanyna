@@ -8,6 +8,7 @@ import { iframeViewerSchema } from 'shared/schemas/iframeViewer.js';
 import { schulteTableSchema } from 'shared/schemas/schulteTable.js';
 import { lettersToSyllableSchema } from 'shared/schemas/lettersToSyllable.js';
 import { findFlashingNumberSchema } from 'shared/schemas/findFlashingNumber.js'
+import { goneAndFoundSchema } from 'shared/schemas/goneAndFound.js';
 
 export const uploadTypeToSchema = {
   imageSlider: uploadImageSliderSchema,
@@ -16,6 +17,7 @@ export const uploadTypeToSchema = {
   schulteTable: schulteTableSchema,
   lettersToSyllable: lettersToSyllableSchema,
   findFlashingNumber: findFlashingNumberSchema,
+  goneAndFound: goneAndFoundSchema,
 };
 
 export const fullTypeToSchema = {
@@ -25,6 +27,7 @@ export const fullTypeToSchema = {
   schulteTable: schulteTableSchema,
   lettersToSyllable: lettersToSyllableSchema,
   findFlashingNumber: findFlashingNumberSchema,
+  goneAndFound: goneAndFoundSchema,
 };
 
 const ERR_INVALID_TASK_CONFIG = createError(

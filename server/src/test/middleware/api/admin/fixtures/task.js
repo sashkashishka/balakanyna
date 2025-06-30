@@ -76,6 +76,26 @@ export const findFlashingNumberTask = {
   },
 };
 
+export const goneAndFoundTask = {
+  name: 'gone and found task',
+  type: 'goneAndFound',
+  config: {
+    preset: 'default',
+    items: {
+      min: 3,
+      max: 11,
+    },
+    limit: {
+      type: 'rounds',
+      value: 10,
+    },
+    y: {
+      min: 3,
+      max: 5,
+    },
+  },
+};
+
 export const tasks = [
   {
     name: 'Task 1',

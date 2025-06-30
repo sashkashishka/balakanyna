@@ -11,6 +11,7 @@ import { IframeViewerConfigForm } from './tasks/IframeViewerConfigForm';
 import { SchulteTableConfigForm } from './tasks/SchulteTableConfigForm';
 import { LettersToSyllableConfigForm } from './tasks/LettersToSyllableConfigForm';
 import { FindFlashingNumberConfigForm } from './tasks/FindFlashingNumberConfigForm';
+import { GoneAndFoundConfigForm } from './tasks/GoneAndFoundConfigForm';
 import { TaskPreview } from '../TaskPreview';
 import { CONFIG_VALIDATOR_MAP } from './utils';
 
@@ -21,6 +22,7 @@ const TASK_FORMS = {
   schulteTable: SchulteTableConfigForm,
   lettersToSyllable: LettersToSyllableConfigForm,
   findFlashingNumber: FindFlashingNumberConfigForm,
+  goneAndFound: GoneAndFoundConfigForm,
 };
 
 export interface ITaskFormProps {
