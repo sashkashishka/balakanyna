@@ -21,6 +21,7 @@ import {
 
 import { admin } from '../../fixtures/admin.js';
 import {
+  brainboxTask,
   imageSliderTask,
   semaphoreTextTask,
   tasks,
@@ -182,114 +183,6 @@ describe('[api] task list', async () => {
       error: 'INVALID_PAYLOAD',
       message: 'Invalid payload',
     });
-  });
-
-  test('should return 200 and populate images for image related tasks', async (t) => {
-    const prefix = 'foo';
-    const offset = 0;
-    const limit = tasks.length;
-    let dbTaskLabels = [];
-
-    const { request, baseUrl } = await getTestServer({
-      t,
-      config: { media: { prefix } },
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        const dbLabels = await seedLabels(db, labels);
-        const dbImages = await seedImages(db, images);
-        const dbTasks = await seedTasks(db, tasks);
-
-        dbTaskLabels = await seedTaskLabels(db, [
-          {
-            labelId: dbLabels[0].id,
-            taskId: dbTasks[0].id,
-          },
-          {
-            labelId: dbLabels[1].id,
-            taskId: dbTasks[0].id,
-          },
-          {
-            labelId: dbLabels[1].id,
-            taskId: dbTasks[1].id,
-          },
-          {
-            taskId: dbTasks[2].id,
-            labelId: dbLabels[2].id,
-          },
-        ]);
-
-        await seedTaskImages(db, [
-          {
-            imageId: dbImages[0].id,
-            taskId: dbTasks[0].id,
-          },
-          {
-            imageId: dbImages[1].id,
-            taskId: dbTasks[1].id,
-          },
-        ]);
-      },
-    });
-
-    const url = getEndpoint(baseUrl, {
-      offset,
-      limit,
-      order_by: 'createdAt',
-      dir: 'asc',
-    });
-
-    const resp = await request(url, {
-      method: taskList.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
-    });
-    const body = await resp.json();
-    const { items, total } = body;
-
-    assert.equal(resp.status, 200);
-    assert.equal(items.length, limit);
-    assert.equal(total, tasks.length);
-
-    for (let i = 1; i < items.length; i++) {
-      assert.ok(
-        new Date(items[i - 1].createdAt) <= new Date(items[i].createdAt),
-      );
-
-      const task = items[i];
-
-      assert.ok(Array.isArray(task.labels));
-
-      for (let j = 0; j < task.labels.length; j++) {
-        assert.ok(
-          dbTaskLabels.some(({ labelId }) => labelId === task.labels[j].id),
-          'label id is from junction table',
-        );
-        assert.ok(task.labels[j].name);
-        assert.ok(task.labels[j].type);
-        assert.ok(task.labels[j].config);
-        assert.ok(task.labels[j].createdAt);
-        assert.ok(task.labels[j].updatedAt);
-        assert.equal(Object.keys(task.labels[j]).length, 6);
-      }
-
-      if (task.type === 'imageSlider') {
-        assert.ok(Array.isArray(task.config.slides));
-        assert.ok(task.config.title);
-
-        for (let i = 0; i < task.config.slides.length; i++) {
-          const slide = task.config.slides[i];
-
-          assert.ok(slide.image.id);
-          assert.ok(slide.image.filename);
-          assert.ok(slide.image.hashsum);
-          assert.ok(
-            slide.image.path.startsWith('/foo/'),
-            'should add prefix to url',
-          );
-        }
-      }
-    }
   });
 
   test('should return 200 and all tasks', async (t) => {
@@ -1396,10 +1289,7 @@ describe('[api] task list', async () => {
       t,
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        await seedTasks(db, [
-          semaphoreTextTask,
-          imageSliderTask,
-        ]);
+        await seedTasks(db, [semaphoreTextTask, imageSliderTask]);
       },
     });
 
@@ -1431,7 +1321,7 @@ describe('[api] task list', async () => {
     assert.ok(items[1].errors instanceof Object);
   });
 
-  test('should return tasks with image prefix if task includes ones', async (t) => {
+  test('should return tasks with populated images if task includes one', async (t) => {
     const prefix = 'foo';
     const offset = 0;
     const limit = tasks.length;
@@ -1441,7 +1331,23 @@ describe('[api] task list', async () => {
       config: { media: { prefix } },
       async seed(db, config) {
         await seedAdmins(db, [admin], config.salt.password);
-        await seedTasks(db, [semaphoreTextTask, imageSliderTask]);
+        const dbImages = await seedImages(db, images);
+        const dbTasks = await seedTasks(db, [imageSliderTask, brainboxTask]);
+
+        await seedTaskImages(db, [
+          {
+            imageId: dbImages[0].id,
+            taskId: dbTasks[0].id,
+          },
+          {
+            imageId: dbImages[0].id,
+            taskId: dbTasks[1].id,
+          },
+          {
+            imageId: dbImages[1].id,
+            taskId: dbTasks[1].id,
+          },
+        ]);
       },
     });
 
@@ -1468,17 +1374,46 @@ describe('[api] task list', async () => {
     for (let i = 0; i < items.length; i++) {
       const task = items[i];
 
-      if (task.type !== 'imageSlider') continue;
+      if (task.type === 'imageSlider') {
+        assert.ok(Array.isArray(task.config.slides));
+        assert.ok(task.config.slides.length, 1);
 
-      assert.ok(Array.isArray(task.config.slides));
+        for (let j = 0; j < task.config.slides.length; j++) {
+          const slide = task.config.slides[j];
 
-      for (let j = 0; j < task.config.slides.length; j++) {
-        const slide = task.config.slides[j];
+          assert.ok(slide.image.id);
+          assert.ok(slide.image.filename);
+          assert.ok(slide.image.hashsum);
+          assert.ok(
+            slide.image.path.startsWith('/foo/'),
+            'should add prefix to url',
+          );
+        }
+      }
 
-        assert.ok(
-          slide.image.path.startsWith('/foo/'),
-          'should add prefix to url',
-        );
+      if (task.type === 'brainbox') {
+        assert.ok(Array.isArray(task.config.items));
+        assert.ok(task.config.items.length, 1);
+
+        for (let j = 0; j < task.config.items.length; j++) {
+          const slide = task.config.items[j];
+
+          assert.ok(slide.front.id);
+          assert.ok(slide.front.filename);
+          assert.ok(slide.front.hashsum);
+          assert.ok(
+            slide.front.path.startsWith('/foo/'),
+            'should add prefix to url',
+          );
+
+          assert.ok(slide.back.id);
+          assert.ok(slide.back.filename);
+          assert.ok(slide.back.hashsum);
+          assert.ok(
+            slide.back.path.startsWith('/foo/'),
+            'shoulback prefix to url',
+          );
+        }
       }
     }
   });
@@ -1516,10 +1451,10 @@ describe('[api] task list', async () => {
         ]);
 
         await seedTaskImages(db, [
-          {imageId: dbImages[2].id, taskId: dbTasks[0].id },
-          {imageId: dbImages[0].id, taskId: dbTasks[1].id },
-          {imageId: dbImages[1].id, taskId: dbTasks[1].id },
-        ])
+          { imageId: dbImages[2].id, taskId: dbTasks[0].id },
+          { imageId: dbImages[0].id, taskId: dbTasks[1].id },
+          { imageId: dbImages[1].id, taskId: dbTasks[1].id },
+        ]);
         await seedTaskLabels(db, [
           { labelId: dbLabels[0].id, taskId: dbTasks[1].id },
         ]);

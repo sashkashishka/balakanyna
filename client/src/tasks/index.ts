@@ -5,3 +5,4 @@ export { SchulteTable } from './SchulteTable/SchulteTable.tsx';
 export { LettersToSyllable } from './LettersToSyllable/LettersToSyllable.tsx';
 export { FindFlashingNumber } from './FindFlashingNumber/FindFlashingNumber.tsx';
 export { GoneAndFound } from './GoneAndFound/GoneAndFound.tsx';
+export { Brainbox, BrainboxPreview } from './Brainbox/Brainbox.tsx';

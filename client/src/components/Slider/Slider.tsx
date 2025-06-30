@@ -1,12 +1,16 @@
 import { onCleanup, onMount, type JSXElement } from 'solid-js';
 import { Swiper } from 'swiper';
-import { Navigation, Pagination } from 'swiper/modules';
+import type { SwiperModule } from 'swiper/types';
+import { Pagination } from 'swiper/modules';
+import cn from 'classnames';
 
 import 'swiper/css';
-import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
+import styles from './Slider.module.css';
+
 interface IProps {
+  modules?: SwiperModule[];
   children?: JSXElement;
 }
 
@@ -20,10 +24,13 @@ export function Slider({ children }: IProps) {
 
   onMount(() => {
     swiper = new Swiper('.swiper', {
-      modules: [Navigation, Pagination],
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+      modules: [Pagination],
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+        renderBullet(index, className) {
+          return `<span class="${className} ${styles.bullet}">${index + 1}</span>`;
+        },
       },
     });
 
@@ -35,13 +42,10 @@ export function Slider({ children }: IProps) {
   });
 
   return (
-    <div ref={(el) => (container = el)} class="swiper">
+    <div ref={(el) => (container = el)} class={cn('swiper', styles.container)}>
       <div class="swiper-wrapper">{children}</div>
 
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
-
-      <div class="swiper-pagination"></div>
+      <div class={cn('swiper-pagination', styles.pagination)}></div>
     </div>
   );
 }

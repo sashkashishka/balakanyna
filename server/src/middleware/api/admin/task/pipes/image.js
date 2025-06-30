@@ -6,6 +6,19 @@ export function getUniqueImageIds(task) {
       return [...new Set(task.config.slides.map(({ image }) => image.id))];
     }
 
+    case 'brainbox': {
+      return [
+        ...new Set(
+          task.config.items.reduce((acc, { front, back }) => {
+            acc.push(front.id);
+            acc.push(back.id);
+
+            return acc;
+          }, []),
+        ),
+      ];
+    }
+
     default:
       return [];
   }
@@ -19,6 +32,17 @@ export function populateImage(task) {
           image: task.images.find((fullImg) => fullImg.id === image.id),
         }))
         .filter(({ image }) => image);
+
+      delete task.images;
+
+      return task;
+    }
+
+    case 'brainbox': {
+      task.config.items = task.config.items.map(({ front, back }) => ({
+        front: task.images.find((fullImg) => fullImg.id === front.id) || {},
+        back: task.images.find((fullImg) => fullImg.id === back.id) || {},
+      }));
 
       delete task.images;
 
@@ -39,6 +63,21 @@ export function addImagePrefixInTaskConfig(prefix) {
           image: {
             ...image,
             path: addPrefixToPathname(image?.path, prefix),
+          },
+        }));
+
+        return task;
+      }
+
+      case 'brainbox': {
+        task.config.items = task.config.items.map(({ front, back }) => ({
+          front: {
+            ...front,
+            path: front.path ? addPrefixToPathname(front.path, prefix) : undefined,
+          },
+          back: {
+            ...back,
+            path: back.path ? addPrefixToPathname(back.path, prefix) : undefined,
           },
         }));
 
