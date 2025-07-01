@@ -9,25 +9,15 @@
 }
 
 .previewContainer {
-  --brainbox-card-size: 300px;
+  --brainbox-card-size: 50vh;
 }
 
 @media (min-width: 768px) {
   .container {
-    --brainbox-card-size: 600px;
+    --brainbox-card-size: 70vh;
   }
 
   .previewContainer {
-    --brainbox-card-size: 300px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .container {
-    --brainbox-card-size: 700px;
-  }
-
-  .previewContainer {
-    --brainbox-card-size: 300px;
+    --brainbox-card-size: 70vh;
   }
 }
