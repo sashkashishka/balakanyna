@@ -15,21 +15,23 @@ export function ImageSlider(props: IProps) {
     <div class={styles.container}>
       <h3 class={styles.title}>{config().title}</h3>
 
-      <Slider>
-        <For each={config().slides}>
-          {({ image }) => (
-            <Slide>
-              <img
-                src={image.path}
-                alt={image.filename}
-                width="100%"
-                height="100%"
-                style={{ 'object-fit': 'contain' }}
-              />
-            </Slide>
-          )}
-        </For>
-      </Slider>
+      <div class={styles.sliderContainer}>
+        <Slider>
+          <For each={config().slides}>
+            {({ image }) => (
+              <Slide>
+                <img
+                  src={image.path}
+                  alt={image.filename}
+                  width="100%"
+                  height="100%"
+                  style={{ 'object-fit': 'contain' }}
+                />
+              </Slide>
+            )}
+          </For>
+        </Slider>
+      </div>
     </div>
   );
 }

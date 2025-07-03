@@ -8,6 +8,15 @@
   max-width: 100%;
 }
 
+.sliderContainer {
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+.container :global(.swiper-wrapper) {
+  max-height: 80vh;
+}
+
 .title {
   margin: 0 0 16px;
   text-align: center;

@@ -1,6 +1,5 @@
 import { onCleanup, onMount, type JSXElement } from 'solid-js';
 import { Swiper } from 'swiper';
-import type { SwiperModule } from 'swiper/types';
 import { Pagination } from 'swiper/modules';
 import cn from 'classnames';
 
@@ -10,7 +9,6 @@ import 'swiper/css/pagination';
 import styles from './Slider.module.css';
 
 interface IProps {
-  modules?: SwiperModule[];
   children?: JSXElement;
 }
 

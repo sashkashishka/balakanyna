@@ -7,7 +7,9 @@
   position: static;
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   margin-top: 12px;
+  gap: 4px;
   --swiper-pagination-bullet-inactive-opacity: 0.5;
 }
 
