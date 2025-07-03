@@ -12,11 +12,13 @@ import { SchulteTableConfigForm } from './tasks/SchulteTableConfigForm';
 import { LettersToSyllableConfigForm } from './tasks/LettersToSyllableConfigForm';
 import { FindFlashingNumberConfigForm } from './tasks/FindFlashingNumberConfigForm';
 import { GoneAndFoundConfigForm } from './tasks/GoneAndFoundConfigForm';
+import { BrainboxConfigForm } from './tasks/BrainboxConfigForm';
 import { TaskPreview } from '../TaskPreview';
 import { CONFIG_VALIDATOR_MAP } from './utils';
 
 const TASK_FORMS = {
   imageSlider: ImageSliderConfigForm,
+  brainbox: BrainboxConfigForm,
   semaphoreText: SemaphoreTextConfigForm,
   iframeViewer: IframeViewerConfigForm,
   schulteTable: SchulteTableConfigForm,

@@ -8,6 +8,7 @@ export type TTaskType =
   | 'lettersToSyllable'
   | 'findFlashingNumber'
   | 'goneAndFound'
+  | 'brainbox'
   | 'schulteTable';
 
 interface ITask {
@@ -109,9 +110,20 @@ interface IGoneAndFoundTask extends ITask {
   };
 }
 
+interface IBrainboxTask extends ITask {
+  type: Extract<TTaskType, 'brainbox'>;
+  config: {
+    items: Array<{
+      front: IImageEntry;
+      back: IImageEntry;
+    }>;
+  };
+}
+
 export type TTask =
   | ISemaphoreTextTask
   | IImageSliderTask
+  | IBrainboxTask
   | IIframeViewerTask
   | ILettersToSyllableTask
   | IFindFlashingNumberTask

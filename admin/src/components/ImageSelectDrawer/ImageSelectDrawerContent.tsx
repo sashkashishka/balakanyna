@@ -13,11 +13,16 @@ import type { IImage } from 'shared/types/image';
 const { Paragraph } = Typography;
 
 interface IProps {
+  multipleSelect?: boolean;
   filters?: Partial<IImageListFilters>;
   setSelected(v: IImage[]): void;
 }
 
-export function ImageSelectDrawerContent({ filters, setSelected }: IProps) {
+export function ImageSelectDrawerContent({
+  multipleSelect,
+  filters,
+  setSelected,
+}: IProps) {
   const defaultFilters = useMemo(
     () => ({
       ...defaultImageListFilters,
@@ -57,7 +62,7 @@ export function ImageSelectDrawerContent({ filters, setSelected }: IProps) {
         setListFilter={setListFilter}
         resetListFilter={resetListFilter}
         rowSelection={{
-          type: 'checkbox',
+          type: multipleSelect ? 'checkbox' : 'radio',
           onChange(_ids, records) {
             setSelected(records);
           },

@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { Row, Col, Form, Input, Button, type FormInstance } from 'antd';
+import { Row, Space, Col, Form, Input, Button, type FormInstance } from 'antd';
 
 import type { TTask } from 'shared/types/task';
 import { safeLS } from '@/utils/storage';
@@ -8,12 +8,12 @@ import { ImageField, ImageSelector } from '@/components/FormFields/ImageField';
 import type { IImage } from 'shared/types/image';
 import type { ITaskFormProps } from '../TaskForm';
 
-type TImageSliderTask = Extract<TTask, { type: 'imageSlider' }>;
+type TBrainboxTask = Extract<TTask, { type: 'brainbox' }>;
 
 interface IProps extends Pick<ITaskFormProps, 'action'> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: FormInstance<any>;
-  initialValues?: Partial<TImageSliderTask>;
+  initialValues?: Partial<TBrainboxTask>;
   onFinish(v: unknown): Promise<boolean>;
 }
 
@@ -26,16 +26,17 @@ function normalizeImage(value: IImage) {
   };
 }
 
-function prepareBody(body: TImageSliderTask) {
+function prepareBody(body: TBrainboxTask) {
   // @ts-expect-error TODO should provide proper typing
-  body.config.slides = body.config.slides.map(({ image }) => ({
-    image: { id: image.id },
+  body.config.items = body.config.items.map(({ front, back }) => ({
+    front: { id: front.id },
+    back: { id: back.id },
   }));
 
   return body;
 }
 
-export function ImageSliderConfigForm({
+export function BrainboxConfigForm({
   form,
   initialValues,
   onFinish,
@@ -51,10 +52,11 @@ export function ImageSliderConfigForm({
       type: initialValues?.type,
       config: {
         ...initialValues?.config,
-        title: initialValues?.config?.title || ' ',
-        slides: initialValues?.config?.slides?.map(({ image }) => ({
+        slides: initialValues?.config?.items?.map(({ front, back }) => ({
           // @ts-expect-error TODO should provide proper typing
-          image: normalizeImage(image),
+          front: normalizeImage(front),
+          // @ts-expect-error TODO should provide proper typing
+          back: normalizeImage(back),
         })),
       },
     };
@@ -64,7 +66,7 @@ export function ImageSliderConfigForm({
     () => ({
       ...normalizedInitialValues,
       ...(action === 'create' && safeLS.getItem(LS_KEY)),
-      type: 'imageSlider',
+      type: 'brainbox',
     }),
     [normalizedInitialValues],
   );
@@ -92,18 +94,18 @@ export function ImageSliderConfigForm({
       }}
     >
       <Row gutter={24}>
-        <Form.Item<TImageSliderTask> name="id" hidden>
+        <Form.Item<TBrainboxTask> name="id" hidden>
           <Input />
         </Form.Item>
 
         <Col span={24}>
-          <Form.Item<TImageSliderTask> label="Task type" name="type">
+          <Form.Item<TBrainboxTask> label="Task type" name="type">
             <Input disabled />
           </Form.Item>
         </Col>
 
         <Col span={24}>
-          <Form.Item<TImageSliderTask>
+          <Form.Item<TBrainboxTask>
             label="Task name"
             name="name"
             rules={[{ required: true, message: 'Please input task name!' }]}
@@ -113,34 +115,64 @@ export function ImageSliderConfigForm({
         </Col>
 
         <Col span={24}>
-          <Form.Item<TImageSliderTask>
-            label="Slider title"
-            name={['config', 'title']}
-            rules={[{ required: true, message: 'Please input slider title' }]}
-          >
-            <Input type="text" placeholder="e.g. Slider for ..." />
-          </Form.Item>
-        </Col>
-
-        <Col span={24}>
           <SortableFormList
-            name={['config', 'slides']}
-            item={{
-              name: 'image',
-              normalize: normalizeImage,
-              rules: [{ required: true, message: 'Please input image' }],
-            }}
-            label="Slides"
-            addButton={
-              <ImageSelector
-                form={form}
-                name={['config', 'slides']}
-                itemPrefix="image"
-                normalize={normalizeImage}
-              />
-            }
+            name={['config', 'items'] as const}
+            label="Items"
+            item={{}}
+            wrapWithField={false}
           >
-            <ImageField />
+            {({ index }) => (
+              <>
+                <Space>
+                  <Form.Item<TBrainboxTask>
+                    label="Front"
+                    // @ts-expect-error nested form items
+                    name={[index, 'front']}
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Front part of the card is required',
+                      },
+                    ]}
+                  >
+                    <ImageField />
+                  </Form.Item>
+
+                  <ImageSelector
+                    multipleSelect={false}
+                    form={form}
+                    // @ts-expect-error nested form items
+                    name={['config', 'items', index, 'front']}
+                    normalize={normalizeImage}
+                  />
+                </Space>
+
+                <Space>
+                  <Form.Item<TBrainboxTask>
+                    label="Back"
+                    // @ts-expect-error nested form items
+                    name={[index, 'back']}
+                    rules={[
+                      {
+                        required: true,
+
+                        message: 'Back part of the card is required',
+                      },
+                    ]}
+                  >
+                    <ImageField />
+                  </Form.Item>
+
+                  <ImageSelector
+                    multipleSelect={false}
+                    form={form}
+                    // @ts-expect-error nested form items
+                    name={['config', 'items', index, 'back']}
+                    normalize={normalizeImage}
+                  />
+                </Space>
+              </>
+            )}
           </SortableFormList>
         </Col>
 

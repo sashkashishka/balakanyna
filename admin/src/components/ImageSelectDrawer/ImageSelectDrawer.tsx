@@ -7,11 +7,16 @@ import { ImageSelectDrawerContent } from './ImageSelectDrawerContent';
 import { PlusOutlined } from '@ant-design/icons';
 
 interface IProps {
+  multipleSelect?: boolean;
   filters?: Partial<IImageListFilters>;
   onSelect?(p: IImage[]): void;
 }
 
-export function ImageSelectDrawer({ onSelect, filters }: IProps) {
+export function ImageSelectDrawer({
+  onSelect,
+  filters,
+  multipleSelect,
+}: IProps) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<IImage[]>();
 
@@ -57,7 +62,11 @@ export function ImageSelectDrawer({ onSelect, filters }: IProps) {
         }
         destroyOnClose
       >
-        <ImageSelectDrawerContent filters={filters} setSelected={setSelected} />
+        <ImageSelectDrawerContent
+          filters={filters}
+          setSelected={setSelected}
+          multipleSelect={multipleSelect}
+        />
       </Drawer>
     </>
   );

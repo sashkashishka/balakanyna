@@ -10,6 +10,7 @@ import {
   LettersToSyllable,
   FindFlashingNumber,
   GoneAndFound,
+  BrainboxPreview,
 } from 'client';
 import 'client/lib/style.css';
 
@@ -23,6 +24,7 @@ const TASK_MAP: Record<TTaskType, () => JSX.Element> = {
   lettersToSyllable: LettersToSyllable,
   findFlashingNumber: FindFlashingNumber,
   goneAndFound: GoneAndFound,
+  brainbox: BrainboxPreview,
 };
 
 interface IProps {
