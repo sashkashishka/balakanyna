@@ -2,6 +2,7 @@
   display: grid;
   height: inherit;
   align-content: center;
+  --brainbox-card-size: min(70vw, 70vh);
 }
 
 .container :global(.swiper) {
@@ -10,14 +11,4 @@
 
 .previewContainer {
   --brainbox-card-size: 50vh;
-}
-
-@media (min-width: 768px) {
-  .container {
-    --brainbox-card-size: 70vh;
-  }
-
-  .previewContainer {
-    --brainbox-card-size: 70vh;
-  }
 }
