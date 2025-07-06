@@ -1,20 +1,12 @@
 .container {
   display: grid;
-  height: inherit;
   align-content: center;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
 }
 
 .container :global(.swiper) {
   max-width: 100%;
-}
-
-.sliderContainer {
-  display: grid;
-  grid-template-rows: 1fr auto;
-}
-
-.container :global(.swiper-wrapper) {
-  max-height: 80vh;
 }
 
 .title {

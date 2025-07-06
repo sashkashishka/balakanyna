@@ -1,7 +1,8 @@
 .container {
   display: grid;
-  height: inherit;
   align-content: center;
+  grid-template-rows: 1fr auto;
+  height: 100%;
   --brainbox-card-size: min(70vw, 70vh);
 }
 
@@ -10,5 +11,6 @@
 }
 
 .previewContainer {
+  grid-template-rows: auto;
   --brainbox-card-size: 50vh;
 }

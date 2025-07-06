@@ -40,10 +40,15 @@ export function Slider({ children }: IProps) {
   });
 
   return (
-    <div ref={(el) => (container = el)} class={cn('swiper', styles.container)}>
-      <div class="swiper-wrapper">{children}</div>
+    <>
+      <div
+        ref={(el) => (container = el)}
+        class={cn('swiper', styles.container)}
+      >
+        <div class="swiper-wrapper">{children}</div>
+      </div>
 
       <div class={cn('swiper-pagination', styles.pagination)}></div>
-    </div>
+    </>
   );
 }
