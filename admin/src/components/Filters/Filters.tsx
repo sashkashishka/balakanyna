@@ -64,6 +64,7 @@ export function Filters<T extends Record<string, any>>({
             >
               {filter.label}
               <Select
+                mode={filter.mode}
                 disabled={filter.disabled}
                 style={{ width: '100%' }}
                 value={tmpFilters[filter.name]}
