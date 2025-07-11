@@ -7,8 +7,12 @@ import { semaphoreTextSchema } from 'shared/schemas/semaphoreText.js';
 import { iframeViewerSchema } from 'shared/schemas/iframeViewer.js';
 import { schulteTableSchema } from 'shared/schemas/schulteTable.js';
 import { lettersToSyllableSchema } from 'shared/schemas/lettersToSyllable.js';
-import { findFlashingNumberSchema } from 'shared/schemas/findFlashingNumber.js'
+import { findFlashingNumberSchema } from 'shared/schemas/findFlashingNumber.js';
 import { goneAndFoundSchema } from 'shared/schemas/goneAndFound.js';
+import {
+  uploadBrainboxSchema,
+  fullBrainboxSchema,
+} from 'shared/schemas/brainbox.js';
 
 export const uploadTypeToSchema = {
   imageSlider: uploadImageSliderSchema,
@@ -18,6 +22,7 @@ export const uploadTypeToSchema = {
   lettersToSyllable: lettersToSyllableSchema,
   findFlashingNumber: findFlashingNumberSchema,
   goneAndFound: goneAndFoundSchema,
+  brainbox: uploadBrainboxSchema,
 };
 
 export const fullTypeToSchema = {
@@ -28,6 +33,7 @@ export const fullTypeToSchema = {
   lettersToSyllable: lettersToSyllableSchema,
   findFlashingNumber: findFlashingNumberSchema,
   goneAndFound: goneAndFoundSchema,
+  brainbox: fullBrainboxSchema,
 };
 
 const ERR_INVALID_TASK_CONFIG = createError(

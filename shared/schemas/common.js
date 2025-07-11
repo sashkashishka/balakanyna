@@ -6,6 +6,7 @@ export const tasks = [
   'lettersToSyllable',
   'findFlashingNumber',
   'goneAndFound',
+  'brainbox',
 ];
 
 export const uploadImageSchema = {

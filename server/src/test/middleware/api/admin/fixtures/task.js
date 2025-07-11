@@ -96,6 +96,23 @@ export const goneAndFoundTask = {
   },
 };
 
+export const brainboxTask = {
+  name: 'brainbox task',
+  type: 'brainbox',
+  config: {
+    items: [
+      {
+        front: {
+          id: 1,
+        },
+        back: {
+          id: 2,
+        },
+      },
+    ],
+  },
+};
+
 export const tasks = [
   {
     name: 'Task 1',

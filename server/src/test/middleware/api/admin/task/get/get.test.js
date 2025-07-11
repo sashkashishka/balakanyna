@@ -17,7 +17,11 @@ import {
 } from '../../../../../../db/seeders.js';
 
 import { admin } from '../../fixtures/admin.js';
-import { imageSliderTask, semaphoreTextTask } from '../../fixtures/task.js';
+import {
+  imageSliderTask,
+  brainboxTask,
+  semaphoreTextTask,
+} from '../../fixtures/task.js';
 import { labels } from '../../fixtures/label.js';
 import { image, images } from '../../fixtures/image.js';
 
@@ -263,140 +267,277 @@ describe('[api] task get', async () => {
     assert.equal(Object.keys(body).length, 9);
   });
 
-  test('should return 200 and empty image list if image was not found', async (t) => {
-    const prefix = 'foo';
-    let dbTasks = [];
-    let dbImages = [];
+  describe('image fields', () => {
+    describe('imageSliderTask', () => {
+      test('should return 200 and empty image list if image was not found', async (t) => {
+        const prefix = 'foo';
+        let dbTasks = [];
+        let dbImages = [];
 
-    const { request, baseUrl } = await getTestServer({
-      t,
-      config: { media: { prefix } },
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        dbImages = await seedImages(db, [image]);
-        dbTasks = await seedTasks(db, [
-          {
-            ...imageSliderTask,
-            hash,
-            config: {
-              slides: [
-                { image: { id: dbImages[0].id } },
-                { image: { id: 20 } },
-              ],
-              title: 'Hello',
-            },
+        const { request, baseUrl } = await getTestServer({
+          t,
+          config: { media: { prefix } },
+          async seed(db, config) {
+            await seedAdmins(db, [admin], config.salt.password);
+            dbImages = await seedImages(db, [image]);
+            dbTasks = await seedTasks(db, [
+              {
+                ...imageSliderTask,
+                hash,
+                config: {
+                  slides: [
+                    { image: { id: dbImages[0].id } },
+                    { image: { id: 20 } },
+                  ],
+                  title: 'Hello',
+                },
+              },
+            ]);
+
+            await seedTaskImages(db, [
+              { imageId: dbImages[0].id, taskId: dbImages[0].id },
+            ]);
           },
-        ]);
+        });
 
-        await seedTaskImages(db, [
-          { imageId: dbImages[0].id, taskId: dbImages[0].id },
-        ]);
-      },
-    });
+        const endpoint = getEndpoint(baseUrl, { id: dbTasks[0].id });
 
-    const endpoint = getEndpoint(baseUrl, { id: dbTasks[0].id });
-
-    const resp = await request(endpoint, {
-      method: taskGet.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
-    });
-    const body = await resp.json();
-
-    assert.equal(resp.status, 200);
-    assert.equal(body.id, dbTasks[0].id);
-    assert.equal(body.hash.length, 8);
-    assert.equal(body.name, imageSliderTask.name);
-    assert.equal(body.type, imageSliderTask.type);
-    assert.ok(Array.isArray(body.config.slides));
-    assert.equal(body.config.slides.length, 1);
-    assert.equal(body.config.title, imageSliderTask.config.title);
-
-    const slide = body.config.slides[0];
-
-    assert.equal(slide.image.id, dbImages[0].id);
-    assert.equal(slide.image.filename, dbImages[0].filename);
-    assert.equal(slide.image.hashsum, dbImages[0].hashsum);
-    assert.ok(slide.image.path.startsWith('/foo/'), 'should add prefix to url');
-
-    assert.equal(body.errors, null);
-    assert.ok(Array.isArray(body.labels));
-    assert.equal(body.labels.length, 0);
-    assert.equal(isNaN(new Date(body.createdAt)), false);
-    assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 9);
-  });
-
-  test('should return 200 and add image prefix if task config includes images', async (t) => {
-    const prefix = 'foo';
-    let dbTasks = [];
-    let dbImages = [];
-
-    const { request, baseUrl } = await getTestServer({
-      t,
-      config: { media: { prefix } },
-      async seed(db, config) {
-        await seedAdmins(db, [admin], config.salt.password);
-        dbImages = await seedImages(db, images);
-        dbTasks = await seedTasks(db, [
-          {
-            ...imageSliderTask,
-            hash,
-            config: {
-              slides: [
-                { image: { id: dbImages[0].id } },
-                { image: { id: dbImages[1].id } },
-              ],
-              title: 'Hello',
-            },
+        const resp = await request(endpoint, {
+          method: taskGet.method,
+          headers: {
+            cookie: await getAuthCookie(request, admin),
           },
-        ]);
+        });
+        const body = await resp.json();
 
-        await seedTaskImages(db, [
-          { imageId: dbImages[0].id, taskId: dbImages[0].id },
-          { imageId: dbImages[1].id, taskId: dbImages[0].id },
-        ]);
-      },
+        assert.equal(resp.status, 200);
+        assert.equal(body.id, dbTasks[0].id);
+        assert.equal(body.hash.length, 8);
+        assert.equal(body.name, imageSliderTask.name);
+        assert.equal(body.type, imageSliderTask.type);
+        assert.ok(Array.isArray(body.config.slides));
+        assert.equal(body.config.slides.length, 1);
+        assert.equal(body.config.title, imageSliderTask.config.title);
+
+        const slide = body.config.slides[0];
+
+        assert.equal(slide.image.id, dbImages[0].id);
+        assert.equal(slide.image.filename, dbImages[0].filename);
+        assert.equal(slide.image.hashsum, dbImages[0].hashsum);
+        assert.ok(
+          slide.image.path.startsWith('/foo/'),
+          'should add prefix to url',
+        );
+
+        assert.equal(body.errors, null);
+        assert.ok(Array.isArray(body.labels));
+        assert.equal(body.labels.length, 0);
+        assert.equal(isNaN(new Date(body.createdAt)), false);
+        assert.equal(isNaN(new Date(body.updatedAt)), false);
+        assert.equal(Object.keys(body).length, 9);
+      });
+
+      test('should return 200 and add image prefix if task config includes images', async (t) => {
+        const prefix = 'foo';
+        let dbTasks = [];
+        let dbImages = [];
+
+        const { request, baseUrl } = await getTestServer({
+          t,
+          config: { media: { prefix } },
+          async seed(db, config) {
+            await seedAdmins(db, [admin], config.salt.password);
+            dbImages = await seedImages(db, images);
+            dbTasks = await seedTasks(db, [
+              {
+                ...imageSliderTask,
+                hash,
+                config: {
+                  slides: [
+                    { image: { id: dbImages[0].id } },
+                    { image: { id: dbImages[1].id } },
+                  ],
+                  title: 'Hello',
+                },
+              },
+            ]);
+
+            await seedTaskImages(db, [
+              { imageId: dbImages[0].id, taskId: dbImages[0].id },
+              { imageId: dbImages[1].id, taskId: dbImages[0].id },
+            ]);
+          },
+        });
+
+        const endpoint = getEndpoint(baseUrl, { id: dbTasks[0].id });
+
+        const resp = await request(endpoint, {
+          method: taskGet.method,
+          headers: {
+            cookie: await getAuthCookie(request, admin),
+          },
+        });
+        const body = await resp.json();
+
+        assert.equal(resp.status, 200);
+        assert.equal(body.id, dbTasks[0].id);
+        assert.equal(body.hash.length, 8);
+        assert.equal(body.name, imageSliderTask.name);
+        assert.equal(body.type, imageSliderTask.type);
+        assert.ok(Array.isArray(body.config.slides));
+        assert.equal(body.config.slides.length, 2);
+
+        assert.equal(body.config.title, imageSliderTask.config.title);
+
+        for (let i = 0; i < body.config.slides.length; i++) {
+          const slide = body.config.slides[i];
+
+          assert.equal(slide.image.id, dbImages[i].id);
+          assert.equal(slide.image.filename, dbImages[i].filename);
+          assert.equal(slide.image.hashsum, dbImages[i].hashsum);
+          assert.ok(
+            slide.image.path.startsWith('/foo/'),
+            'should add prefix to url',
+          );
+        }
+
+        assert.equal(body.errors, null);
+        assert.ok(Array.isArray(body.labels));
+        assert.equal(body.labels.length, 0);
+        assert.equal(isNaN(new Date(body.createdAt)), false);
+        assert.equal(isNaN(new Date(body.updatedAt)), false);
+        assert.equal(Object.keys(body).length, 9);
+      });
     });
 
-    const endpoint = getEndpoint(baseUrl, { id: dbTasks[0].id });
+    describe('brainbox task', () => {
+      test('should return 200 and empty image object if image was not found', async (t) => {
+        const prefix = 'foo';
+        let dbTasks = [];
+        let dbImages = [];
 
-    const resp = await request(endpoint, {
-      method: taskGet.method,
-      headers: {
-        cookie: await getAuthCookie(request, admin),
-      },
+        const { request, baseUrl } = await getTestServer({
+          t,
+          config: { media: { prefix } },
+          async seed(db, config) {
+            await seedAdmins(db, [admin], config.salt.password);
+            dbImages = await seedImages(db, [image]);
+            dbTasks = await seedTasks(db, [
+              {
+                ...brainboxTask,
+                hash,
+                config: {
+                  items: [
+                    { front: { id: dbImages[0].id }, back: { id: 1000 } },
+                  ],
+                },
+              },
+            ]);
+
+            await seedTaskImages(db, [
+              { imageId: dbImages[0].id, taskId: dbImages[0].id },
+            ]);
+          },
+        });
+
+        const endpoint = getEndpoint(baseUrl, { id: dbTasks[0].id });
+
+        const resp = await request(endpoint, {
+          method: taskGet.method,
+          headers: {
+            cookie: await getAuthCookie(request, admin),
+          },
+        });
+        const body = await resp.json();
+
+        assert.equal(resp.status, 200);
+        assert.equal(body.id, dbTasks[0].id);
+        assert.equal(body.hash.length, 8);
+        assert.equal(body.type, brainboxTask.type);
+        assert.ok(Array.isArray(body.config.items));
+        assert.equal(body.config.items.length, 1);
+
+        const slide = body.config.items[0];
+
+        assert.ok(slide.front.id);
+        assert.deepEqual(slide.back, {});
+        assert.ok(
+          slide.front.path.startsWith('/foo/'),
+          'should add prefix to url',
+        );
+        assert.equal(Object.keys(slide.front).length, 4);
+        assert.equal(Object.keys(slide.back).length, 0);
+
+        assert.equal(Object.keys(body).length, 9);
+      });
+
+      test('should return 200 and add image prefix if task config includes images', async (t) => {
+        const prefix = 'foo';
+        let dbTasks = [];
+        let dbImages = [];
+
+        const { request, baseUrl } = await getTestServer({
+          t,
+          config: { media: { prefix } },
+          async seed(db, config) {
+            await seedAdmins(db, [admin], config.salt.password);
+            dbImages = await seedImages(db, images);
+            dbTasks = await seedTasks(db, [
+              {
+                ...brainboxTask,
+                hash,
+                config: {
+                  items: [
+                    {
+                      front: { id: dbImages[0].id },
+                      back: { id: dbImages[1].id },
+                    },
+                  ],
+                },
+              },
+            ]);
+
+            await seedTaskImages(db, [
+              { imageId: dbImages[0].id, taskId: dbImages[0].id },
+              { imageId: dbImages[1].id, taskId: dbImages[0].id },
+            ]);
+          },
+        });
+
+        const endpoint = getEndpoint(baseUrl, { id: dbTasks[0].id });
+
+        const resp = await request(endpoint, {
+          method: taskGet.method,
+          headers: {
+            cookie: await getAuthCookie(request, admin),
+          },
+        });
+        const body = await resp.json();
+
+        assert.equal(resp.status, 200);
+        assert.equal(body.id, dbTasks[0].id);
+        assert.equal(body.hash.length, 8);
+        assert.equal(body.type, brainboxTask.type);
+        assert.ok(Array.isArray(body.config.items));
+        assert.equal(body.config.items.length, 1);
+
+        for (let i = 0; i < body.config.items.length; i++) {
+          const slide = body.config.items[i];
+
+          assert.equal(slide.front.id, dbImages[i].id);
+          assert.equal(slide.back.id, dbImages[i + 1].id);
+          assert.ok(
+            slide.front.path.startsWith('/foo/'),
+            'should add prefix to url',
+          );
+          assert.ok(
+            slide.back.path.startsWith('/foo/'),
+            'should add prefix to url',
+          );
+        }
+
+        assert.equal(Object.keys(body).length, 9);
+      });
     });
-    const body = await resp.json();
-
-    assert.equal(resp.status, 200);
-    assert.equal(body.id, dbTasks[0].id);
-    assert.equal(body.hash.length, 8);
-    assert.equal(body.name, imageSliderTask.name);
-    assert.equal(body.type, imageSliderTask.type);
-    assert.ok(Array.isArray(body.config.slides));
-    assert.equal(body.config.slides.length, 2);
-
-    assert.equal(body.config.title, imageSliderTask.config.title);
-
-    for (let i = 0; i < body.config.slides.length; i++) {
-      const slide = body.config.slides[i];
-
-      assert.equal(slide.image.id, dbImages[i].id);
-      assert.equal(slide.image.filename, dbImages[i].filename);
-      assert.equal(slide.image.hashsum, dbImages[i].hashsum);
-      assert.ok(
-        slide.image.path.startsWith('/foo/'),
-        'should add prefix to url',
-      );
-    }
-
-    assert.equal(body.errors, null);
-    assert.ok(Array.isArray(body.labels));
-    assert.equal(body.labels.length, 0);
-    assert.equal(isNaN(new Date(body.createdAt)), false);
-    assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 9);
   });
 });

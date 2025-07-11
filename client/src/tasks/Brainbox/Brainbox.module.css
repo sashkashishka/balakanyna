@@ -1,0 +1,16 @@
+.container {
+  display: grid;
+  align-content: center;
+  grid-template-rows: 1fr auto;
+  height: 100%;
+  --brainbox-card-size: min(70vw, 70vh);
+}
+
+.container :global(.swiper) {
+  max-width: 100%;
+}
+
+.previewContainer {
+  grid-template-rows: auto;
+  --brainbox-card-size: 50vh;
+}
