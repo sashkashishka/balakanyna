@@ -633,6 +633,80 @@ describe('[api] task list', async () => {
         );
       }
     });
+
+    test('should return 200 and order_by id and dir asc', async (t) => {
+      const offset = 0;
+      const limit = tasks.length / 2;
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedTasks(db, tasks);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'id',
+        dir: 'asc',
+      });
+
+      const resp = await request(url, {
+        method: taskList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, limit);
+      assert.equal(total, tasks.length);
+
+      for (let i = 1; i < items.length; i++) {
+        assert.ok(items[i - 1].id < items[i].id);
+      }
+    });
+
+    test('should return 200 and order_by id and dir desc', async (t) => {
+      const offset = 0;
+      const limit = tasks.length / 2;
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedTasks(db, tasks);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'id',
+        dir: 'desc',
+      });
+
+      const resp = await request(url, {
+        method: taskList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, limit);
+      assert.equal(total, tasks.length);
+
+      for (let i = 1; i < items.length; i++) {
+        assert.ok(items[i - 1].id > items[i].id);
+      }
+    });
   });
 
   describe('[filter]', () => {

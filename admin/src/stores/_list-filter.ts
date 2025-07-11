@@ -108,7 +108,7 @@ export function createListFilters<T extends IFilters>(
       if (!router) return;
 
       if (router.search.filters) {
-        const filters = safeParse(window.atob(router.search.filters));
+        const filters = safeParse(decodeURIComponent(router.search.filters));
 
         if (filters) {
           $filters.set(filters);
@@ -141,7 +141,7 @@ export function createListFilters<T extends IFilters>(
 export function createFiltersSearchParams(filters: IFilters): URLSearchParams {
   const searchParams = new URLSearchParams();
 
-  searchParams.append('filters', window.btoa(JSON.stringify(filters)));
+  searchParams.append('filters', encodeURIComponent(JSON.stringify(filters)));
 
   return searchParams;
 }
