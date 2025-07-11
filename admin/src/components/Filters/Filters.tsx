@@ -8,6 +8,7 @@ import { UserSearchInput } from '../UserSearchInput';
 import { LabelSearchInput } from '../LabelSearchInput';
 import { taskTypeOptions } from '../TaskForm/constants';
 import { SyncFiltersOnMount } from './SyncFilterOnMount';
+import { ListenEnterPress } from './ListenEnterPress';
 
 interface IProps<T> {
   values: T;
@@ -262,6 +263,7 @@ export function Filters<T extends Record<string, any>>({
           </Space>
         }
       >
+        <ListenEnterPress callback={onApplyTmpFilters} />
         <SyncFiltersOnMount values={values} setTmpFilters={setTmpFilters} />
         <Space direction="vertical" size="large">
           {content}
