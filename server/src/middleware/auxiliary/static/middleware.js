@@ -2,7 +2,7 @@ import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import mime from 'mime-types';
 
-import { ERR_FILE_STREAM_ERROR, ERR_NOT_FOUND } from '../../../core/errors.js';
+import { ERR_FILE_STREAM_ERROR } from '../../../core/errors.js';
 import { getFilePath } from './utils.js';
 
 /**
