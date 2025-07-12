@@ -43,7 +43,9 @@ async function createUserMiddleware(ctx) {
     .insert(userTable)
     .values({
       name: body.name,
+      name_normalized: body.name.toLowerCase(),
       surname: body.surname,
+      surname_normalized: body.surname.toLowerCase(),
       grade: body.grade,
       birthdate: body.birthdate,
       notes: body.notes,
@@ -56,7 +58,9 @@ async function createUserMiddleware(ctx) {
   ctx.json({
     id: result.id,
     name: result.name,
+    name_normalized: result.name_normalized,
     surname: result.surname,
+    surname_normalized: result.surname_normalized,
     grade: result.grade,
     birthdate: result.birthdate,
     notes: result.notes,

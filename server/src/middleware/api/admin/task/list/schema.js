@@ -4,7 +4,7 @@ export const taskListSearchParamsSchema = {
   properties: {
     order_by: {
       type: 'string',
-      enum: ['createdAt', 'updatedAt', 'type', 'name'],
+      enum: ['createdAt', 'updatedAt', 'type', 'name', 'id'],
     },
     dir: {
       type: 'string',

@@ -32,8 +32,9 @@ export const taskTypes = getTaskTypesSelectorFilter({
 export const ids = getSelectFilter({
   label: 'Task ids',
   name: 'ids',
+  mode: 'tags',
   options: [],
-  disabled: true,
+  disabled: false,
 });
 
 // TODO: add program search filter

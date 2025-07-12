@@ -94,6 +94,7 @@ export function getNumberRangeFilter({
 export function getSelectFilter({
   label,
   name,
+  mode,
   options,
   disabled,
 }: Omit<ISelectFilter, 'type'>): ISelectFilter {
@@ -101,6 +102,7 @@ export function getSelectFilter({
     type: 'select',
     label,
     name,
+    mode,
     options,
     disabled,
   };

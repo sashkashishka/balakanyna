@@ -13,7 +13,7 @@ import { seedAdmins } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
 
 async function getSupportedFile() {
-  const name = 'foo.jpeg';
+  const name = 'ФFoo.jpeg';
   const type = 'image/jpeg';
   const filepath = path.resolve(
     import.meta.dirname,
@@ -31,7 +31,7 @@ async function getSupportedFile() {
   };
 }
 
-async function getUnSupportedFile() {
+async function getUnsupportedFile() {
   const name = 'baz.gif';
   const type = 'image/gif';
   const filepath = path.resolve(
@@ -133,7 +133,7 @@ describe('[api] image upload', async () => {
 
     const formData = new FormData();
 
-    const { file } = await getUnSupportedFile();
+    const { file } = await getUnsupportedFile();
 
     formData.append(wrongFieldname, file);
 
@@ -171,7 +171,7 @@ describe('[api] image upload', async () => {
 
     const formData = new FormData();
 
-    const { file, name } = await getUnSupportedFile();
+    const { file, name } = await getUnsupportedFile();
 
     formData.append(fieldname, file, name);
 
@@ -314,11 +314,12 @@ describe('[api] image upload', async () => {
     assert.ok(image);
     assert.equal(typeof image.id, 'number');
     assert.equal(image.filename, name);
+    assert.equal(image.filename_normalized, name.toLowerCase());
     assert.equal(typeof image.hashsum, 'string');
     assert.equal(image.path, hashedFilename);
     assert.equal(isNaN(new Date(image.createdAt)), false);
     assert.equal(isNaN(new Date(image.updatedAt)), false);
-    assert.equal(Object.keys(image).length, 6);
+    assert.equal(Object.keys(image).length, 7);
 
     const files = await fsp.readdir(saveDir);
     assert.equal(files.length, 1, 'should save any file');
@@ -367,11 +368,12 @@ describe('[api] image upload', async () => {
     assert.ok(image);
     assert.equal(typeof image.id, 'number');
     assert.equal(image.filename, name);
+    assert.equal(image.filename_normalized, name.toLowerCase());
     assert.equal(typeof image.hashsum, 'string');
     assert.equal(image.path, hashedFilename);
     assert.equal(isNaN(new Date(image.createdAt)), false);
     assert.equal(isNaN(new Date(image.updatedAt)), false);
-    assert.equal(Object.keys(image).length, 6);
+    assert.equal(Object.keys(image).length, 7);
 
     const files = await fsp.readdir(saveDir);
     assert.equal(files.length, 1, 'should save any file');
@@ -497,11 +499,12 @@ describe('[api] image upload', async () => {
     assert.ok(image);
     assert.equal(typeof image.id, 'number');
     assert.equal(image.filename, name);
+    assert.equal(image.filename_normalized, name.toLowerCase());
     assert.equal(typeof image.hashsum, 'string');
     assert.equal(image.path, hashedFilename);
     assert.equal(isNaN(new Date(image.createdAt)), false);
     assert.equal(isNaN(new Date(image.updatedAt)), false);
-    assert.equal(Object.keys(image).length, 6);
+    assert.equal(Object.keys(image).length, 7);
 
     const files = await fsp.readdir(saveDir);
     assert.equal(files.length, 1, 'should save any file');
@@ -528,6 +531,7 @@ describe('[api] image upload', async () => {
     assert.ok(image2);
     assert.equal(image2.id, image.id);
     assert.equal(image2.filename, image.filename);
+    assert.equal(image2.filename_normalized, image.filename_normalized);
     assert.equal(image2.hashsum, image.hashsum);
     assert.equal(image2.path, image.path);
     assert.equal(image2.createdAt, image.createdAt);
@@ -544,7 +548,7 @@ describe('[api] image upload', async () => {
     );
     assert.equal(isNaN(new Date(image2.createdAt)), false);
     assert.equal(isNaN(new Date(image2.updatedAt)), false);
-    assert.equal(Object.keys(image2).length, 6);
+    assert.equal(Object.keys(image2).length, 7);
 
     const files2 = await fsp.readdir(saveDir);
     assert.equal(files2.length, 1, 'should save only 1 file');

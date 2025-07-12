@@ -44,27 +44,17 @@ async function updateUserMiddleware(ctx) {
   const value = {
     id: body.id,
     name: body.name,
+    name_normalized: body.name.toLowerCase(),
     surname: body.surname,
+    surname_normalized: body.surname.toLowerCase(),
     grade: body.grade,
+    notes: body.notes,
+    email: body.email,
+    phoneNumber: body.phoneNumber,
+    messangers: body.messangers,
     birthdate: body.birthdate,
     updatedAt: sql`(datetime())`,
   };
-
-  if (body.notes) {
-    value.notes = body.notes;
-  }
-
-  if (body.email) {
-    value.email = body.email;
-  }
-
-  if (body.phoneNumber) {
-    value.phoneNumber = body.phoneNumber;
-  }
-
-  if (body.messangers) {
-    value.messangers = body.messangers;
-  }
 
   const [result] = await ctx.db
     .update(userTable)
@@ -75,7 +65,9 @@ async function updateUserMiddleware(ctx) {
   ctx.json({
     id: result.id,
     name: result.name,
+    name_normalized: result.name_normalized,
     surname: result.surname,
+    surname_normalized: result.surname_normalized,
     grade: result.grade,
     birthdate: result.birthdate,
     notes: result.notes,

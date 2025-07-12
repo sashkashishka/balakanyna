@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useLayoutEffect, useMemo } from 'react';
 import { useStore } from '@nanostores/react';
+import { atom } from 'nanostores';
 import { Flex, Space, Spin, Tabs, Typography } from 'antd';
 
 import { $router, openRoute, ROUTE_ALIAS } from '@/stores/router';
@@ -11,14 +12,19 @@ import { UserTasks } from './Tasks';
 
 const { Paragraph } = Typography;
 
+const $userId = atom<number>(0);
+const $user = makeUserStore($userId);
+
 export function UserViewPage() {
   const { route, params } = useStore($router)!;
-  const [$user] = useState(() =>
-    makeUserStore(
+
+  useLayoutEffect(() => {
+    $userId.set(
       // @ts-expect-error id does exist
       params.uid,
-    ),
-  );
+    );
+  }, [params]);
+
   const { data: user, loading, error } = useStore($user);
 
   const tabs = useMemo(
@@ -69,6 +75,8 @@ export function UserViewPage() {
       </Flex>
 
       <Tabs
+        // @ts-expect-error id does exist
+        key={params.uid}
         onChange={onTabChange}
         type="card"
         items={tabs}

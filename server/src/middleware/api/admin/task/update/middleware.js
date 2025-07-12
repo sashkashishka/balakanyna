@@ -98,6 +98,7 @@ async function updateTaskMiddleware(ctx) {
           .update(taskTable)
           .set({
             name: body.name,
+            name_normalized: body.name.toLowerCase(),
             config: sortJsonKeys(body.config),
             updatedAt: sql`(datetime())`,
           })
@@ -134,6 +135,7 @@ async function updateTaskMiddleware(ctx) {
     id: task.id,
     hash: task.hash,
     name: task.name,
+    name_normalized: task.name_normalized,
     type: task.type,
     config: task.config,
     createdAt: task.createdAt,

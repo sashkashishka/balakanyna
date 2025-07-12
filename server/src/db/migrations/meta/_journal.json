@@ -29,6 +29,13 @@
       "when": 1749749616515,
       "tag": "0003_populate-hash-column",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1752305395618,
+      "tag": "0004_silent_celestials",
+      "breakpoints": true
     }
   ]
 }

@@ -11,7 +11,7 @@ import { seedAdmins } from '../../../../../../db/seeders.js';
 import { seedUsers } from '../../../../../../db/seeders.js';
 
 import { admin } from '../../fixtures/admin.js';
-import { users } from '../../fixtures/user.js';
+import { users, usersNonLatin } from '../../fixtures/user.js';
 
 function getEndpoint(baseUrl, { search } = {}) {
   const url = getUrl(userSearch.route, baseUrl);
@@ -68,17 +68,23 @@ describe('[api] user search', async () => {
   });
 
   const testCases = [
-    ['d', 2],
-    ['i', 6],
+    ['d', 2, users],
+    ['i', 6, users],
+    ['ж', 1, usersNonLatin],
+    ['Ж', 1, usersNonLatin],
+    ['д', 2, usersNonLatin],
+    ['Д', 2, usersNonLatin],
+    ['к', 4, usersNonLatin],
+    ['К', 4, usersNonLatin],
   ];
 
-  testCases.forEach(([search, expected]) => {
-    test(`should return 200 and search ${search} in both name and surname`, async (t) => {
+  testCases.forEach(([search, expected, list]) => {
+    test(`should return 200 and search ${search} in both name and surname and case insensitive`, async (t) => {
       const { request, baseUrl } = await getTestServer({
         t,
         async seed(db, config) {
           await seedAdmins(db, [admin], config.salt.password);
-          await seedUsers(db, users);
+          await seedUsers(db, list);
         },
       });
 

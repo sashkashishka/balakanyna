@@ -16,6 +16,7 @@ import { admin } from '../../fixtures/admin.js';
 import { brainboxTask } from '../../fixtures/task.js';
 import { images } from '../../fixtures/image.js';
 import { taskImageTable } from '../../../../../../db/schema.js';
+import { assertCommonTaskProps } from '../utils.js';
 
 const hash = '88888888';
 
@@ -186,10 +187,8 @@ describe('[api] task update brainbox', () => {
     const junctionIds = await db.select().from(taskImageTable);
 
     assert.equal(resp.status, 200);
-    assert.equal(body.id, payload.id);
     assert.equal(body.hash, hash);
-    assert.equal(body.name, payload.name);
-    assert.equal(body.type, payload.type);
+    assertCommonTaskProps(body, payload);
     assert.ok(Array.isArray(body.config.items));
     assert.equal(body.config.items.length, 1);
     assert.equal(junctionIds.length, 2);
@@ -203,10 +202,6 @@ describe('[api] task update brainbox', () => {
       assert.equal(slide.front.id, img1.id);
       assert.equal(slide.back.id, img2.id);
     }
-
-    assert.equal(isNaN(new Date(body.createdAt)), false);
-    assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 7);
   });
 
   test('should return 200 if provide repetetive images in config', async (t) => {
@@ -269,10 +264,8 @@ describe('[api] task update brainbox', () => {
     const junctionIds = await db.select().from(taskImageTable);
 
     assert.equal(resp.status, 200);
-    assert.equal(body.id, payload.id);
     assert.equal(body.hash, hash, 'should preserve hash');
-    assert.equal(body.name, payload.name);
-    assert.equal(body.name, payload.name);
+    assertCommonTaskProps(body, payload);
     assert.ok(Array.isArray(body.config.items));
     assert.ok(body.config.items.length, 2);
     assert.equal(
@@ -290,10 +283,6 @@ describe('[api] task update brainbox', () => {
       assert.equal(slide.front.id, img1.id);
       assert.equal(slide.back.id, img2.id);
     }
-
-    assert.equal(isNaN(new Date(body.createdAt)), false);
-    assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 7);
 
     assert.notEqual(
       new Date(body.updatedAt).getTime(),

@@ -59,11 +59,11 @@ async function userListMiddleware(ctx) {
   }
 
   if (name) {
-    andClauses.push(like(userTable.name, `%${name}%`));
+    andClauses.push(like(userTable.name_normalized, `%${name.toLowerCase()}%`));
   }
 
   if (surname) {
-    andClauses.push(like(userTable.surname, `%${surname}%`));
+    andClauses.push(like(userTable.surname_normalized, `%${surname.toLowerCase()}%`));
   }
 
   const query = ctx.db

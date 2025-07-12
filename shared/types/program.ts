@@ -18,3 +18,10 @@ export interface IProgramFull extends IProgram {
 export interface IProgramBody extends IProgram {
   tasks?: Array<{ taskId: number }>;
 }
+
+// eslint-disable-next-line
+export interface IProgramCopy
+  extends Pick<
+    IProgram,
+    'id' | 'userId' | 'expirationDatetime' | 'startDatetime'
+  > {}

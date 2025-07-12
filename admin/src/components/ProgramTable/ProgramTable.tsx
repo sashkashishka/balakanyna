@@ -14,6 +14,7 @@ import type { IProgramListFilters } from '@/stores/program';
 import { UpdateProgramDrawer } from '../UpdateProgramDrawer';
 
 import { filtersConfig as defaultFiltersConfig } from './constants';
+import { Actions } from './Actions';
 
 interface IProps {
   filtersConfig?: TFilters[];
@@ -116,6 +117,13 @@ export function ProgramTable({
       sorter: true,
       sortDirections: ['descend', 'ascend'],
       sortOrder: filters.order_by === 'updatedAt' ? filters.dir : null,
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render(_id, record) {
+        return <Actions programId={record.id} />;
+      },
     },
   ];
 
