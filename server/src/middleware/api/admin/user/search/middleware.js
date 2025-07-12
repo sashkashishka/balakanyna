@@ -18,8 +18,8 @@ async function userSearchMiddleware(ctx) {
     .from(userTable)
     .where(
       or(
-        like(userTable.name, `%${search}%`),
-        like(userTable.surname, `%${search}%`),
+        like(userTable.name_normalized, `%${search.toLowerCase()}%`),
+        like(userTable.surname_normalized, `%${search.toLowerCase()}%`),
       ),
     )
     .limit(ctx.config.search.limit);

@@ -8,7 +8,9 @@ export const user = {
 export const users = [
   {
     name: 'Alice',
+    name_normalized: 'alice',
     surname: 'Johnson',
+    surname_normalized: 'johnson',
     grade: 5,
     birthdate: '2001-03-15T00:00:00',
     createdAt: '2023-01-10T00:00:00',
@@ -16,7 +18,9 @@ export const users = [
   },
   {
     name: 'Bob',
+    name_normalized: 'bob',
     surname: 'Smith',
+    surname_normalized: 'smith',
     grade: 8,
     birthdate: '2002-06-20T00:00:00',
     createdAt: '2023-02-05T00:00:00',
@@ -24,7 +28,9 @@ export const users = [
   },
   {
     name: 'Charlie',
+    name_normalized: 'charlie',
     surname: 'Brown',
+    surname_normalized: 'brown',
     grade: 10,
     birthdate: '1999-12-01T00:00:00',
     createdAt: '2023-03-20T00:00:00',
@@ -32,7 +38,9 @@ export const users = [
   },
   {
     name: 'Diana',
+    name_normalized: 'diana',
     surname: 'Taylor',
+    surname_normalized: 'taylor',
     grade: 7,
     birthdate: '2000-05-25T00:00:00',
     createdAt: '2023-04-15T00:00:00',
@@ -40,7 +48,9 @@ export const users = [
   },
   {
     name: 'Eve',
+    name_normalized: 'eve',
     surname: 'Williams',
+    surname_normalized: 'williams',
     grade: 6,
     birthdate: '2003-11-11T00:00:00',
     createdAt: '2023-05-30T00:00:00',
@@ -48,10 +58,55 @@ export const users = [
   },
   {
     name: 'Daniel',
+    name_normalized: 'daniel',
     surname: 'Miller',
+    surname_normalized: 'miller',
     grade: 6,
     birthdate: '2003-01-11T00:00:00',
     createdAt: '2023-02-28T00:00:00',
     updatedAt: '2023-02-28T00:00:00',
+  },
+];
+
+export const usersNonLatin = [
+  {
+    name: 'Оскар',
+    name_normalized: 'оскар',
+    surname: 'Шиндлер',
+    surname_normalized: 'шиндлер',
+    grade: 5,
+    birthdate: '2001-03-15T00:00:00',
+    createdAt: '2023-01-10T00:00:00',
+    updatedAt: '2023-01-10T00:00:00',
+  },
+  {
+    name: 'Женя',
+    name_normalized: 'женя',
+    surname: 'Карпенко',
+    surname_normalized: 'карпенко',
+    grade: 8,
+    birthdate: '2002-06-20T00:00:00',
+    createdAt: '2023-02-05T00:00:00',
+    updatedAt: '2023-02-05T00:00:00',
+  },
+  {
+    name: 'Валя',
+    name_normalized: 'валя',
+    surname: 'Корпінська',
+    surname_normalized: 'корпінська',
+    grade: 10,
+    birthdate: '1999-12-01T00:00:00',
+    createdAt: '2023-03-20T00:00:00',
+    updatedAt: '2023-03-20T00:00:00',
+  },
+  {
+    name: 'Діана',
+    name_normalized: 'діана',
+    surname: 'Словінська',
+    surname_normalized: 'словінська',
+    grade: 7,
+    birthdate: '2000-05-25T00:00:00',
+    createdAt: '2023-04-15T00:00:00',
+    updatedAt: '2023-04-15T00:00:00',
   },
 ];
