@@ -37,6 +37,7 @@ import * as programUpdate from './api/admin/program/update/middleware.js';
 import * as programGet from './api/admin/program/get/middleware.js';
 import * as programList from './api/admin/program/list/middleware.js';
 import * as programCopy from './api/admin/program/copy/middleware.js';
+import * as programDelete from './api/admin/program/delete/middleware.js';
 
 import * as clientProgramGet from './api/client/program/get/middleware.js';
 import * as clientTaskGet from './api/client/task/get/middleware.js';
@@ -188,6 +189,11 @@ export function connectMiddlewares(router, config) {
     programCopy.route,
     verifyTokenMiddleware,
     programCopy.middleware,
+  );
+  router[programDelete.method](
+    programDelete.route,
+    verifyTokenMiddleware,
+    programDelete.middleware,
   );
 
   // link
