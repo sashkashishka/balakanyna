@@ -46,25 +46,13 @@ async function updateUserMiddleware(ctx) {
     name: body.name,
     surname: body.surname,
     grade: body.grade,
+    notes: body.notes,
+    email: body.email,
+    phoneNumber: body.phoneNumber,
+    messangers: body.messangers,
     birthdate: body.birthdate,
     updatedAt: sql`(datetime())`,
   };
-
-  if (body.notes) {
-    value.notes = body.notes;
-  }
-
-  if (body.email) {
-    value.email = body.email;
-  }
-
-  if (body.phoneNumber) {
-    value.phoneNumber = body.phoneNumber;
-  }
-
-  if (body.messangers) {
-    value.messangers = body.messangers;
-  }
 
   const [result] = await ctx.db
     .update(userTable)
