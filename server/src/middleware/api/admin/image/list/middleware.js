@@ -54,7 +54,7 @@ async function imageListMiddleware(ctx) {
   }
 
   if (filename) {
-    andClauses.push(like(imageTable.filename, `%${filename}%`));
+    andClauses.push(like(imageTable.filename_normalized, `%${filename.toLowerCase()}%`));
   }
 
   if (labels) {
