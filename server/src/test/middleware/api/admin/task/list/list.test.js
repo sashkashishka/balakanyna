@@ -25,6 +25,7 @@ import {
   imageSliderTask,
   semaphoreTextTask,
   tasks,
+  tasksNonLatin,
 } from '../../fixtures/task.js';
 import { labels } from '../../fixtures/label.js';
 import { getProgram } from '../../fixtures/program.js';
@@ -710,43 +711,80 @@ describe('[api] task list', async () => {
   });
 
   describe('[filter]', () => {
-    test('should return 200 and filter by name', async (t) => {
-      const offset = 0;
-      const limit = tasks.length;
-      const name = 'Task 1';
+    const testCases = [
+      {
+        filter: 'name',
+        value: 'Task 1',
+        list: tasks,
+        sum: 1,
+        result: 1,
+        limit: tasks.length,
+        offset: 0,
+      },
+      {
+        filter: 'name',
+        value: 'task 1',
+        list: tasks,
+        sum: 1,
+        result: 1,
+        limit: tasks.length,
+        offset: 0,
+      },
+      {
+        filter: 'name',
+        value: 'мемор',
+        list: tasksNonLatin,
+        sum: 2,
+        result: 2,
+        limit: tasksNonLatin.length,
+        offset: 0,
+      },
+      {
+        filter: 'name',
+        value: 'Мемор',
+        list: tasksNonLatin,
+        sum: 2,
+        result: 2,
+        limit: tasksNonLatin.length,
+        offset: 0,
+      },
+    ];
 
-      const { request, baseUrl } = await getTestServer({
-        t,
-        async seed(db, config) {
-          await seedAdmins(db, [admin], config.salt.password);
-          await seedTasks(db, tasks);
-        },
+    testCases.forEach(({ filter, value, offset, limit, sum, result, list }) => {
+      test(`should return 200 and filter by ${filter} "${value}" case insensitive`, async (t) => {
+        const { request, baseUrl } = await getTestServer({
+          t,
+          async seed(db, config) {
+            await seedAdmins(db, [admin], config.salt.password);
+            await seedTasks(db, list);
+          },
+        });
+
+        const url = getEndpoint(baseUrl, {
+          offset,
+          limit,
+          order_by: 'createdAt',
+          dir: 'desc',
+          [filter]: value,
+        });
+
+        const resp = await request(url, {
+          method: taskList.method,
+          headers: {
+            cookie: await getAuthCookie(request, admin),
+          },
+        });
+        const body = await resp.json();
+        const { items, total } = body;
+
+        assert.equal(resp.status, 200);
+        assert.equal(items.length, result);
+        assert.equal(total, sum);
+
+        for (let i = 0; i < items.length; i++) {
+          assert.match(items[i][filter], new RegExp(value, 'i'));
+        }
       });
-
-      const url = getEndpoint(baseUrl, {
-        offset,
-        limit,
-        order_by: 'createdAt',
-        dir: 'desc',
-        name,
-      });
-
-      const resp = await request(url, {
-        method: taskList.method,
-        headers: {
-          cookie: await getAuthCookie(request, admin),
-        },
-      });
-      const body = await resp.json();
-      const { items, total } = body;
-
-      assert.equal(resp.status, 200);
-      assert.equal(items.length, 1);
-      assert.equal(total, 1);
-
-      for (let i = 0; i < items.length; i++) {
-        assert.match(items[i].name, new RegExp(name, 'i'));
-      }
     });
 
     test('should return 200 and filter by types', async (t) => {
