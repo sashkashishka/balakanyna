@@ -106,6 +106,11 @@ export function openUserView(uid: string) {
   // @ts-expect-error something with router types
   openPage($router, ROUTE_ALIAS.USER_VIEW, { uid });
 }
+
+export function openUserProgramView(uid: string) {
+  // @ts-expect-error something with router types
+  openPage($router, ROUTE_ALIAS.USER_VIEW_PROGRAMS, { uid });
+}
 export function openProgramList() {
   openPage($router, ROUTE_ALIAS.PROGRAM_LIST);
 }

@@ -2,7 +2,11 @@ import { type ReadableAtom } from 'nanostores';
 import type { IPaginatorResponse } from 'shared/types';
 import { createFetcherStore, createMutatorStore } from './_query';
 import { type IFilters } from './_list-filter';
-import type { IProgram, IProgramFull } from 'shared/types/program';
+import type {
+  IProgram,
+  IProgramCopy,
+  IProgramFull,
+} from 'shared/types/program';
 import { getSearchParam } from '@/utils/network';
 
 export interface IProgramListFilters extends IFilters {
@@ -76,6 +80,23 @@ export const $updateProgram = createMutatorStore<IProgram>(
   async ({ data, invalidate }) => {
     const resp = await fetch(`/api/admin/program/update?id=${data.id}`, {
       method: 'PATCH',
+      body: JSON.stringify(data),
+      headers: { 'content-type': 'application/json' },
+    });
+
+    invalidate(
+      (k) =>
+        k.startsWith(PROGRAM_KEYS.list) || k.startsWith(PROGRAM_KEYS.program),
+    );
+
+    return resp;
+  },
+);
+
+export const $copyProgram = createMutatorStore<IProgramCopy>(
+  async ({ data, invalidate }) => {
+    const resp = await fetch('/api/admin/program/copy', {
+      method: 'POST',
       body: JSON.stringify(data),
       headers: { 'content-type': 'application/json' },
     });

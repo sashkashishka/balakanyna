@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useStore } from '@nanostores/react';
 import { Flex, Space, Spin, Tabs, Typography } from 'antd';
 
@@ -13,11 +13,13 @@ const { Paragraph } = Typography;
 
 export function UserViewPage() {
   const { route, params } = useStore($router)!;
-  const [$user] = useState(() =>
-    makeUserStore(
-      // @ts-expect-error id does exist
-      params.uid,
-    ),
+  const $user = useMemo(
+    () =>
+      makeUserStore(
+        // @ts-expect-error id does exist
+        params.uid,
+      ),
+    [params],
   );
   const { data: user, loading, error } = useStore($user);
 
@@ -69,6 +71,7 @@ export function UserViewPage() {
       </Flex>
 
       <Tabs
+        key={JSON.stringify(params)}
         onChange={onTabChange}
         type="card"
         items={tabs}
