@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
 
 export function assertCommonTaskProps(body, payload) {
-  assert.equal(typeof body.id, 'number');
+  if (payload.id) {
+    assert.equal(body.id, payload.id);
+  } else {
+    assert.equal(typeof body.id, 'number');
+  }
   assert.equal(body.hash.length, 8);
   assert.equal(body.name, payload.name);
   assert.equal(body.name_normalized, payload.name.toLowerCase());
