@@ -1,11 +1,13 @@
 import { useStore } from '@nanostores/react';
+import { atom } from 'nanostores';
 import dayjs from 'dayjs';
 import { Button, Col, DatePicker, Form, Input, notification, Row } from 'antd';
+import { useLayoutEffect } from 'react';
 
 import type { IProgramCopy, IProgramFull } from 'shared/types/program';
 import { $copyProgram } from '@/stores/program';
+import { makeUserStore } from '@/stores/user';
 import { openUserProgramView } from '@/stores/router';
-
 import { UserSearchInput } from '../UserSearchInput';
 
 interface IProps {
@@ -14,9 +16,17 @@ interface IProps {
   initialValues?: Partial<IProgramCopy>;
 }
 
+const $userId = atom<number>(0);
+const $user = makeUserStore($userId);
+
 export function CopyProgramForm({ name, program, initialValues }: IProps) {
   const [form] = Form.useForm();
 
+  useLayoutEffect(() => {
+    $userId.set(program.userId);
+  }, []);
+
+  const { data: user, loading } = useStore($user);
   const { mutate } = useStore($copyProgram);
 
   async function onFinish(data: IProgramCopy) {
@@ -81,7 +91,7 @@ export function CopyProgramForm({ name, program, initialValues }: IProps) {
         <Col span={24} sm={12}>
           Copy from the user
           <br />
-          <b>{program.userId}</b>
+          <b>{loading ? '...' : `${user?.name} ${user?.surname}`}</b>
           <br />
           <br />
         </Col>

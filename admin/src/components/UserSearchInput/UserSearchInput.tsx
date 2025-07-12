@@ -1,30 +1,19 @@
+import { atom, computed } from 'nanostores';
 import { useStore } from '@nanostores/react';
-import { useMemo, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Select, type SelectProps, Spin } from 'antd';
 
+import { makeUserSearchStore } from '@/stores/user';
 import { debounce } from '@/utils/debounce';
-import { getSearchParam } from '@/utils/network';
 import { makeTmpValueStore } from './store';
-import type { IUser } from 'shared/types/user';
 
 const DEBOUNCE_DELAY = 200;
-
-// TODO: think how to refactor it to keep everything in stores
-async function fetchUsers(search: string) {
-  const resp = await fetch(
-    `/api/admin/user/search${getSearchParam('search', search)}`,
-    {
-      method: 'GET',
-      headers: { 'content-type': 'application/json' },
-    },
-  );
-
-  if (resp.ok) {
-    return resp.json();
-  }
-
-  return [];
-}
 
 interface IProps {
   maxCount?: number;
@@ -33,43 +22,36 @@ interface IProps {
   disabled?: boolean;
 }
 
+const $search = atom('');
+const $userSearch = makeUserSearchStore($search);
+
 export function UserSearchInput({
   maxCount = 1,
   disabled,
   value,
   onChange,
 }: IProps) {
-  const { $tmpValue, setTmpValue } = useMemo(
-    () =>
-      makeTmpValueStore(Array.isArray(value!) ? value! : [value!], onChange!),
-    [],
+  const [{ $tmpValue, setTmpValue }] = useState(
+    makeTmpValueStore(Array.isArray(value!) ? value! : [value!], onChange!),
   );
+  useEffect(() => () => $search.set(''), []);
 
   const tmpValue = useStore($tmpValue);
-
-  const [users, setUsers] = useState<IUser[]>([]);
-  const [fetching, setFetching] = useState(false);
-
-  const debounceFetcher = useMemo(() => {
-    const loadOptions = async (value: string) => {
-      console.log(value);
-      setFetching(true);
-      const data = await fetchUsers(value);
-      setUsers(data);
-      setFetching(false);
-    };
-
-    return debounce(loadOptions, DEBOUNCE_DELAY);
-  }, []);
+  const { data, loading } = useStore($userSearch);
 
   const options = useMemo<SelectProps['options']>(() => {
-    if (!users) return [];
+    if (!data) return [];
 
-    return users.map(({ id, name, surname }) => ({
+    return data.map(({ id, name, surname }) => ({
       label: `${name} ${surname}`,
       value: id,
     }));
-  }, [users]);
+  }, [data]);
+
+  const handleSearch = useCallback(
+    debounce($search.set.bind($search), DEBOUNCE_DELAY),
+    [$search],
+  );
 
   return (
     <Select
@@ -80,8 +62,8 @@ export function UserSearchInput({
       allowClear
       labelInValue
       filterOption={false}
-      onSearch={debounceFetcher}
-      notFoundContent={fetching ? <Spin size="small" /> : null}
+      onSearch={handleSearch}
+      notFoundContent={loading ? <Spin size="small" /> : null}
       value={tmpValue}
       placeholder="Alice"
       onChange={(values) => {
