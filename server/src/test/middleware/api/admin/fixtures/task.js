@@ -1,5 +1,5 @@
 export const imageSliderTask = {
-  name: 'slider task',
+  name: 'Slider task',
   type: 'imageSlider',
   config: {
     slides: [
@@ -34,7 +34,7 @@ export const iframeViewerTask = {
 };
 
 export const schulteTableTask = {
-  name: 'schulte task',
+  name: 'Schulte task',
   type: 'schulteTable',
   config: {
     x: 2,
@@ -44,7 +44,7 @@ export const schulteTableTask = {
 };
 
 export const lettersToSyllableTask = {
-  name: 'letters to syllable',
+  name: 'Letters to syllable',
   type: 'lettersToSyllable',
   config: {
     list: [{ first: 'a', last: 'b', vowelColor: 'red' }],
@@ -52,7 +52,7 @@ export const lettersToSyllableTask = {
 };
 
 export const findFlashingNumberTask = {
-  name: 'find flashing number',
+  name: 'Find flashing number',
   type: 'findFlashingNumber',
   config: {
     duration: 60,
@@ -77,7 +77,7 @@ export const findFlashingNumberTask = {
 };
 
 export const goneAndFoundTask = {
-  name: 'gone and found task',
+  name: 'Gone and found task',
   type: 'goneAndFound',
   config: {
     preset: 'default',
@@ -97,7 +97,7 @@ export const goneAndFoundTask = {
 };
 
 export const brainboxTask = {
-  name: 'brainbox task',
+  name: 'Brainbox task',
   type: 'brainbox',
   config: {
     items: [
