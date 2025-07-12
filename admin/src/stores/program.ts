@@ -109,3 +109,20 @@ export const $copyProgram = createMutatorStore<IProgramCopy>(
     return resp;
   },
 );
+
+export const $deleteProgram = createMutatorStore<Pick<IProgramCopy, 'id'>, Response>(
+  async ({ data, invalidate }) => {
+    const resp = await fetch('/api/admin/program/delete', {
+      method: 'DELETE',
+      body: JSON.stringify(data),
+      headers: { 'content-type': 'application/json' },
+    });
+
+    invalidate(
+      (k) =>
+        k.startsWith(PROGRAM_KEYS.list) || k.startsWith(PROGRAM_KEYS.program),
+    );
+
+    return resp;
+  },
+);
