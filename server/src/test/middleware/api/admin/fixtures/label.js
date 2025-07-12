@@ -10,6 +10,7 @@ export const label = {
 export const labels = [
   {
     name: 'Foo',
+    name_normalized: 'foo',
     type: 'task',
     config: {
       color: 'green',
@@ -20,6 +21,7 @@ export const labels = [
   },
   {
     name: 'Bar',
+    name_normalized: 'bar',
     type: 'task',
     config: {
       color: 'red',
@@ -30,6 +32,7 @@ export const labels = [
   },
   {
     name: 'Bar',
+    name_normalized: 'bar',
     type: 'image',
     config: {
       color: 'yellow',
@@ -40,6 +43,7 @@ export const labels = [
   },
   {
     name: 'Baz',
+    name_normalized: 'baz',
     type: 'image',
     config: {
       color: 'purple',
@@ -50,6 +54,7 @@ export const labels = [
   },
   {
     name: 'Boo',
+    name_normalized: 'boo',
     type: 'image',
     config: {
       color: 'brown',
@@ -60,6 +65,7 @@ export const labels = [
   },
   {
     name: 'Koo',
+    name_normalized: 'koo',
     type: 'image',
     config: {
       color: 'blue',
@@ -67,5 +73,30 @@ export const labels = [
     },
     createdAt: '2024-11-09T00:00:00',
     updatedAt: '2024-11-09T00:00:00',
+  },
+];
+
+export const labelsNonLatin = [
+  {
+    name: 'Фуу',
+    name_normalized: 'фуу',
+    type: 'task',
+    config: {
+      color: 'green',
+      bordered: false,
+    },
+    createdAt: '2024-11-14T00:00:00',
+    updatedAt: '2024-11-14T00:00:00',
+  },
+  {
+    name: 'фуу',
+    name_normalized: 'фуу',
+    type: 'task',
+    config: {
+      color: 'red',
+      bordered: false,
+    },
+    createdAt: '2024-11-13T00:00:00',
+    updatedAt: '2024-11-13T00:00:00',
   },
 ];
