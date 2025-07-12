@@ -71,7 +71,8 @@ export function UserViewPage() {
       </Flex>
 
       <Tabs
-        key={JSON.stringify(params)}
+        // @ts-expect-error id does exist
+        key={params.uid}
         onChange={onTabChange}
         type="card"
         items={tabs}
