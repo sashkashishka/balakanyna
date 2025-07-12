@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { Button, Drawer, Flex, Typography } from 'antd';
 
 import { makeProgramStore } from '@/stores/program';
@@ -13,7 +13,7 @@ interface IProps {
 
 export function UpdateProgramDrawer({ programId, children }: IProps) {
   const [open, setOpen] = useState(false);
-  const [$program] = useState(() => makeProgramStore(programId));
+  const $program = useMemo(() => makeProgramStore(programId), [programId]);
 
   return (
     <>

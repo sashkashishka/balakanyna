@@ -5,7 +5,7 @@ import { Button, Col, DatePicker, Form, Input, notification, Row } from 'antd';
 import type { IProgramCopy, IProgramFull } from 'shared/types/program';
 import { $copyProgram } from '@/stores/program';
 import { makeUserStore } from '@/stores/user';
-import { useState } from 'react';
+import { useMemo } from 'react';
 import { openUserProgramView } from '@/stores/router';
 import { UserSearchInput } from '../UserSearchInput';
 
@@ -17,7 +17,7 @@ interface IProps {
 
 export function CopyProgramForm({ name, program, initialValues }: IProps) {
   const [form] = Form.useForm();
-  const [$user] = useState(makeUserStore(program.userId));
+  const $user = useMemo(() => makeUserStore(program.userId), []);
 
   const { data: user, loading } = useStore($user);
   const { mutate } = useStore($copyProgram);

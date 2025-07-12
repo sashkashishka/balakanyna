@@ -41,6 +41,8 @@ export function CopyProgramDrawer({ $program }: IProps) {
           program={data}
           initialValues={{
             id: data.id,
+            startDatetime: new Date().toISOString(),
+            expirationDatetime: new Date(Date.now() + 10000).toISOString(),
           }}
         />
       </Drawer>

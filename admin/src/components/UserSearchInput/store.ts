@@ -13,7 +13,7 @@ export function makeTmpValueStore(
   onChange: (v: number[]) => void,
 ) {
   const initTmpValue = Array.isArray(initialValue)
-    ? initialValue.map((v) => ({
+    ? initialValue.filter(Boolean).map((v) => ({
         label:
           cache.get(String(v)) === -1 ? v : (cache.get(String(v)) as string),
         value: v,
