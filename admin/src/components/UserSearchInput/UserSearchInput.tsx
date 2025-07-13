@@ -1,9 +1,8 @@
-import { atom, computed } from 'nanostores';
+import { atom } from 'nanostores';
 import { useStore } from '@nanostores/react';
 import {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useState,
 } from 'react';
