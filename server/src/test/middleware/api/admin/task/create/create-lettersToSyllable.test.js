@@ -9,6 +9,7 @@ import * as taskCreate from '../../../../../../middleware/api/admin/task/create/
 import { seedAdmins } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
 import { lettersToSyllableTask } from '../../fixtures/task.js';
+import { assertCommonTaskProps } from '../utils.js';
 
 describe('[api] task create lettersToSyllable', () => {
   test('should retun 400 if config is invalid', async (t) => {
@@ -62,14 +63,8 @@ describe('[api] task create lettersToSyllable', () => {
     const body = await resp.json();
 
     assert.equal(resp.status, 200);
-    assert.equal(typeof body.id, 'number');
-    assert.equal(body.hash.length, 8);
-    assert.equal(body.name, payload.name);
-    assert.equal(body.type, payload.type);
+    assertCommonTaskProps(body, payload);
     assert.deepEqual(body.config.list, payload.config.list);
-    assert.equal(isNaN(new Date(body.createdAt)), false);
-    assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 7);
   });
 
   test('should return 200 if vowelColor is absent', async (t) => {
@@ -97,13 +92,7 @@ describe('[api] task create lettersToSyllable', () => {
     const body = await resp.json();
 
     assert.equal(resp.status, 200);
-    assert.equal(typeof body.id, 'number');
-    assert.equal(body.hash.length, 8);
-    assert.equal(body.name, payload.name);
-    assert.equal(body.type, payload.type);
+    assertCommonTaskProps(body, payload);
     assert.deepEqual(body.config.list, payload.config.list);
-    assert.equal(isNaN(new Date(body.createdAt)), false);
-    assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 7);
   });
 });

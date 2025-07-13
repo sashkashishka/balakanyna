@@ -88,7 +88,7 @@ describe('[api] program update', async () => {
     });
   });
 
-  test('should return 404 if program does not exists', async (t) => {
+  test('should return 400 if program does not exists', async (t) => {
     const { request } = await getTestServer({
       t,
       async seed(db, config) {
@@ -109,10 +109,10 @@ describe('[api] program update', async () => {
     });
     const body = await resp.json();
 
-    assert.equal(resp.status, 404);
+    assert.equal(resp.status, 400);
     assert.deepEqual(body, {
-      error: 'NOT_FOUND',
-      message: 'Not Found',
+      error: 'PROGRAM_DOES_NOT_EXIST',
+      message: 'Program does not exist',
     });
   });
 

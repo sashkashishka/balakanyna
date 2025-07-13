@@ -1,5 +1,5 @@
 export const imageSliderTask = {
-  name: 'slider task',
+  name: 'Slider task',
   type: 'imageSlider',
   config: {
     slides: [
@@ -34,7 +34,7 @@ export const iframeViewerTask = {
 };
 
 export const schulteTableTask = {
-  name: 'schulte task',
+  name: 'Schulte task',
   type: 'schulteTable',
   config: {
     x: 2,
@@ -44,7 +44,7 @@ export const schulteTableTask = {
 };
 
 export const lettersToSyllableTask = {
-  name: 'letters to syllable',
+  name: 'Letters to syllable',
   type: 'lettersToSyllable',
   config: {
     list: [{ first: 'a', last: 'b', vowelColor: 'red' }],
@@ -52,7 +52,7 @@ export const lettersToSyllableTask = {
 };
 
 export const findFlashingNumberTask = {
-  name: 'find flashing number',
+  name: 'Find flashing number',
   type: 'findFlashingNumber',
   config: {
     duration: 60,
@@ -77,7 +77,7 @@ export const findFlashingNumberTask = {
 };
 
 export const goneAndFoundTask = {
-  name: 'gone and found task',
+  name: 'Gone and found task',
   type: 'goneAndFound',
   config: {
     preset: 'default',
@@ -97,7 +97,7 @@ export const goneAndFoundTask = {
 };
 
 export const brainboxTask = {
-  name: 'brainbox task',
+  name: 'Brainbox task',
   type: 'brainbox',
   config: {
     items: [
@@ -116,6 +116,7 @@ export const brainboxTask = {
 export const tasks = [
   {
     name: 'Task 1',
+    name_normalized: 'task 1',
     type: 'imageSlider',
     hash: '11111111',
     config: {
@@ -133,6 +134,7 @@ export const tasks = [
   },
   {
     name: 'Task 2',
+    name_normalized: 'task 2',
     type: 'imageSlider',
     hash: '22222222',
     config: {
@@ -150,6 +152,7 @@ export const tasks = [
   },
   {
     name: 'Task 3',
+    name_normalized: 'task 3',
     type: 'imageSlider',
     hash: '33333333',
     config: {
@@ -167,6 +170,7 @@ export const tasks = [
   },
   {
     name: 'Task 4',
+    name_normalized: 'task 4',
     type: 'imageSlider',
     hash: '44444444',
     config: {
@@ -184,6 +188,7 @@ export const tasks = [
   },
   {
     name: 'Task 5',
+    name_normalized: 'task 5',
     type: 'semaphoreText',
     hash: '55555555',
     config: {
@@ -196,6 +201,7 @@ export const tasks = [
   },
   {
     name: 'Task 6',
+    name_normalized: 'task 6',
     type: 'semaphoreText',
     hash: '66666666',
     config: {
@@ -208,6 +214,7 @@ export const tasks = [
   },
   {
     name: 'Task 7',
+    name_normalized: 'task 7',
     type: 'semaphoreText',
     hash: '77777777',
     config: {
@@ -220,6 +227,7 @@ export const tasks = [
   },
   {
     name: 'Task 8',
+    name_normalized: 'task 8',
     type: 'semaphoreText',
     hash: '88888888',
     config: {
@@ -229,5 +237,33 @@ export const tasks = [
     },
     createdAt: '2024-03-17T00:00:00.000Z',
     updatedAt: '2024-03-17T00:00:00.000Z',
+  },
+];
+export const tasksNonLatin = [
+  {
+    name: 'меморі 1',
+    name_normalized: 'меморі 1',
+    type: 'semaphoreText',
+    hash: '88888888',
+    config: {
+      colors: ['brown'],
+      delayRange: [4, 5],
+      text: ['d'],
+    },
+    createdAt: '2024-03-17T00:00:00.000Z',
+    updatedAt: '2024-03-17T00:00:00.000Z',
+  },
+  {
+    name: 'Меморі 1',
+    name_normalized: 'меморі 1',
+    type: 'semaphoreText',
+    hash: '88888888',
+    config: {
+      colors: ['red'],
+      delayRange: [1, 2],
+      text: ['a'],
+    },
+    createdAt: '2024-03-18T00:00:00.000Z',
+    updatedAt: '2024-03-18T00:00:00.000Z',
   },
 ];

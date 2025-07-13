@@ -144,7 +144,9 @@ describe('[api] user update', async () => {
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbUsers[0].id);
     assert.equal(body.name, payload.name);
+    assert.equal(body.name_normalized, payload.name.toLowerCase());
     assert.equal(body.surname, payload.surname);
+    assert.equal(body.surname_normalized, payload.surname.toLowerCase());
     assert.equal(body.grade, payload.grade);
     assert.equal(body.birthdate, payload.birthdate);
     assert.equal(body.notes, payload.notes);
@@ -153,7 +155,7 @@ describe('[api] user update', async () => {
     assert.equal(body.messangers, payload.messangers);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 11);
+    assert.equal(Object.keys(body).length, 13);
 
     assert.doesNotMatch(
       body.updatedAt,
@@ -171,10 +173,12 @@ describe('[api] user update', async () => {
     );
   });
 
-  test('should not clear non required fields if they was not sent', async (t) => {
+  test('should clear non required fields if they was not sent', async (t) => {
     let dbUsers = [];
     const customUser = {
       ...user,
+      phoneNumber: '+23498234',
+      messangers: 'tg',
       notes: 'boo',
       email: 'lolo@gmail.com',
     };
@@ -194,11 +198,11 @@ describe('[api] user update', async () => {
       name: 'Bob',
       surname: 'Mortimer',
       grade: 2,
-      notes: undefined,
-      email: null,
+      notes: '',
+      email: '',
       birthdate: new Date().toISOString(),
-      phoneNumber: '+23498234',
-      messangers: 'tg',
+      phoneNumber: '',
+      messangers: '',
     };
 
     const resp = await request(userUpdate.route, {
@@ -213,24 +217,20 @@ describe('[api] user update', async () => {
     assert.equal(resp.status, 200);
     assert.equal(body.id, dbUsers[0].id);
     assert.equal(body.name, payload.name);
+    assert.equal(body.name_normalized, payload.name.toLowerCase());
     assert.equal(body.surname, payload.surname);
+    assert.equal(body.surname_normalized, payload.surname.toLowerCase());
     assert.equal(body.grade, payload.grade);
     assert.equal(body.birthdate, payload.birthdate);
+
     assert.equal(body.phoneNumber, payload.phoneNumber);
     assert.equal(body.messangers, payload.messangers);
-    assert.equal(
-      body.notes,
-      dbUsers[0].notes,
-      'should remain the same as before',
-    );
-    assert.equal(
-      body.email,
-      dbUsers[0].email,
-      'should remain the same as before',
-    );
+    assert.equal(body.notes, payload.notes);
+    assert.equal(body.email, payload.email);
+
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 11);
+    assert.equal(Object.keys(body).length, 13);
 
     assert.doesNotMatch(
       body.updatedAt,

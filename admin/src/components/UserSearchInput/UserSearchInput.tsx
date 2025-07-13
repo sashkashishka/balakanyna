@@ -1,11 +1,15 @@
-import { atom, computed } from 'nanostores';
+import { atom } from 'nanostores';
 import { useStore } from '@nanostores/react';
-import { useCallback, useMemo, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { Select, type SelectProps, Spin } from 'antd';
 
 import { makeUserSearchStore } from '@/stores/user';
 import { debounce } from '@/utils/debounce';
-import { getSearchParam } from '@/utils/network';
 import { makeTmpValueStore } from './store';
 
 const DEBOUNCE_DELAY = 200;
@@ -17,6 +21,9 @@ interface IProps {
   disabled?: boolean;
 }
 
+const $search = atom('');
+const $userSearch = makeUserSearchStore($search);
+
 export function UserSearchInput({
   maxCount = 1,
   disabled,
@@ -26,15 +33,9 @@ export function UserSearchInput({
   const [{ $tmpValue, setTmpValue }] = useState(
     makeTmpValueStore(Array.isArray(value!) ? value! : [value!], onChange!),
   );
+  useEffect(() => () => $search.set(''), []);
 
   const tmpValue = useStore($tmpValue);
-
-  const [$search] = useState(() => atom(''));
-  const [$searchParams] = useState(() =>
-    computed([$search], (search) => getSearchParam('search', search)),
-  );
-  const [$userSearch] = useState(() => makeUserSearchStore($searchParams));
-
   const { data, loading } = useStore($userSearch);
 
   const options = useMemo<SelectProps['options']>(() => {

@@ -38,6 +38,7 @@ export interface INumberRangeFilter extends IFilter {
 export interface ISelectFilter extends IFilter {
   type: 'select';
   name: string;
+  mode: SelectProps['mode'];
   label: ReactNode;
   options: SelectProps['options'];
 }
