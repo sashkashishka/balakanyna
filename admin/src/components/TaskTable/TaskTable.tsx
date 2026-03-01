@@ -55,6 +55,9 @@ export function TaskTable({
     {
       title: 'ID',
       dataIndex: 'id',
+      sorter: true,
+      sortDirections: ['descend', 'ascend'],
+      sortOrder: filters.order_by === 'id' ? filters.dir : null,
       render(id) {
         return (
           <UpdateTaskDrawer

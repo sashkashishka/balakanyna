@@ -17,7 +17,9 @@ export const adminTable = sqliteTable('admin', {
 export const userTable = sqliteTable('user', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   name: text().notNull(),
+  name_normalized: text().default(''),
   surname: text().notNull(),
+  surname_normalized: text().default(''),
   grade: integer({ mode: 'number' }).notNull(),
   birthdate: text().notNull(),
   notes: text(),
@@ -42,6 +44,7 @@ export const taskTable = sqliteTable('task', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   hash: text().default(''),
   name: text().notNull(),
+  name_normalized: text().default(''),
   type: text({ enum: tasks }).notNull(),
   config: text({ mode: 'json' }),
   ...timestamps,
@@ -51,6 +54,7 @@ export const labelTable = sqliteTable('label', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   type: text({ enum: ['image', 'task'] }).notNull(),
   name: text().notNull(),
+  name_normalized: text().default(''),
   config: text({ mode: 'json' }).notNull(),
   ...timestamps,
 });
@@ -58,6 +62,7 @@ export const labelTable = sqliteTable('label', {
 export const imageTable = sqliteTable('image', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   filename: text().notNull(),
+  filename_normalized: text().default(''),
   path: text().notNull(),
   hashsum: text().notNull(),
   ...timestamps,

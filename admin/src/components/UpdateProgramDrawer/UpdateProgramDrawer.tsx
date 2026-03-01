@@ -1,9 +1,10 @@
-import { useState, type ReactNode } from 'react';
-import { Button, Drawer } from 'antd';
+import { useMemo, useState, type ReactNode } from 'react';
+import { Button, Drawer, Flex, Typography } from 'antd';
 
 import { makeProgramStore } from '@/stores/program';
 
 import { UpdateProgramDrawerContent } from './UpdateProgramDrawerContent';
+import { CopyProgramDrawer } from '../CopyProgramDrawer';
 
 interface IProps {
   programId: number;
@@ -12,7 +13,7 @@ interface IProps {
 
 export function UpdateProgramDrawer({ programId, children }: IProps) {
   const [open, setOpen] = useState(false);
-  const [$program] = useState(() => makeProgramStore(programId));
+  const $program = useMemo(() => makeProgramStore(programId), [programId]);
 
   return (
     <>
@@ -22,7 +23,15 @@ export function UpdateProgramDrawer({ programId, children }: IProps) {
 
       <Drawer
         size="large"
-        title="Update program"
+        title={
+          <Flex justify="space-between" align="center">
+            <Typography.Title level={5} style={{ margin: 0 }}>
+              Update program
+            </Typography.Title>
+
+            <CopyProgramDrawer $program={$program} />
+          </Flex>
+        }
         open={open}
         onClose={() => setOpen(false)}
         destroyOnClose

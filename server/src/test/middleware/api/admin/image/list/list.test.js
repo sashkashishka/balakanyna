@@ -15,7 +15,7 @@ import {
 } from '../../../../../../db/seeders.js';
 
 import { admin } from '../../fixtures/admin.js';
-import { images } from '../../fixtures/image.js';
+import { images, imagesNonLatin } from '../../fixtures/image.js';
 import { labels } from '../../fixtures/label.js';
 
 function getEndpoint(
@@ -488,43 +488,116 @@ describe('[api] image list', async () => {
   });
 
   describe('[filter]', () => {
-    test('should return 200 and filter by filename', async (t) => {
-      const offset = 0;
-      const limit = images.length;
-      const filename = '10';
+    const testCases = [
+      {
+        filter: 'filename',
+        value: 'ima',
+        list: images,
+        sum: 10,
+        result: 10,
+        limit: images.length,
+        offset: 0,
+      },
+      {
+        filter: 'filename',
+        value: '10',
+        list: images,
+        sum: 1,
+        result: 1,
+        limit: images.length,
+        offset: 0,
+      },
+      {
+        filter: 'filename',
+        value: 'О',
+        list: imagesNonLatin,
+        sum: 1,
+        result: 1,
+        limit: imagesNonLatin.length,
+        offset: 0,
+      },
+      {
+        filter: 'filename',
+        value: 'о',
+        list: imagesNonLatin,
+        sum: 1,
+        result: 1,
+        limit: imagesNonLatin.length,
+        offset: 0,
+      },
+      {
+        filter: 'filename',
+        value: 'Ф',
+        list: imagesNonLatin,
+        sum: 1,
+        result: 1,
+        limit: imagesNonLatin.length,
+        offset: 0,
+      },
+      {
+        filter: 'filename',
+        value: 'ф',
+        list: imagesNonLatin,
+        sum: 1,
+        result: 1,
+        limit: imagesNonLatin.length,
+        offset: 0,
+      },
+      {
+        filter: 'filename',
+        value: 'к',
+        list: imagesNonLatin,
+        sum: 2,
+        result: 2,
+        limit: imagesNonLatin.length,
+        offset: 0,
+      },
+      {
+        filter: 'filename',
+        value: 'К',
+        list: imagesNonLatin,
+        sum: 2,
+        result: 2,
+        limit: imagesNonLatin.length,
+        offset: 0,
+      },
+    ];
 
-      const { request, baseUrl } = await getTestServer({
-        t,
-        async seed(db, config) {
-          await seedAdmins(db, [admin], config.salt.password);
-          await seedImages(db, images);
-        },
+    testCases.forEach(({ filter, value, list, sum, result, limit, offset }) => {
+      test(`should return 200 and filter by ${filter} "${value}" and case insensitive`, async (t) => {
+        const { request, baseUrl } = await getTestServer({
+          t,
+          async seed(db, config) {
+            await seedAdmins(db, [admin], config.salt.password);
+            await seedImages(db, list);
+          },
+        });
+
+        const url = getEndpoint(baseUrl, {
+          offset,
+          limit,
+          order_by: 'createdAt',
+          dir: 'desc',
+          [filter]: value,
+        });
+
+        const resp = await request(url, {
+          method: imageList.method,
+          headers: {
+            cookie: await getAuthCookie(request, admin),
+          },
+        });
+        const body = await resp.json();
+        const { items, total } = body;
+
+        assert.equal(resp.status, 200);
+        assert.equal(items.length, result);
+        assert.equal(total, sum);
+
+        for (let i = 0; i < items.length; i++) {
+          assert.match(items[i][filter], new RegExp(value, 'i'));
+        }
       });
-
-      const url = getEndpoint(baseUrl, {
-        offset,
-        limit,
-        order_by: 'createdAt',
-        dir: 'desc',
-        filename,
-      });
-
-      const resp = await request(url, {
-        method: imageList.method,
-        headers: {
-          cookie: await getAuthCookie(request, admin),
-        },
-      });
-      const body = await resp.json();
-      const { items, total } = body;
-
-      assert.equal(resp.status, 200);
-      assert.equal(items.length, 1);
-      assert.equal(total, 1);
-
-      for (let i = 0; i < items.length; i++) {
-        assert.match(items[i].filename, new RegExp(filename, 'i'));
-      }
     });
 
     test('should return 200 filter min_created_at', async (t) => {

@@ -9,6 +9,7 @@ import * as taskUpdate from '../../../../../../middleware/api/admin/task/update/
 import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
 import { lettersToSyllableTask } from '../../fixtures/task.js';
+import { assertCommonTaskProps } from '../utils.js';
 
 const hash = '88888888';
 
@@ -161,14 +162,9 @@ describe('[api] task update lettersToSyllable', () => {
     const body = await resp.json();
 
     assert.equal(resp.status, 200);
-    assert.equal(body.id, payload.id);
     assert.equal(body.hash, hash, 'should preserve hash');
-    assert.equal(body.name, payload.name);
-    assert.equal(body.type, payload.type);
+    assertCommonTaskProps(body, payload);
     assert.deepEqual(body.config.list, payload.config.list);
-    assert.equal(isNaN(new Date(body.createdAt)), false);
-    assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 7);
   });
 
   test('should return 200 and update task with absent vowelColor property', async (t) => {
@@ -203,10 +199,8 @@ describe('[api] task update lettersToSyllable', () => {
     const body = await resp.json();
 
     assert.equal(resp.status, 200);
-    assert.equal(body.id, payload.id);
     assert.equal(body.hash, hash, 'should preserve hash');
-    assert.equal(body.name, payload.name);
-    assert.equal(body.type, payload.type);
+    assertCommonTaskProps(body, payload);
     assert.equal(body.config.list[0].first, payload.config.list[0].first);
     assert.equal(body.config.list[0].last, payload.config.list[0].last);
     assert.equal(
@@ -214,8 +208,5 @@ describe('[api] task update lettersToSyllable', () => {
       undefined,
       'should overwrite vowelColor',
     );
-    assert.equal(isNaN(new Date(body.createdAt)), false);
-    assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 7);
   });
 });

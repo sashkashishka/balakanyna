@@ -49,6 +49,7 @@ async function createTaskMiddleware(ctx) {
           .values({
             hash: ctx.hash.update(JSON.stringify(body)),
             name: body.name,
+            name_normalized: body.name.toLowerCase(),
             type: body.type,
             config: sortJsonKeys(body.config),
           })
@@ -80,6 +81,7 @@ async function createTaskMiddleware(ctx) {
     id: task.id,
     hash: task.hash,
     name: task.name,
+    name_normalized: task.name_normalized,
     type: task.type,
     config: task.config,
     createdAt: task.createdAt,

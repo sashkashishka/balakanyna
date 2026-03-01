@@ -72,7 +72,7 @@ async function taskListMiddleware(ctx) {
   }
 
   if (name) {
-    andClauses.push(like(taskTable.name, `%${name}%`));
+    andClauses.push(like(taskTable.name_normalized, `%${name.toLowerCase()}%`));
   }
 
   if (types) {

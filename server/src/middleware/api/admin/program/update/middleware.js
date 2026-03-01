@@ -4,7 +4,6 @@ import { Composer } from '../../../../../core/composer.js';
 import {
   createError,
   ERR_INVALID_PAYLOAD,
-  ERR_NOT_FOUND,
 } from '../../../../../core/errors.js';
 import { createValidateBodyMiddleware } from '../../../../auxiliary/validate/middleware.js';
 import {
@@ -22,6 +21,12 @@ const ERR_DATES_COMPLIANCE = createError(
   400,
 );
 
+const ERR_PROGRAM_DOES_NOT_EXIST = createError(
+  'PROGRAM_DOES_NOT_EXIST',
+  'Program does not exist',
+  400,
+);
+
 const ERR_TASK_DOES_NOT_EXIST = createError(
   'TASK_DOES_NOT_EXIST',
   'Task does not exist',
@@ -31,7 +36,7 @@ const ERR_TASK_DOES_NOT_EXIST = createError(
 /**
  * @argument {import('../../../../../core/context.js').Context} ctx
  */
-async function checkIfProgramExistsMiddleware(ctx, next) {
+export async function checkIfProgramExistsMiddleware(ctx, next) {
   const body = ctx.body;
 
   const [result] = await ctx.db
@@ -41,7 +46,7 @@ async function checkIfProgramExistsMiddleware(ctx, next) {
     .limit(1);
 
   if (result?.count === 0) {
-    throw new ERR_NOT_FOUND();
+    throw new ERR_PROGRAM_DOES_NOT_EXIST();
   }
 
   return next();
@@ -71,7 +76,7 @@ async function checkIfTasksExistMiddleware(ctx, next) {
 /**
  * @argument {import('../../../../../core/context.js').Context} ctx
  */
-function verifyStartAndExpirationDatetimeComplianceMiddleware(ctx, next) {
+export function verifyStartAndExpirationDatetimeComplianceMiddleware(ctx, next) {
   const body = ctx.body;
 
   const start = new Date(body.startDatetime);

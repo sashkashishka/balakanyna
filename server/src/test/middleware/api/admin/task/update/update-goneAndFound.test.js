@@ -9,6 +9,7 @@ import * as taskUpdate from '../../../../../../middleware/api/admin/task/update/
 import { seedAdmins, seedTasks } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
 import { goneAndFoundTask } from '../../fixtures/task.js';
+import { assertCommonTaskProps } from '../utils.js';
 
 const hash = '88888888';
 
@@ -221,13 +222,8 @@ describe('[api] task update goneAndFound', () => {
     const body = await resp.json();
 
     assert.equal(resp.status, 200);
-    assert.equal(body.id, payload.id);
     assert.equal(body.hash, hash, 'should preserve hash');
-    assert.equal(body.name, payload.name);
-    assert.equal(body.type, payload.type);
+    assertCommonTaskProps(body, payload);
     assert.deepEqual(body.config.list, payload.config.list);
-    assert.equal(isNaN(new Date(body.createdAt)), false);
-    assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 7);
   });
 });

@@ -9,6 +9,7 @@ import * as taskCreate from '../../../../../../middleware/api/admin/task/create/
 import { seedAdmins } from '../../../../../../db/seeders.js';
 import { admin } from '../../fixtures/admin.js';
 import { schulteTableTask } from '../../fixtures/task.js';
+import { assertCommonTaskProps } from '../utils.js';
 
 describe('[api] task create schulte table', () => {
   test('should retun 400 if config is invalid', async (t) => {
@@ -62,16 +63,9 @@ describe('[api] task create schulte table', () => {
     const body = await resp.json();
 
     assert.equal(resp.status, 200);
-    assert.equal(typeof body.id, 'number');
-    assert.equal(body.hash.length, 8);
-    assert.equal(body.name, payload.name);
-    assert.equal(body.type, payload.type);
+    assertCommonTaskProps(body, payload);
     assert.equal(body.config.x, payload.config.x);
     assert.equal(body.config.y, payload.config.y);
     assert.equal(body.config.reverse, payload.config.reverse);
-    assert.equal(isNaN(new Date(body.createdAt)), false);
-    assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 7);
   });
 });
-

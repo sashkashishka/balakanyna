@@ -22,7 +22,7 @@ async function labelListMiddleware(ctx) {
   const andClauses = [];
 
   if (name) {
-    andClauses.push(like(labelTable.name, `%${name}%`));
+    andClauses.push(like(labelTable.name_normalized, `%${name.toLowerCase()}%`));
   }
 
   if (type) {

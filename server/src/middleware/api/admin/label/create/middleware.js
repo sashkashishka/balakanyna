@@ -45,6 +45,7 @@ async function createLabelMiddleware(ctx) {
     .insert(labelTable)
     .values({
       name: body.name,
+      name_normalized: body.name.toLowerCase(),
       type: body.type,
       config: body.config,
     })
@@ -53,6 +54,7 @@ async function createLabelMiddleware(ctx) {
   ctx.json({
     id: result.id,
     name: result.name,
+    name_normalized: result.name_normalized,
     type: result.type,
     config: result.config,
     createdAt: result.createdAt,

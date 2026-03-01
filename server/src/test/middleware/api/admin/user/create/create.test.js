@@ -108,7 +108,9 @@ describe('[api] user create', async () => {
     assert.equal(resp.status, 200);
     assert.equal(typeof body.id, 'number');
     assert.equal(body.name, payload.name);
+    assert.equal(body.name_normalized, payload.name.toLowerCase());
     assert.equal(body.surname, payload.surname);
+    assert.equal(body.surname_normalized, payload.surname.toLowerCase());
     assert.equal(body.grade, payload.grade);
     assert.equal(body.birthdate, payload.birthdate);
     assert.equal(body.notes, payload.notes);
@@ -117,7 +119,7 @@ describe('[api] user create', async () => {
     assert.equal(body.messangers, payload.messangers);
     assert.equal(isNaN(new Date(body.createdAt)), false);
     assert.equal(isNaN(new Date(body.updatedAt)), false);
-    assert.equal(Object.keys(body).length, 11);
+    assert.equal(Object.keys(body).length, 13);
 
     // try to create the same user again
     const resp2 = await request(userCreate.route, {

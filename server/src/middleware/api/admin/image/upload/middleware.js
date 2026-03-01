@@ -149,6 +149,7 @@ async function uploadImageMiddelware(ctx) {
           .insert(imageTable)
           .values({
             filename,
+            filename_normalized: filename.toLowerCase(),
             hashsum: hashsum,
             path: path.basename(saveTo),
           })

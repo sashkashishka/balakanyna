@@ -1,4 +1,4 @@
-import { type ReadableAtom } from 'nanostores';
+import { computed, type ReadableAtom } from 'nanostores';
 import type { IUser } from 'shared/types/user';
 import type { IPaginatorResponse } from 'shared/types';
 import { createFetcherStore, createMutatorStore } from './_query';
@@ -21,18 +21,37 @@ export const defaultUserListFilters: IUserListFilters = {
   dir: 'descend',
 };
 
+const DEDUPE_TIME = 1000 * 60 * 60;
+
 export const USER_KEYS = {
   list: 'user/list',
   getList(search: ReadableAtom<string>) {
     return [this.list, search];
   },
   user: 'user/get',
-  getUser(userId: number | string) {
-    return [this.user, getSearchParam('id', userId)];
+  getUser($userId: ReadableAtom<number>) {
+    return [
+      computed([$userId], (userId) => {
+        if (userId) {
+          return [this.user, getSearchParam('id', userId)].join('');
+        }
+
+        return undefined;
+      }),
+    ];
   },
   search: 'user/search',
-  getSearch(search: ReadableAtom<string>) {
-    return [this.search, search];
+  getSearch($search: ReadableAtom<string>) {
+    return [
+      computed([$search], (search) => {
+        console.log(777, search);
+        if (search) {
+          return [this.search, getSearchParam('search', search)].join('');
+        }
+
+        return undefined;
+      }),
+    ];
   },
 };
 
@@ -41,18 +60,25 @@ export function makeUsersStore(search: ReadableAtom<string>) {
   const $users = createFetcherStore<IPaginatorResponse<IUser>>(
     USER_KEYS.getList(search),
   );
-
   return $users;
 }
 
-export function makeUserStore(userId: string | number) {
-  const $user = createFetcherStore<IUser>(USER_KEYS.getUser(userId));
-
+export function makeUserStore($userId: ReadableAtom<number>) {
+  const $user = createFetcherStore<IUser>(USER_KEYS.getUser($userId), {
+    dedupeTime: DEDUPE_TIME,
+    cacheLifetime: DEDUPE_TIME,
+  });
   return $user;
 }
 
-export function makeUserSearchStore(search: ReadableAtom<string>) {
-  const $userSearch = createFetcherStore<IUser[]>(USER_KEYS.getSearch(search));
+export function makeUserSearchStore($search: ReadableAtom<string>) {
+  const $userSearch = createFetcherStore<IUser[]>(
+    USER_KEYS.getSearch($search),
+    {
+      dedupeTime: DEDUPE_TIME,
+      cacheLifetime: DEDUPE_TIME,
+    },
+  );
   return $userSearch;
 }
 

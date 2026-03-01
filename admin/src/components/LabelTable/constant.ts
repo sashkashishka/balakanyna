@@ -10,6 +10,7 @@ export const filtersConfig: Array<TFilters> = [
   getSelectFilter({
     label: 'Type',
     name: 'type',
+    mode: 'multiple',
     options: [
       { label: 'Image', value: 'image' },
       { label: 'Task', value: 'task' },

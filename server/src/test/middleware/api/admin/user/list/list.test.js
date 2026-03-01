@@ -11,7 +11,7 @@ import { seedAdmins } from '../../../../../../db/seeders.js';
 import { seedUsers } from '../../../../../../db/seeders.js';
 
 import { admin } from '../../fixtures/admin.js';
-import { users } from '../../fixtures/user.js';
+import { users, usersNonLatin } from '../../fixtures/user.js';
 
 function getEndpoint(
   baseUrl,
@@ -568,82 +568,99 @@ describe('[api] user list', async () => {
   });
 
   describe('[filter]', () => {
-    test('should return 200 and filter by name', async (t) => {
-      const offset = 0;
-      const limit = users.length;
-      const name = 'd';
+    const testCases = [
+      {
+        filter: 'name',
+        value: 'd',
+        list: users,
+        sum: 2,
+        result: 2,
+        limit: users.length,
+        offset: 0,
+      },
+      {
+        filter: 'surname',
+        value: 'i',
+        list: users,
+        sum: 3,
+        result: 2,
+        limit: 2,
+        offset: 0,
+      },
+      {
+        filter: 'name',
+        value: 'О',
+        list: usersNonLatin,
+        sum: 1,
+        result: 1,
+        limit: usersNonLatin.length,
+        offset: 0,
+      },
+      {
+        filter: 'name',
+        value: 'о',
+        list: usersNonLatin,
+        sum: 1,
+        result: 1,
+        limit: usersNonLatin.length,
+        offset: 0,
+      },
 
-      const { request, baseUrl } = await getTestServer({
-        t,
-        async seed(db, config) {
-          await seedAdmins(db, [admin], config.salt.password);
-          await seedUsers(db, users);
-        },
+      {
+        filter: 'surname',
+        value: 'О',
+        list: usersNonLatin,
+        sum: 3,
+        result: 3,
+        limit: usersNonLatin.length,
+        offset: 0,
+      },
+      {
+        filter: 'surname',
+        value: 'о',
+        list: usersNonLatin,
+        sum: 3,
+        result: 3,
+        limit: usersNonLatin.length,
+        offset: 0,
+      },
+    ];
+
+    testCases.forEach(({ filter, value, list, sum, result, limit, offset }) => {
+      test(`should return 200 and filter by ${filter} "${value}" case insensitive`, async (t) => {
+        const { request, baseUrl } = await getTestServer({
+          t,
+          async seed(db, config) {
+            await seedAdmins(db, [admin], config.salt.password);
+            await seedUsers(db, list);
+          },
+        });
+
+        const url = getEndpoint(baseUrl, {
+          offset,
+          limit,
+          order_by: 'createdAt',
+          dir: 'desc',
+          [filter]: value,
+        });
+
+        const resp = await request(url, {
+          method: userList.method,
+          headers: {
+            cookie: await getAuthCookie(request, admin),
+          },
+        });
+        const body = await resp.json();
+        const { items, total } = body;
+
+        assert.equal(resp.status, 200);
+        assert.equal(items.length, result);
+        assert.equal(total, sum);
+
+        for (let i = 0; i < items.length; i++) {
+          assert.match(items[i][filter], new RegExp(value, 'i'));
+        }
       });
-
-      const url = getEndpoint(baseUrl, {
-        offset,
-        limit,
-        order_by: 'createdAt',
-        dir: 'desc',
-        name,
-      });
-
-      const resp = await request(url, {
-        method: userList.method,
-        headers: {
-          cookie: await getAuthCookie(request, admin),
-        },
-      });
-      const body = await resp.json();
-      const { items, total } = body;
-
-      assert.equal(resp.status, 200);
-      assert.equal(items.length, 2);
-      assert.equal(total, 2);
-
-      for (let i = 0; i < items.length; i++) {
-        assert.match(items[i].name, new RegExp(name, 'i'));
-      }
-    });
-
-    test('should return 200 and filter by surname', async (t) => {
-      const offset = 0;
-      const limit = 2;
-      const surname = 'i';
-
-      const { request, baseUrl } = await getTestServer({
-        t,
-        async seed(db, config) {
-          await seedAdmins(db, [admin], config.salt.password);
-          await seedUsers(db, users);
-        },
-      });
-
-      const url = getEndpoint(baseUrl, {
-        offset,
-        limit,
-        order_by: 'createdAt',
-        dir: 'desc',
-        surname,
-      });
-
-      const resp = await request(url, {
-        method: userList.method,
-        headers: {
-          cookie: await getAuthCookie(request, admin),
-        },
-      });
-      const body = await resp.json();
-      const { items, total } = body;
-
-      assert.equal(resp.status, 200);
-      assert.equal(items.length, 2);
-      assert.equal(total, 3);
-
-      for (let i = 0; i < items.length; i++) {
-        assert.match(items[i].surname, new RegExp(surname, 'i'));
-      }
     });
 
     test('should return 200 filter min_created_at', async (t) => {

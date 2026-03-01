@@ -73,6 +73,7 @@ async function updateLabelMiddleware(ctx) {
   const value = {
     id: body.id,
     name: body.name,
+    name_normalized: body.name.toLowerCase(),
     config: body.config,
     updatedAt: new Date().toISOString(),
   };
@@ -86,6 +87,7 @@ async function updateLabelMiddleware(ctx) {
   ctx.json({
     id: result.id,
     name: result.name,
+    name_normalized: result.name_normalized,
     type: result.type,
     config: result.config,
     createdAt: result.createdAt,

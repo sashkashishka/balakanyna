@@ -11,7 +11,7 @@ import { seedAdmins } from '../../../../../../db/seeders.js';
 import { seedLabels } from '../../../../../../db/seeders.js';
 
 import { admin } from '../../fixtures/admin.js';
-import { labels } from '../../fixtures/label.js';
+import { labels, labelsNonLatin } from '../../fixtures/label.js';
 
 function getEndpoint(baseUrl, { limit, offset, order_by, dir, name, type }) {
   const url = getUrl(labelList.route, baseUrl);
@@ -426,7 +426,7 @@ describe('[api] label list', async () => {
   });
 
   describe('[filter]', () => {
-    test('should return 200 and filter by name', async (t) => {
+    test('should return 200 and filter by name - latin with uppercase', async (t) => {
       const offset = 0;
       const limit = labels.length;
       const name = 'B';
@@ -459,6 +459,123 @@ describe('[api] label list', async () => {
       assert.equal(resp.status, 200);
       assert.equal(items.length, 4);
       assert.equal(total, 4);
+
+      for (let i = 0; i < items.length; i++) {
+        assert.match(items[i].name, new RegExp(name, 'i'));
+      }
+    });
+
+    test('should return 200 and filter by name - latin with lowercase', async (t) => {
+      const offset = 0;
+      const limit = labels.length;
+      const name = 'b';
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedLabels(db, labels);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'desc',
+        name,
+      });
+
+      const resp = await request(url, {
+        method: labelList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, 4);
+      assert.equal(total, 4);
+
+      for (let i = 0; i < items.length; i++) {
+        assert.match(items[i].name, new RegExp(name, 'i'));
+      }
+    });
+
+    test('should return 200 and filter by name - non latin with uppercase', async (t) => {
+      const offset = 0;
+      const limit = labels.length;
+      const name = 'Ф';
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedLabels(db, labelsNonLatin);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'desc',
+        name,
+      });
+
+      const resp = await request(url, {
+        method: labelList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, 2);
+      assert.equal(total, 2);
+
+      for (let i = 0; i < items.length; i++) {
+        assert.match(items[i].name, new RegExp(name, 'i'));
+      }
+    });
+
+    test('should return 200 and filter by name - latin with lowercase', async (t) => {
+      const offset = 0;
+      const limit = labels.length;
+      const name = 'ф';
+
+      const { request, baseUrl } = await getTestServer({
+        t,
+        async seed(db, config) {
+          await seedAdmins(db, [admin], config.salt.password);
+          await seedLabels(db, labelsNonLatin);
+        },
+      });
+
+      const url = getEndpoint(baseUrl, {
+        offset,
+        limit,
+        order_by: 'createdAt',
+        dir: 'desc',
+        name,
+      });
+
+      const resp = await request(url, {
+        method: labelList.method,
+        headers: {
+          cookie: await getAuthCookie(request, admin),
+        },
+      });
+      const body = await resp.json();
+      const { items, total } = body;
+
+      assert.equal(resp.status, 200);
+      assert.equal(items.length, 2);
+      assert.equal(total, 2);
 
       for (let i = 0; i < items.length; i++) {
         assert.match(items[i].name, new RegExp(name, 'i'));
