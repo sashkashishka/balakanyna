@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => ({
   },
   server: {
     proxy: {
-      '/media': {
+      '/images': {
         target: 'http://localhost:4030',
         changeOrigin: true,
       },

@@ -83,6 +83,10 @@ export function Playground({
           class={cn(styles.pickField, {
             [styles.pickFieldHidden!]: gameStore.phase !== 'find',
           })}
+          style={{
+            '--x': 5,
+            '--y': Math.ceil(gameStore.pickingBoard.length / 5),
+          }}
         >
           <For each={gameStore.pickingBoard}>
             {(cell) => (

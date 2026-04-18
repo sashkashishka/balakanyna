@@ -2,7 +2,6 @@
   position: relative;
   display: grid;
   grid-template-rows: 60% 30%;
-  align-content: space-between;
   gap: 20px;
   height: 100%;
   width: 100%;
@@ -22,9 +21,10 @@
 .grid {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(var(--x), 1fr);
-  grid-template-rows: repeat(var(--y), 76px);
-  gap: 12px;
+  grid-template-columns: repeat(var(--x), calc(100% / var(--x)));
+  grid-template-rows: repeat(var(--y), calc(100% / var(--y)));
+  width: 100%;
+  height: 100%;
   z-index: 2;
 }
 
@@ -50,9 +50,16 @@
 
   .pickField {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
-    gap: 16px;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+
+    .cell {
+      width: calc(100% / var(--x));
+      height: calc(100% / var(--y));
+    }
   }
 
   .pickFieldHidden {
