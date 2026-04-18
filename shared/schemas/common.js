@@ -7,6 +7,7 @@ export const tasks = [
   'findFlashingNumber',
   'goneAndFound',
   'brainbox',
+  'sequenceMemory',
 ];
 
 export const uploadImageSchema = {

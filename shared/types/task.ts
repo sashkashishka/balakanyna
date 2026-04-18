@@ -9,7 +9,8 @@ export type TTaskType =
   | 'findFlashingNumber'
   | 'goneAndFound'
   | 'brainbox'
-  | 'schulteTable';
+  | 'schulteTable'
+  | 'sequenceMemory';
 
 interface ITask {
   id: number;
@@ -120,6 +121,14 @@ interface IBrainboxTask extends ITask {
   };
 }
 
+interface ISequenceMemoryTask extends ITask {
+  type: Extract<TTaskType, 'sequenceMemory'>;
+  config: {
+    width: number;
+    height: number;
+  };
+}
+
 export type TTask =
   | ISemaphoreTextTask
   | IImageSliderTask
@@ -128,4 +137,5 @@ export type TTask =
   | ILettersToSyllableTask
   | IFindFlashingNumberTask
   | IGoneAndFoundTask
-  | ISchulteTableTask;
+  | ISchulteTableTask
+  | ISequenceMemoryTask;
