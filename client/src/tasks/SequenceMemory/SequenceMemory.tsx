@@ -141,8 +141,8 @@ export function SequenceMemory({ config }: IProps) {
     >
       <Show when={gameState() === 'start'}>
         <div class={styles.screen}>
-          <h2>Тест на послідовну пам'ять</h2>
-          <p>Запам'ятайте послідовність кнопок</p>
+          <h2>Тренування зорової памʼяті</h2>
+          <p>Запам'ятайте послідовність</p>
           <button class={styles.button} onClick={startGame}>
             Почати
           </button>

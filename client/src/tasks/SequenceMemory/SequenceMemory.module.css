@@ -8,6 +8,7 @@
   padding: 16px;
   border-radius: 16px;
   color: white;
+  box-sizing: border-box;
   transition:
     opacity 0.3s ease,
     background-color 0.3s ease;
