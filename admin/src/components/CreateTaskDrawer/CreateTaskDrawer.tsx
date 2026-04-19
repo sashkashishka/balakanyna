@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Button, Drawer, Select, Space } from 'antd';
+import { Button, Drawer, Card, Row, Col, Space } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 
 import { TaskForm } from '../TaskForm';
 import { type TTaskType } from 'shared/types/task';
-import { taskTypeOptions } from '../TaskForm/constants';
+import { tasks } from 'shared/schemas/common';
 import type { ITaskFormProps } from '../TaskForm/TaskForm';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -13,6 +14,15 @@ export function CreateTaskDrawer({ onSuccess, onDuplicate }: IProps) {
   const [taskType, setTaskType] = useState<TTaskType>();
   const [open, setOpen] = useState(false);
 
+  const handleBack = () => {
+    setTaskType(undefined);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setTaskType(undefined);
+  };
+
   return (
     <>
       <Button type="primary" onClick={() => setOpen(true)}>
@@ -21,35 +31,56 @@ export function CreateTaskDrawer({ onSuccess, onDuplicate }: IProps) {
 
       <Drawer
         width="1024px"
-        title="Create new task"
+        title={
+          taskType ? (
+            <Space>
+              <Button
+                type="text"
+                icon={<ArrowLeftOutlined />}
+                onClick={handleBack}
+              >
+                Back
+              </Button>
+              <span>Create {taskType} task</span>
+            </Space>
+          ) : (
+            'Create new task'
+          )
+        }
         open={open}
-        onClose={() => setOpen(false)}
-        destroyOnClose
+        closable={!taskType}
+        onClose={taskType ? handleBack : handleClose}
       >
-        <Space direction="vertical" size="large" style={{ width: '100%' }}>
-          <Select
-            value={taskType}
-            options={taskTypeOptions}
-            onSelect={(v) => setTaskType(v)}
-            style={{ width: '100%' }}
-            placeholder="Select task type"
+        {!taskType ? (
+          <Space direction="vertical" size="large" style={{ width: '100%' }}>
+            <Row gutter={[16, 16]}>
+              {(tasks as TTaskType[]).map((task) => (
+                <Col span={8} key={task}>
+                  <Card
+                    hoverable
+                    onClick={() => setTaskType(task)}
+                    style={{ textAlign: 'center', cursor: 'pointer' }}
+                  >
+                    <Card.Meta title={task} />
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </Space>
+        ) : (
+          <TaskForm
+            action="create"
+            taskType={taskType}
+            onDuplicate={(id) => {
+              handleClose();
+              onDuplicate?.(id);
+            }}
+            onSuccess={(p) => {
+              handleClose();
+              onSuccess?.(p);
+            }}
           />
-
-          {taskType && (
-            <TaskForm
-              action="create"
-              taskType={taskType}
-              onDuplicate={(id) => {
-                setOpen(false);
-                onDuplicate?.(id);
-              }}
-              onSuccess={(p) => {
-                setOpen(false);
-                onSuccess?.(p);
-              }}
-            />
-          )}
-        </Space>
+        )}
       </Drawer>
     </>
   );

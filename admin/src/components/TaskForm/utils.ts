@@ -10,6 +10,7 @@ import { lettersToSyllableSchema } from 'shared/schemas/lettersToSyllable';
 import { findFlashingNumberSchema } from 'shared/schemas/findFlashingNumber';
 import { goneAndFoundSchema } from 'shared/schemas/goneAndFound';
 import { fullBrainboxSchema } from 'shared/schemas/brainbox';
+import { sequenceMemorySchema } from 'shared/schemas/sequenceMemory';
 
 const ajv = getAjv();
 
@@ -22,4 +23,5 @@ export const CONFIG_VALIDATOR_MAP: Record<TTaskType, ValidateFunction> = {
   lettersToSyllable: ajv.compile(lettersToSyllableSchema),
   findFlashingNumber: ajv.compile(findFlashingNumberSchema),
   goneAndFound: ajv.compile(goneAndFoundSchema),
+  sequenceMemory: ajv.compile(sequenceMemorySchema),
 };

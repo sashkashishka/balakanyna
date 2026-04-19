@@ -11,6 +11,7 @@ const TASKS: Record<TTaskType, ReturnType<typeof lazy>> = {
   lettersToSyllable: lazy(() => import('@/tasks/LettersToSyllable/index.ts')),
   findFlashingNumber: lazy(() => import('@/tasks/FindFlashingNumber/index.ts')),
   goneAndFound: lazy(() => import('@/tasks/GoneAndFound/index.ts')),
+  sequenceMemory: lazy(() => import('@/tasks/SequenceMemory/index.ts')),
 };
 
 interface IProps {

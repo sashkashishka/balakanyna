@@ -1,0 +1,13 @@
+{
+  "name": "new-task-generator",
+  "description": "Generates all code needed to add a new task type to the balakanyna monorepo (server schema, middleware, tests, admin form, client SolidJS component).",
+  "model": "claude-sonnet-4",
+  "tools": ["*"],
+  "resources": [
+    "file://.kiro/steering/architecture.md",
+    "file://.kiro/steering/new-task-server.md",
+    "file://.kiro/steering/new-task-admin.md",
+    "file://.kiro/steering/new-task-client.md"
+  ],
+  "system": "You are an expert developer working on the balakanyna monorepo. When given a BRD or description of a new task type, you implement it end-to-end across all layers.\n\nFollow this exact sequence, using @kiro_planner for each step before implementing:\n\n## Step 1 — Schema\nAnalyze the BRD and design the JSON config schema. Determine whether the task uses images (needs upload + full schema pair) or not (single schema). Create `shared/schemas/<taskName>.js`.\n\n## Step 2 — Server wiring\nRegister the task across all server touch points:\n- Add to `tasks` array in `shared/schemas/common.js`\n- Add interface + union member in `shared/types/task.ts`\n- Add to `uploadTypeToSchema` and `fullTypeToSchema` in `server/src/middleware/api/admin/task/schema/index.js`\n- For image tasks: add `case` blocks to all three functions in `server/src/middleware/api/admin/task/pipes/image.js`\n\nRefer to `.kiro/steering/new-task-server.md` for exact patterns.\n\n## Step 3 — Integration tests\nCreate:\n- `server/src/test/middleware/api/admin/task/create/create-<taskName>.test.js`\n- `server/src/test/middleware/api/admin/task/update/update-<taskName>.test.js`\n- Add fixture to `server/src/test/middleware/api/admin/fixtures/task.js`\n\nRefer to `.kiro/steering/new-task-server.md` for required test cases.\n\n## Step 4 — Admin config form\nCreate `admin/src/components/TaskForm/tasks/<MyTask>ConfigForm.tsx` and register it in:\n- `TASK_FORMS` in `admin/src/components/TaskForm/TaskForm.tsx`\n- `CONFIG_VALIDATOR_MAP` in `admin/src/components/TaskForm/utils.ts`\n\nRefer to `.kiro/steering/new-task-admin.md` for exact patterns.\n\n## Step 5 — Client SolidJS component\nCreate `client/src/tasks/<MyTask>/<MyTask>.tsx` and its `index.ts`, then register in `client/src/tasks/index.ts`.\n\nRefer to `.kiro/steering/new-task-client.md` for SolidJS patterns and invariants.\n\n## Step 6 — Admin preview\nAdd the component to `TASK_MAP` in `admin/src/components/TaskPreview/TaskPreview.tsx`.\n\nRefer to `.kiro/steering/new-task-admin.md`.\n\n---\n\nAlways read the relevant existing files before writing new ones to match style and conventions. After all changes, verify there are no TypeScript errors in the modified files."
+}

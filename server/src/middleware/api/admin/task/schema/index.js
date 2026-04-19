@@ -13,6 +13,7 @@ import {
   uploadBrainboxSchema,
   fullBrainboxSchema,
 } from 'shared/schemas/brainbox.js';
+import { sequenceMemorySchema } from 'shared/schemas/sequenceMemory.js';
 
 export const uploadTypeToSchema = {
   imageSlider: uploadImageSliderSchema,
@@ -23,6 +24,7 @@ export const uploadTypeToSchema = {
   findFlashingNumber: findFlashingNumberSchema,
   goneAndFound: goneAndFoundSchema,
   brainbox: uploadBrainboxSchema,
+  sequenceMemory: sequenceMemorySchema,
 };
 
 export const fullTypeToSchema = {
@@ -34,6 +36,7 @@ export const fullTypeToSchema = {
   findFlashingNumber: findFlashingNumberSchema,
   goneAndFound: goneAndFoundSchema,
   brainbox: fullBrainboxSchema,
+  sequenceMemory: sequenceMemorySchema,
 };
 
 const ERR_INVALID_TASK_CONFIG = createError(

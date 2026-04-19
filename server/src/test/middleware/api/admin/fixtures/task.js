@@ -113,6 +113,15 @@ export const brainboxTask = {
   },
 };
 
+export const sequenceMemoryTask = {
+  name: 'Sequence Memory task',
+  type: 'sequenceMemory',
+  config: {
+    width: 3,
+    height: 3,
+  },
+};
+
 export const tasks = [
   {
     name: 'Task 1',

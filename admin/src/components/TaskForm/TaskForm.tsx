@@ -13,6 +13,7 @@ import { LettersToSyllableConfigForm } from './tasks/LettersToSyllableConfigForm
 import { FindFlashingNumberConfigForm } from './tasks/FindFlashingNumberConfigForm';
 import { GoneAndFoundConfigForm } from './tasks/GoneAndFoundConfigForm';
 import { BrainboxConfigForm } from './tasks/BrainboxConfigForm';
+import { SequenceMemoryConfigForm } from './tasks/SequenceMemoryConfigForm';
 import { TaskPreview } from '../TaskPreview';
 import { CONFIG_VALIDATOR_MAP } from './utils';
 
@@ -25,6 +26,7 @@ const TASK_FORMS = {
   lettersToSyllable: LettersToSyllableConfigForm,
   findFlashingNumber: FindFlashingNumberConfigForm,
   goneAndFound: GoneAndFoundConfigForm,
+  sequenceMemory: SequenceMemoryConfigForm,
 };
 
 export interface ITaskFormProps {

@@ -19,6 +19,7 @@ export function Cell(props: IProps) {
 
   return (
     <td
+      translate="no"
       class={styles.cell}
       onClick={(e) => {
         e.preventDefault();

@@ -27,4 +27,4 @@ dist-ssr
 .tool-versions
 
 client/lib/
-server/static/
+server/src/static/
